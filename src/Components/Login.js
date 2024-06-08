@@ -6,11 +6,12 @@ import "../Components/Login.css";
 import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 
+
 import LoginImg from "../Images/signUp.jpg";
 import GoogleImg from "../Images/googleImg.png";
 import { Link, useNavigate } from "react-router-dom";
-
-
+import axios from "axios";
+import Swal from "sweetalert2";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ function Login() {
       .required(),
     Password: yup
       .string()
-      .matches(/^[\w\d\W]{8}$/, "Enter only 8 digits")
+      .matches(/^[\w\d\W]{6}$/, "Enter only 8 digits")
       .required("Password is required"),
   });
 
@@ -34,26 +35,87 @@ function Login() {
 
     const { name, value } = e.target;
 
-    if (name === "PhoneNumber" && (number.test(value) || value === " ")&& value.length <= 10) {
+    if (
+      name === "PhoneNumber" &&
+      (number.test(value) || value === " ") &&
+      value.length <= 10
+    ) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
-    } else if ((name === "Password")&& value.length <= 8) {
+    } else if (name === "Password" && value.length <= 6) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   }
 
   const navigate = useNavigate();
 
-  function handleSubmit(event) {
-  //  event.preventDefault();
+  async function handleSubmit() {
+    try {
+      // Api Calling
+      const response = await axios.post("http://localhost:5000/log/loginuser", {
+        phone_number: formData.PhoneNumber,
+        password: formData.Password,
+      });
+      console.log(response);
+  
+      if (response.status === 200) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+  
+        Toast.fire({
+          icon: "success",
+          title: "Signed in successfully",
+        });
+  
+        console.log('Signed in successfully');
+        setTimeout(()=>{
+          navigate("/polling");
+        },1000
+        )
+      }
+    } catch (err) {
+      console.error("Error Occurred:", err);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
 
-    setFormData({ PhoneNumber: "", Password: "" });
-    console.log(formData.PhoneNumber)
-    localStorage.setItem("Phone Number ",formData.PhoneNumber)
-    navigate("/polling");
-   
+      Toast.fire({
+        icon: "error",
+        title: "User is not a register User",
+      });
+
+      console.log('Signed in successfully');
+      setTimeout(()=>{
+       
+        navigate("/signup");
+      },1000
+      )
+      localStorage.setItem("Phone Number ", formData.PhoneNumber);
+    }
   }
+  
 
-
+    // setFormData({ PhoneNumber: "", Password: "" });
+    // console.log(formData.PhoneNumber);
+    // localStorage.setItem("Phone Number ", formData.PhoneNumber);
+    // navigate("/polling");
+  
 
   return (
     <>
@@ -67,7 +129,7 @@ function Login() {
             <Col xs={12} md={6}>
               <Card
                 className="LoginCard mx-auto"
-                style={{ maxWidth: "100%", height: "auto" }}
+                style={{ maxWidth: "100%", height: "auto" ,backgroundColor:'cadetblue'}}
               >
                 <Card.Body>
                   <Formik
@@ -87,7 +149,6 @@ function Login() {
                             name="PhoneNumber"
                             value={formData.PhoneNumber}
                             onChange={handleInputChanges}
-                           
                           />
                           <ErrorMessage
                             name="PhoneNumber"
@@ -126,31 +187,31 @@ function Login() {
                         </center>
                         <hr />
                         <center>
-                      {" "}
-                      <a href='/ForgetPassword' >Forget Password </a> 
-                      <p>OR</p>
-                    </center>
+                          {" "}
+                          <a href="/ForgetPassword" style={{color:"Black",textDecoration:"none"}}>Forget Password </a>
+                          <p>OR</p>
+                        </center>
 
                         <div className="OtherLogin">
                           <center>
-                          <Button
-                            variant="light"
-                            className="  Google-Column"
-                            style={{ height: "40px" }}
-                          >
-                            <img
-                              src={GoogleImg}
-                              alt="Google img"
-                              className="GoogleImg "
-                            />
-                            CONTINUE WITH GOOGLE
-                          </Button>
+                            <Button
+                              variant="light"
+                              className="  Google-Column"
+                              style={{ height: "40px" }}
+                            >
+                              <img
+                                src={GoogleImg}
+                                alt="Google img"
+                                className="GoogleImg "
+                              />
+                              CONTINUE WITH GOOGLE
+                            </Button>
                           </center>
                         </div>
                         <div>
-                          <p className="text-center">
+                          <p className="text-center" >
                             Don't have an account?{" "}
-                            <Link to="/signup">Sign Up </Link>{" "}
+                            <Link to="/signup" style={{color:"Black",textDecoration:"none"}}>Sign Up </Link>{" "}
                           </p>
                         </div>
                       </Form>

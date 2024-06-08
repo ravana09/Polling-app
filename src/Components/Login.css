@@ -1,47 +1,71 @@
-
 .Body-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    
-    /* background: black; */
-    background-color: cadetblue;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: cadetblue;
+}
 
-    
+.LoginImages {
+  max-width: 100%;
+  height: auto;
+  object-fit: inherit;
+}
+
+.LoginCard {
+  background-color: cadetblue;
+  color: rgb(242, 238, 238);
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+}
+
+.LoginCard:hover {
+  background-color: rgb(78, 137, 141);
+  color: rgb(240, 233, 233);
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+}
+
+.GoogleImg {
+  width: 30px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.Google-Column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  width: 350px;
+  padding: 10px;
+}
+
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+  .Body-container {
+    flex-direction: column;
+    padding: 10px;
   }
 
-  
-  .LoginImages {
-    max-width: 100%;
-    height: auto;
-    object-fit:inherit ;
-  }
-  
   .LoginCard {
-    /* background-color: rgb(8, 8, 8); */
-    background-color: cadetblue;
-    color: white;
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
-   
-  }
-  
-  .GoogleImg {
-    width: 30px;
-    height: 40px;
-    margin-right: 10px;
+    max-width: 90%;
+    padding: 15px;
+    box-shadow: 0px 4px 15px 0px rgb(60, 59, 59);
   }
 
-  .Google-Column{
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   border-radius: 20px;
-   width: 350px;
-   padding: 10px;
+  .LoginCard:hover {
+    padding: 15px;
   }
+
+  .Google-Column {
+    width: 90%;
+  }
+}
+
   

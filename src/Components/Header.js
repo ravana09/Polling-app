@@ -3,6 +3,16 @@ import "../Components/Header.css";
 import { Col, Container, Form, Nav, Navbar, Row } from "react-bootstrap";
 
 function Header() {
+
+  function capitalizeFirstLetter(string) {
+    if (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    return '';
+  }
+
+  const user = localStorage.getItem("user");
+
   function handleClick() {}
   return (
     <>
@@ -29,7 +39,7 @@ function Header() {
                     onClick={() => handleClick("/home")}
                     style={{ fontSize: 20 }}
                   >
-                    Hello !! {localStorage.getItem("Phone Number ")}
+                     Hello !! {capitalizeFirstLetter(user)}
                   </Nav.Link>
                 </Navbar.Text>
               {/* </Navbar.Collapse> */}

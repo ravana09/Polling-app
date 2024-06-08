@@ -123,7 +123,7 @@ function AddPoll() {
               <Card className="Notification_card">
                 <Card.Body>
                   <Card.Title>
-                    <PiWarningCircleLight /> Tips On Better Polls
+                  <p> <PiWarningCircleLight />Tips On Better Polls</p> 
                   </Card.Title>
                   <Card.Text>
                     <ol >

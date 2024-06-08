@@ -40,7 +40,7 @@ function SignUp() {
         console.log({ ...data, [name]: value });
         break;
       case "Password":
-        if (value.length <= 8) {
+        if (value.length <= 6) {
           setData({ ...data, [name]: value });
           console.log({ ...data, [name]: value });
         }
@@ -65,7 +65,7 @@ function SignUp() {
       .required("Mobile Number is required"),
     Password: yup
       .string()
-      .matches(/^[\w\d\W]{8}$/, "Password must be exactly 8 characters")
+      .matches(/^[\w\d\W]{6}$/, "Password must be exactly 8 characters")
       .required("Password is required"),
   });
   const handleSubmit = async (values, actions) => {
@@ -129,13 +129,16 @@ function SignUp() {
   };
 
   const EmailSendOTP = () => {
-    // Logic to send OTP to the email
-    setShowEmailOtpInput(true);
+    if (data.Email !== "") {
+      setShowEmailOtpInput(true);
+    }
   };
+  
 
   const MobileSendOTP = () => {
-    // Logic to send OTP to the mobile number
+  if(data.MobileNumber !=="" && data.MobileNumber.length !==9 && showEmailOtpInput===true){
     setShowMobileOtpInput(true);
+  }
   };
 
   const EmailOTPVerification = () => {
@@ -158,7 +161,7 @@ function SignUp() {
           <Col xs={12} md={6}>
             <Card
               className="LoginCard mx-auto"
-              style={{ maxWidth: "95%", height: "auto" }}
+              style={{ maxWidth: "95%", height: "auto",backgroundColor:'cadetblue' }}
             >
               <Card.Body>
                 <Formik
@@ -325,9 +328,9 @@ function SignUp() {
                           </Button>
                         </center>
                       </div>
-                      <div>
+                      <div style={{marginTop:10}}>
                         <p className="text-center">
-                          Already have an account? <Link to="/">Sign In</Link>
+                          Already have an account? <Link to="/" style={{color:"Black",textDecoration:"none"}}>Sign In</Link>
                         </p>
                       </div>
                     </Form>

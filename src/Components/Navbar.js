@@ -84,7 +84,7 @@ function NavBar() {
                           className="Nav-Links"
                           onClick={() => handleClick("/polling")}
                         >
-                          Home
+                          Poll List
                         </Nav.Link>
                         <Nav.Link
                           className="Nav-Links"
@@ -143,7 +143,7 @@ function NavBar() {
                     onClick={() => handleClick("/polling")}
                     style={{ paddingLeft: 20 }}
                   >
-                    Home
+                  Poll List
                   </Nav.Link>
                   <Nav.Link
                     className="Nav-Links"
@@ -167,8 +167,9 @@ function NavBar() {
                   {/* Sign-out button */}
                   <Nav.Link
                     onClick={handleSignOut}
-                    style={{ paddingLeft: 20, backgroundColor: "#FF895D" }}
-                    className="d-flex align-items-end"
+                    
+                    style={{ paddingLeft: 20, backgroundColor: "#FF895D" ,width:100,height:"auto"}}
+                    className="d-flex align-items-end "
                   >
                     Sign Out
                   </Nav.Link>

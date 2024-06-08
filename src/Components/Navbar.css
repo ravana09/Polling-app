@@ -113,4 +113,22 @@ General Styles
   .search-Bar {
     display: none;
   }
+  .signOut {
+  position: absolute;
+  top:75vh;
+  margin-top: 20px;
+
+  width: 150px;
+  background-color: #FF4500;
+  border: none;
+}
+.signOut:hover {
+  position: absolute;
+  top:75vh;
+  margin-top: 20px;
+
+  width: 150px;
+  background-color: #fa6e3b;
+  border: none;
+}
 }

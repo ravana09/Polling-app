@@ -5,7 +5,7 @@
 } */
 
 .AddPoll-Container {
-  background-color: #DAE0E6;
+  background-color: #dae0e6;
   /* width: 100%; */
   height: auto;
 }
@@ -19,30 +19,28 @@
 }
 
 .AddPoll-Navbar:hover {
-  background-color: #F2F8FD;
+  background-color: #f2f8fd;
 }
 
 .AddPoll-Body {
   width: 800px;
   height: auto;
   min-height: 70vh;
- 
 }
 
 .Addpoll-Buttons {
-  background-color:#FF4500;
+  background-color: #ff4500;
   width: 150px;
   color: white;
   border-radius: 20px;
 }
 .Addpoll-Buttons:hover {
-  background-color:   #fa6e3b;
-  
+  background-color: #fa6e3b;
+
   width: 150px;
   color: white;
   border-radius: 20px;
 }
-
 
 .Cancel-Buttons {
   background-color: #c2c3c4;
@@ -72,19 +70,19 @@
 }
 
 .AddPoll-textArea {
-  background-color: #f9f4f4;
+  background-color: white;
   width: 100%;
   border-radius: 0;
   min-height: 10vh;
+  padding: 10px;
+  border: 0.2px solid rgb(190, 187, 187);
 }
-.option_card{
+.option_card {
   margin-top: 30px;
 }
 
-.Notification_card{
+.Notification_card {
   width: 18rem;
-  
-
 }
 
 /* AddPoll.css */
@@ -111,20 +109,15 @@
   .pollingBody {
     padding: 10px;
   }
-  .Notification_card{
+ 
+  .Notification_card {
     width: 100%;
-    
+    font-size: small;
   }
-  .AddButton{
+
+  .AddButton {
     margin: 20px;
   }
 }
 
 /* Styling for smaller screens (mobile devices) */
-
-
-
-
-
-
-

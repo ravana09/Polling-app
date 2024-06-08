@@ -1,0 +1,47 @@
+
+.Body-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    
+    /* background: black; */
+    background-color: cadetblue;
+
+    
+  }
+
+  
+  .LoginImages {
+    max-width: 100%;
+    height: auto;
+    object-fit:inherit ;
+  }
+  
+  .LoginCard {
+    /* background-color: rgb(8, 8, 8); */
+    background-color: cadetblue;
+    color: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+   
+  }
+  
+  .GoogleImg {
+    width: 30px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .Google-Column{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 20px;
+   width: 350px;
+   padding: 10px;
+  }
+  

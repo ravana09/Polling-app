@@ -1,0 +1,87 @@
+/* .AddPoll-Header{
+  position: fixed;
+  top:0px
+} */
+
+.AddPoll-Container {
+  background-color: #DAE0E6;
+  width: 100%;
+  height: auto;
+  
+}
+
+.AddPoll-Navbar {
+  width: 25vh;
+  border: 1px solid black;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.AddPoll-Navbar:hover {
+  background-color: #F2F8FD;
+}
+
+.AddPoll-Body {
+  width: 100%;
+  height: auto;
+  min-height: 70vh;
+  
+}
+.Addpoll-Buttons{
+  background-color: #FF4500;
+  width: 150px;
+  color: white;
+  border-radius: 20px;
+}
+
+.Cancel-Buttons{
+  background-color:#c2c3c4;
+  width: 150px;
+  color: white;
+  border-radius: 20px;
+
+}
+
+@media (min-width: 768px) {
+  .AddPoll-Body {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+}
+
+.AddPoll-PollsCard {
+  background-color: #f7f7f7;
+  width: 100%;
+  border-radius: 0;
+  min-height: 40vh;
+  padding: 20px;
+}
+
+.AddPoll-textArea {
+  background-color: #f7f7f7;
+  width: 100%;
+  border-radius: 0;
+  min-height: 10vh;
+}
+
+@media (min-width: 768px) {
+  .AddPoll-PollsCard {
+    width: 47rem;
+    background-color: #f7f7f7;
+    border-radius: 0;
+  }
+
+  .AddPoll-Container {
+    background-color: #DAE0E6;
+    width: 100%;
+    height: auto;
+  }
+}
+
+
+
+
+
+

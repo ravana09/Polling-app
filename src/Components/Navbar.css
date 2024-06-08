@@ -1,0 +1,106 @@
+General Styles
+.Title {
+  position: fixed;
+}
+
+.sidebar {
+  width: 360px;
+  background-color: #ffffff;
+  color: rgb(244, 240, 240);
+  height: 100vh;
+  position: fixed;
+  font-size: 15px;
+  border-right: 0.1px solid rgba(0, 0, 0, 0.2);
+  z-index: 1050;
+}
+
+.sidebar h2 {
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  display: block;
+  padding: 20px;
+  transition: background-color 0.3s;
+  font-size: larger;
+}
+
+.sidebar ul li a:hover {
+  background-color: #575757;
+}
+
+.main-content {
+  margin-left: 250px;
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+
+.signOut {
+  position: absolute;
+  top:75vh;
+  margin-top: 20px;
+
+  width: 150px;
+  background-color: #ff895d;
+  border: none;
+}
+
+.Nav-Links {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+#Mobile_view {
+  display: none;
+}
+
+@media only screen and (max-width: 1220px) {
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+    padding: 10px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+}
+
+@media only screen and (max-width: 770px) {
+  .sidebar {
+    display: none;
+  }
+
+  #desktop_view {
+    display: none;
+  }
+
+  #Mobile_view {
+    display: block;
+    width: 100%;
+  }
+
+  .Mobile_container {
+    margin-top: 35px;
+    margin-bottom: 0;
+  }
+
+  .polling {
+    margin-top: 40px;
+  }
+
+  .polling_row {
+    margin-top: 20px;
+  }
+
+  .search-Bar {
+    display: none;
+  }
+}

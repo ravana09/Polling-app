@@ -1,0 +1,26 @@
+.fixed-top {
+  position: fixed;
+  top: 0;
+}
+.home-Body {
+  margin-top: 60px;
+  width: 260px;
+}
+.Header {
+  border-bottom: 0.1px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+.Header-Title{
+  color: orange;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.search-Bar{
+  width: 500px;
+  background-color: #EDEFF1;
+  border-radius: 20px;
+  margin-left: 50px;
+  margin-right: 250px;
+
+}

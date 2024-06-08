@@ -1,0 +1,25 @@
+
+
+.range-Card {
+  background-color: #edeff1;
+}
+
+.rangeInnerCard{
+  width: 100%;
+  background-color: #FAFAFB;
+  border: 0.1px solid rgba(0, 0, 0, 0.2);
+ 
+}
+
+.Range-Colour {
+ 
+
+  height: 30px;
+  margin: 5px 0;
+ 
+  padding-left: 10;
+}
+
+.Result-range{
+  margin: 10px;
+}

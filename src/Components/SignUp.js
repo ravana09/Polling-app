@@ -6,6 +6,8 @@ import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 import signUpimg from "../Images/signupCard.jpg";
 import GoogleImg from "../Images/googleImg.png";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 function SignUp() {
   const [showEmailOtpInput, setShowEmailOtpInput] = useState(false);
@@ -24,19 +26,23 @@ function SignUp() {
       case "Name":
         if (/^[A-Za-z]*$/.test(value) || value === " ") {
           setData({ ...data, [name]: value });
+          console.log({ ...data, [name]: value });
         }
         break;
       case "MobileNumber":
         if (/^\d*$/.test(value) && value.length <= 10) {
           setData({ ...data, [name]: value });
+          console.log({ ...data, [name]: value });
         }
         break;
       case "Email":
         setData({ ...data, [name]: value });
+        console.log({ ...data, [name]: value });
         break;
       case "Password":
         if (value.length <= 8) {
           setData({ ...data, [name]: value });
+          console.log({ ...data, [name]: value });
         }
         break;
       default:
@@ -62,6 +68,65 @@ function SignUp() {
       .matches(/^[\w\d\W]{8}$/, "Password must be exactly 8 characters")
       .required("Password is required"),
   });
+  const handleSubmit = async (values, actions) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/createuser",
+        {
+          user_name: values.Name,
+          email: values.Email,
+          phone_number: values.MobileNumber,
+          password: values.Password,
+        }
+      );
+      console.log(response);
+
+      if (response.status === 201) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Signed up successfully",
+        });
+
+        console.log("Sign up successful:", response.data);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Error:in sign up",
+        });
+        console.error("Sign up failed:", response.data);
+        // Handle error (show error message, etc.)
+      }
+    } catch (error) {
+      console.error("An error occurred during sign up:", error);
+      // Handle error (show error message, etc.)
+    }
+    actions.setSubmitting(false);
+  };
 
   const EmailSendOTP = () => {
     // Logic to send OTP to the email
@@ -82,11 +147,6 @@ function SignUp() {
   };
 
   let navigate = useNavigate();
-  const handleSubmit = (values, actions) => {
-    console.log(values);
-    actions.resetForm();
-    navigate("/");
-  };
 
   return (
     <div className="Body-container">
@@ -104,6 +164,7 @@ function SignUp() {
                 <Formik
                   initialValues={data}
                   validationSchema={schema}
+                  enableReinitialize
                   onSubmit={handleSubmit}
                 >
                   {({ handleSubmit }) => (
@@ -249,7 +310,7 @@ function SignUp() {
                       </center>
                       <hr />
                       <div className="OtherLogin">
-                      <center>
+                        <center>
                           <Button
                             variant="light"
                             className="  Google-Column"
@@ -262,7 +323,7 @@ function SignUp() {
                             />
                             CONTINUE WITH GOOGLE
                           </Button>
-                          </center>
+                        </center>
                       </div>
                       <div>
                         <p className="text-center">

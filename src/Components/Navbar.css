@@ -47,9 +47,19 @@ General Styles
   margin-top: 20px;
 
   width: 150px;
-  background-color: #ff895d;
+  background-color: #FF4500;
   border: none;
 }
+.signOut:hover {
+  position: absolute;
+  top:75vh;
+  margin-top: 20px;
+
+  width: 150px;
+  background-color: #fa6e3b;
+  border: none;
+}
+
 
 .Nav-Links {
   margin-top: 10px;

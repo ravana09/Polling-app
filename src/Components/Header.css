@@ -11,7 +11,12 @@
   background-color: white;
 }
 .Header-Title{
-  color: orange;
+  color:#FF4500;
+  font-size: 30px;
+  font-weight: 800;
+}
+.Header-Title:hover{
+  color:#FF4500;
   font-size: 30px;
   font-weight: 800;
 }

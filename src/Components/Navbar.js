@@ -82,13 +82,13 @@ function NavBar() {
                       <div>
                         <Nav.Link
                           className="Nav-Links"
-                          onClick={() => handleClick("/home")}
+                          onClick={() => handleClick("/polling")}
                         >
                           Home
                         </Nav.Link>
                         <Nav.Link
                           className="Nav-Links"
-                          onClick={() => handleClick("/Polling")}
+                          onClick={() => handleClick("/polling")}
                         >
                           Services
                         </Nav.Link>
@@ -119,9 +119,7 @@ function NavBar() {
 
               <Button
                 onClick={handleSignOut}
-                style={{
-                  backgroundColor: "#FF895D",
-                }}
+               
                 className="d-flex align-items-end m-10 signOut "
               >
                 <Row>
@@ -142,7 +140,7 @@ function NavBar() {
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                   <Nav.Link
-                    onClick={() => handleClick("/home")}
+                    onClick={() => handleClick("/polling")}
                     style={{ paddingLeft: 20 }}
                   >
                     Home

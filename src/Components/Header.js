@@ -10,9 +10,8 @@ function Header() {
         <Col  xs={12} md={12} lg={12} xl={12}>
           <Navbar expand="lg"className=" Header">
             <Container >
-              <Navbar.Brand href="#home" className="Header-Title">GT POLL</Navbar.Brand>
-              {/* <Navbar.Toggle />
-              <Navbar.Collapse className="justify-content-end"> */}
+              <Navbar.Brand  className="Header-Title">GT POLL</Navbar.Brand>
+             
                 <Form inline>
                   <Row>
                     <Col xs="auto">

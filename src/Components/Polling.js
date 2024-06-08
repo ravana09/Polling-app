@@ -90,7 +90,7 @@ function Polling() {
   }, []);
 
   return (
-    <Row className="polling_row">
+    <Row className="polling_row"  >
       <div className="pollingBody">
         <Col md={12} sm={12}>
           {fetchData.map((apiData) => (

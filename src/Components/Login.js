@@ -49,7 +49,7 @@ function Login() {
     setFormData({ PhoneNumber: "", Password: "" });
     console.log(formData.PhoneNumber)
     localStorage.setItem("Phone Number ",formData.PhoneNumber)
-    navigate("/home");
+    navigate("/polling");
    
   }
 

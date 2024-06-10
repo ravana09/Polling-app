@@ -86,9 +86,9 @@ function NewPassword() {
       <div className="Body-container">
         <Container>
           <Row className="justify-content-center align-items-center">
-            <Col xs={12} md={6} className="d-flex justify-content-center mb-3">
+            {/* <Col xs={12} md={6} className="d-flex justify-content-center mb-3">
               <img className="LoginImages" src={signUpimg} alt="signupImage" />
-            </Col>
+            </Col> */}
             <Col xs={12} md={6}>
               <Card
                 className="LoginCard mx-auto"

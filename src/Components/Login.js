@@ -106,7 +106,7 @@ function Login() {
         navigate("/signup");
       },1000
       )
-      localStorage.setItem("Phone Number ", formData.PhoneNumber);
+      localStorage.setItem("MobileNUmber", formData.PhoneNumber);
     }
   }
   

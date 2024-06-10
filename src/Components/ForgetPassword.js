@@ -49,71 +49,110 @@ function ForgetPassword() {
   const navigate = useNavigate();
 
   function handleSubmit() {
-    localStorage.setItem("Phone Number", formData.PhoneNumber);
-    navigate("/NewPassword");
+    localStorage.setItem("MobileNUmber", formData.PhoneNumber);
+    if (setIsOtpSent) {
+      navigate("/NewPassword");
+    } else {
+    }
   }
 
   const MobileSendOTP = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/mobileauth/send-otp-sms", {
-        number: formData.PhoneNumber,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/mobileauth/send-otp-sms",
+        {
+          number: formData.PhoneNumber,
+        }
+      );
 
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "OTP Sent successfully",
+        const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
           timer: 1000,
           timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: "OTP Sent successfully",
         });
 
         setShowMobileOtpInput(true);
         setIsOtpSent(true);
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Failed to send OTP",
+        const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
-          timer: 3000,
+          timer: 1000,
           timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+
+        Toast.fire({
+          icon: "error",
+          title: "Failed to send OTP",
         });
       }
     } catch (err) {
       console.log("Error occurred with Network: ", err);
-      Swal.fire({
-        icon: "error",
-        title: "Error Occurred in sending OTP",
+
+      const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 1000,
         timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Error Occurred in sending OTP",
       });
     }
   };
 
   const MobileOTPVerification = async (setFieldError) => {
     try {
-      const response = await axios.post("http://localhost:5000/mobileauth/verify-otp-sms", {
-        number: formData.PhoneNumber,
-        otp: formData.MobileOtp,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/mobileauth/verify-otp-sms",
+        {
+          number: formData.PhoneNumber,
+          otp: formData.MobileOtp,
+        }
+      );
 
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "OTP Verified successfully",
+        const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
-          timer: 3000,
+          timer: 1000,
           timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
         });
+
+        Toast.fire({
+          icon: "success",
+          title: "OTP Verified successfully",
+        });
+
         setShowMobileOtpInput(false);
         setFormData((prevData) => ({ ...prevData, MobileOtp: "" }));
       } else {
@@ -130,7 +169,10 @@ function ForgetPassword() {
       <Container>
         <Row className="justify-content-center align-items-center">
           <Col xs={12} md={6}>
-            <Card className="LoginCard mx-auto" style={{ maxWidth: "100%", height: "auto" }}>
+            <Card
+              className="LoginCard mx-auto"
+              style={{ maxWidth: "100%", height: "auto" }}
+            >
               <Card.Body>
                 <Formik
                   initialValues={formData}
@@ -185,7 +227,9 @@ function ForgetPassword() {
                             </Col>
                             <Col sm={6}>
                               <Button
-                                onClick={() => MobileOTPVerification(setFieldError)}
+                                onClick={() =>
+                                  MobileOTPVerification(setFieldError)
+                                }
                                 variant="success"
                                 type="submit"
                               >

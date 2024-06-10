@@ -10,6 +10,7 @@ import NewPassword from './Components/NewPassword';
 import Header from './Components/Header';
 import AddPoll from './Components/AddPoll';
 import SideNavBar from './Components/Navbar';
+import GooogleForm from './Components/GooogleForm';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/NewPassword" element={<NewPassword />} />
+        <Route path="/GooogleForm" element={<GooogleForm />} />
+
         
        
         <Route path="/Polling" element={<WithHomeLayout component={<Polling />} />} />

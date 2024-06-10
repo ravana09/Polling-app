@@ -17,47 +17,48 @@ function SignUp() {
     Email: "",
     MobileNumber: "",
     Password: "",
+    EmailOtp: "",
+    MobileOtp: "",
   });
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     const { name, value } = e.target;
 
     switch (name) {
       case "Name":
-        if (/^[A-Za-z]*$/.test(value) || value === " ") {
+        if (/^[A-Za-z\s]*$/.test(value)) {
           setData({ ...data, [name]: value });
-          console.log({ ...data, [name]: value });
         }
         break;
       case "MobileNumber":
         if (/^\d*$/.test(value) && value.length <= 10) {
           setData({ ...data, [name]: value });
-          console.log({ ...data, [name]: value });
+        }
+        break;
+      case "MobileOtp":
+        if (/^\d*$/.test(value) && value.length <= 6) {
+          setData({ ...data, [name]: value });
         }
         break;
       case "Email":
+      case "EmailOtp":
         setData({ ...data, [name]: value });
-        console.log({ ...data, [name]: value });
         break;
       case "Password":
         if (value.length <= 6) {
           setData({ ...data, [name]: value });
-          console.log({ ...data, [name]: value });
         }
         break;
       default:
         break;
     }
-  }
+  };
 
   const schema = yup.object().shape({
     Name: yup.string().required("Name is required"),
     Email: yup
       .string()
-      .matches(
-        /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]{2,6}$/,
-        "Enter a valid email"
-      )
+      .email("Enter a valid email")
       .required("Email is required"),
     MobileNumber: yup
       .string()
@@ -65,9 +66,14 @@ function SignUp() {
       .required("Mobile Number is required"),
     Password: yup
       .string()
-      .matches(/^[\w\d\W]{6}$/, "Password must be exactly 8 characters")
+      .max(6, "Password must be at most 6 characters")
       .required("Password is required"),
+    EmailOtp: yup.string().when("showEmailOtpInput", {
+      is: true,
+      then: yup.string().required("OTP is required"),
+    }),
   });
+
   const handleSubmit = async (values, actions) => {
     try {
       const response = await axios.post(
@@ -79,77 +85,150 @@ function SignUp() {
           password: values.Password,
         }
       );
-      console.log(response);
-
       if (response.status === 201) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
+        Swal.fire({
           icon: "success",
           title: "Signed up successfully",
+          showConfirmButton: false,
+          timer: 2000,
         });
 
-        console.log("Sign up successful:", response.data);
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
+        Swal.fire({
+          icon: "error",
+          title: "Error in sign up",
           showConfirmButton: false,
           timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
         });
-        Toast.fire({
-          icon: "error",
-          title: "Error:in sign up",
-        });
-        console.error("Sign up failed:", response.data);
-        // Handle error (show error message, etc.)
       }
     } catch (error) {
       console.error("An error occurred during sign up:", error);
-      // Handle error (show error message, etc.)
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred during sign up",
+        text: error.message,
+        showConfirmButton: true,
+      });
     }
     actions.setSubmitting(false);
   };
 
-  const EmailSendOTP = () => {
-    if (data.Email !== "") {
-      setShowEmailOtpInput(true);
+  const EmailSendOTP = async () => {
+    try {
+      if (!data.Email) {
+        throw new Error("Email is required");
+      }
+
+      const response = await axios.post(
+        "http://localhost:5000/emailauth/send-welcome-email",
+        { email: data.Email }
+      );
+
+      if (response.status === 200) {
+        setShowEmailOtpInput(true);
+        Swal.fire({
+          icon: "success",
+          title: "OTP sent successfully",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Failed to send OTP",
+          showConfirmButton: true,
+        });
+      }
+    } catch (err) {
+      console.log("Error occurred: ", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error occurred",
+        text: err.message,
+        showConfirmButton: true,
+      });
     }
   };
-  
 
-  const MobileSendOTP = () => {
-  if(data.MobileNumber !=="" && data.MobileNumber.length !==9 && showEmailOtpInput===true){
-    setShowMobileOtpInput(true);
+  const EmailOTPVerification = async (values, setFieldError) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/emailauth/verify-otp",
+        { email: data.Email, otp: data.EmailOtp }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Email verified successfully",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setShowEmailOtpInput(false);
+      } else {
+        setFieldError("EmailOtp", "Invalid OTP, please try again");
+      }
+    } catch (err) {
+      console.log("Error occurred: ", err);
+      setFieldError("EmailOtp", "Error occurred, please try again");
+    }
+  };
+
+  const MobileSendOTP = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/mobileauth/send-otp-sms",
+        {
+          number: data.MobileNumber,
+        }
+      );
+      if (response.status === 200) {
+        setShowMobileOtpInput(true);
+        console.log("Otp has been sent to Mobile Number ", response);
+      } else {
+        console.log("Error in sending OTP to Mobile Number ", response);
+      }
+    } catch (err) {
+      console.log("Error occurred: ", err);
+    }
+  };
+
+  const MobileOTPVerification = async (setFieldError) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/mobileauth/verify-otp-sms",
+        {
+          number: data.MobileNumber,
+          otp: data.MobileOtp,
+        }
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Mobile number verified successfully",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setShowMobileOtpInput(false);
+      } else {
+        setFieldError("MobileOtp", "Invalid OTP, please try again");
+      }
+    } catch (err) {
+      console.log("Error occurred: ", err);
+      setFieldError("MobileOtp", "Error occurred, please try again");
+    }
+  };
+
+  let navigate=useNavigate()
+  function handleGoogle() {
+    navigate('/GooogleForm')
+    
   }
-  };
 
-  const EmailOTPVerification = () => {
-    // Logic to verify the email OTP
-  };
 
-  const MobileOTPVerification = () => {
-    // Logic to verify the mobile OTP
-  };
-
-  let navigate = useNavigate();
 
   return (
     <div className="Body-container">
@@ -161,7 +240,11 @@ function SignUp() {
           <Col xs={12} md={6}>
             <Card
               className="LoginCard mx-auto"
-              style={{ maxWidth: "95%", height: "auto",backgroundColor:'cadetblue' }}
+              style={{
+                maxWidth: "95%",
+                height: "auto",
+                backgroundColor: "cadetblue",
+              }}
             >
               <Card.Body>
                 <Formik
@@ -170,7 +253,7 @@ function SignUp() {
                   enableReinitialize
                   onSubmit={handleSubmit}
                 >
-                  {({ handleSubmit }) => (
+                  {({ handleSubmit, setFieldError }) => (
                     <Form noValidate onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>Name</Form.Label>
@@ -181,12 +264,12 @@ function SignUp() {
                           value={data.Name}
                           onChange={handleChange}
                         />
+                        <ErrorMessage
+                          name="Name"
+                          className="text-danger"
+                          component="div"
+                        />
                       </Form.Group>
-                      <ErrorMessage
-                        name="Name"
-                        className="text-danger"
-                        component="div"
-                      />
 
                       <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label>Email</Form.Label>
@@ -199,13 +282,12 @@ function SignUp() {
                               value={data.Email}
                               onChange={handleChange}
                             />
+                            <ErrorMessage
+                              name="Email"
+                              className="text-danger"
+                              component="div"
+                            />
                           </Col>
-                          <ErrorMessage
-                            name="Email"
-                            className="text-danger"
-                            component="div"
-                          />
-
                           <Col sm={3}>
                             <Button type="button" onClick={EmailSendOTP}>
                               Send OTP
@@ -222,13 +304,21 @@ function SignUp() {
                               <Form.Control
                                 type="text"
                                 placeholder="Enter OTP"
-                                required
+                                name="EmailOtp"
+                                value={data.EmailOtp}
+                                onChange={handleChange}
+                              />
+                              <ErrorMessage
+                                name="EmailOtp"
+                                className="text-danger"
+                                component="div"
                               />
                             </Col>
-
                             <Col sm={6}>
                               <Button
-                                onClick={EmailOTPVerification}
+                                onClick={() =>
+                                  EmailOTPVerification(data, setFieldError)
+                                }
                                 variant="success"
                               >
                                 Verify
@@ -249,12 +339,12 @@ function SignUp() {
                               value={data.MobileNumber}
                               onChange={handleChange}
                             />
+                            <ErrorMessage
+                              name="MobileNumber"
+                              className="text-danger"
+                              component="div"
+                            />
                           </Col>
-                          <ErrorMessage
-                            name="MobileNumber"
-                            className="text-danger"
-                            component="div"
-                          />
                           <Col sm={3}>
                             <Button type="button" onClick={MobileSendOTP}>
                               Send OTP
@@ -266,17 +356,26 @@ function SignUp() {
                       {showMobileOtpInput && (
                         <Form.Group className="mb-3" controlId="formMobileOtp">
                           <Row>
-                            <Form.Label>Enter OTP</Form.Label>
+                            <Form.Label>Enter Mobile OTP</Form.Label>
                             <Col sm={6}>
                               <Form.Control
                                 type="text"
-                                placeholder="Enter OTP"
-                                required
+                                placeholder="Enter Mobile OTP"
+                                name="MobileOtp"
+                                value={data.MobileOtp}
+                                onChange={handleChange}
+                              />
+                              <ErrorMessage
+                                name="MobileOtp"
+                                className="text-danger"
+                                component="div"
                               />
                             </Col>
                             <Col sm={6}>
                               <Button
-                                onClick={MobileOTPVerification}
+                                onClick={() =>
+                                  MobileOTPVerification(setFieldError)
+                                }
                                 variant="success"
                               >
                                 Verify
@@ -295,12 +394,12 @@ function SignUp() {
                           value={data.Password}
                           onChange={handleChange}
                         />
+                        <ErrorMessage
+                          name="Password"
+                          className="text-danger"
+                          component="div"
+                        />
                       </Form.Group>
-                      <ErrorMessage
-                        name="Password"
-                        className="text-danger"
-                        component="div"
-                      />
 
                       <center>
                         <Button
@@ -311,31 +410,44 @@ function SignUp() {
                           Sign Up
                         </Button>
                       </center>
-                      <hr />
-                      <div className="OtherLogin">
-                        <center>
-                          <Button
-                            variant="light"
-                            className="  Google-Column"
-                            style={{ height: "40px" }}
-                          >
-                            <img
-                              src={GoogleImg}
-                              alt="Google img"
-                              className="GoogleImg "
-                            />
-                            CONTINUE WITH GOOGLE
-                          </Button>
-                        </center>
-                      </div>
-                      <div style={{marginTop:10}}>
-                        <p className="text-center">
-                          Already have an account? <Link to="/" style={{color:"Black",textDecoration:"none"}}>Sign In</Link>
-                        </p>
-                      </div>
                     </Form>
                   )}
                 </Formik>
+
+                <div className="text-center mt-4">
+                  <p style={{ color: "black" }}>Or Sign Up with</p>
+                  <Button
+                    variant="outline-primary"
+                    className="GoogleButton"
+                    style={{ backgroundColor: "white", color: "red" }}
+                    onClick={() => {
+                      handleGoogle();
+                    }}
+                  >
+                    <img
+                      src={GoogleImg}
+                      alt="Google"
+                      style={{
+                        width: "30px",
+                        marginRight: "8px",
+                      }}
+                    />
+                    Google
+                  </Button>
+                </div>
+
+                <div className="text-center mt-3">
+                  <p style={{ color: "black" }}>
+                    Already have an account?{" "}
+                    <Link
+                      to="/"
+                      style={{ color: "blue", textDecoration: "none" }}
+                    >
+                      {" "}
+                      Log In
+                    </Link>
+                  </p>
+                </div>
               </Card.Body>
             </Card>
           </Col>

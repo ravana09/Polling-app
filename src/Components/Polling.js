@@ -12,6 +12,9 @@ function Polling() {
   const [pollId, setPollId] = useState("");
   const [pollCounts, setPollCounts] = useState([]); // State to store the poll ID
 
+   //personal id 
+   let id=localStorage.getItem('Id')
+
   function handleData(e) {
     setSelectedOption(e.target.value);
   }
@@ -22,7 +25,7 @@ function Polling() {
     if (selectedOption && pollId) {
       try {
         const url = `http://localhost:5000/poll/voting/${pollId}/${selectedOption}`;
-        await axios.post(url);
+        await axios.post(url,{userID:id});
 
         const Toast = Swal.mixin({
           toast: true,

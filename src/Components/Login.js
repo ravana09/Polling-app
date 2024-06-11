@@ -6,7 +6,6 @@ import "../Components/Login.css";
 import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 
-
 import LoginImg from "../Images/signUp.jpg";
 import GoogleImg from "../Images/googleImg.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -55,8 +54,10 @@ function Login() {
         phone_number: formData.PhoneNumber,
         password: formData.Password,
       });
+
+      console.log(response.data.user.user_name);
       console.log(response);
-  
+
       if (response.status === 200) {
         const Toast = Swal.mixin({
           toast: true,
@@ -69,17 +70,24 @@ function Login() {
             toast.onmouseleave = Swal.resumeTimer;
           },
         });
-  
+
         Toast.fire({
           icon: "success",
           title: "Signed in successfully",
         });
-  
-        console.log('Signed in successfully');
-        setTimeout(()=>{
+
+        //local storage 
+        localStorage.setItem("Users_Name", response.data.user.user_name);
+        localStorage.setItem(
+          "Users_PhoneNumber",
+          response.data.user.phone_number
+        );
+        localStorage.setItem("Id", response.data.user._id);
+
+        console.log("Signed in successfully");
+        setTimeout(() => {
           navigate("/polling");
-        },1000
-        )
+        }, 1000);
       }
     } catch (err) {
       console.error("Error Occurred:", err);
@@ -100,19 +108,13 @@ function Login() {
         title: "User is not a register User",
       });
 
-      console.log('Signed in successfully');
-      setTimeout(()=>{
-       
+      console.log("Signed in successfully");
+      setTimeout(() => {
         navigate("/signup");
-      },1000
-      )
+      }, 1000);
       localStorage.setItem("MobileNUmber", formData.PhoneNumber);
     }
   }
-  
-
-
-  
 
   return (
     <>
@@ -126,7 +128,11 @@ function Login() {
             <Col xs={12} md={6}>
               <Card
                 className="LoginCard mx-auto"
-                style={{ maxWidth: "100%", height: "auto" ,backgroundColor:'cadetblue'}}
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  backgroundColor: "cadetblue",
+                }}
               >
                 <Card.Body>
                   <Formik
@@ -185,7 +191,12 @@ function Login() {
                         <hr />
                         <center>
                           {" "}
-                          <a href="/ForgetPassword" style={{color:"Black",textDecoration:"none"}}>Forget Password </a>
+                          <a
+                            href="/ForgetPassword"
+                            style={{ color: "Black", textDecoration: "none" }}
+                          >
+                            Forget Password{" "}
+                          </a>
                           <p>OR</p>
                         </center>
 
@@ -194,7 +205,7 @@ function Login() {
                             <Button
                               variant="light"
                               className="  Google-Column"
-                              style={{ height: "40px" }}
+                              style={{ height: "40px", width: "100% " }}
                             >
                               <img
                                 src={GoogleImg}
@@ -206,9 +217,14 @@ function Login() {
                           </center>
                         </div>
                         <div>
-                          <p className="text-center" >
+                          <p className="text-center">
                             Don't have an account?{" "}
-                            <Link to="/signup" style={{color:"Black",textDecoration:"none"}}>Sign Up </Link>{" "}
+                            <Link
+                              to="/signup"
+                              style={{ color: "Black", textDecoration: "none" }}
+                            >
+                              Sign Up{" "}
+                            </Link>{" "}
                           </p>
                         </div>
                       </Form>

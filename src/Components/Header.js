@@ -11,7 +11,8 @@ function Header() {
     return '';
   }
 
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("Users_Name");
+  
 
   function handleClick() {}
   return (

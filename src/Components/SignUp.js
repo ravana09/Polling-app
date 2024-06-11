@@ -419,7 +419,7 @@ function SignUp() {
                   <Button
                     variant="outline-primary"
                     className="GoogleButton"
-                    style={{ backgroundColor: "white", color: "red" }}
+                    style={{ backgroundColor: "white", color: "red",width:"100%" }}
                     onClick={() => {
                       handleGoogle();
                     }}

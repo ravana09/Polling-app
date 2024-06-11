@@ -46,8 +46,8 @@ function NavBar() {
 
   // Function to handle sign-out
   function handleSignOut() {
-    localStorage.removeItem("Phone Number");
-    localStorage.removeItem("Phone Number ");
+    localStorage.clear();
+    localStorage.removeItem("MobileNUmber ");
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",

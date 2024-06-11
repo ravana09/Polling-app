@@ -70,10 +70,17 @@ const createPoll = async (e) => {
       // desc:data.desc,
       createdBy: id,
       expirationTime:""
-    });
+    }
+
+ 
+    );
 
     console.log(response);
 
+    if(response.status===201){
+  
+    
+  
     Swal.fire({
       icon: "success",
       title: "Poll Created Successfully",
@@ -83,6 +90,17 @@ const createPoll = async (e) => {
       timer: 3000,
       timerProgressBar: true,
     });
+
+
+    setData({
+      Title: '',
+      Question: '',
+      options: [{option:" "},{option:" "}] 
+    });
+    setCategory('')
+    setDuration('')
+
+  }
 
   } catch (error) {
     console.error("Error creating poll:", error);

@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "../Components/Polling.css";
-import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Form,
+  Row,
+  Button,
+  Stack,
+  Badge,
+
+} from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
 function Polling() {
   const [fetchData, setFetchData] = useState([]); // State to fetch data
@@ -11,9 +21,14 @@ function Polling() {
   const [votedPollIds, setVotedPollIds] = useState([]); // State to store voted poll IDs
   const [pollId, setPollId] = useState("");
   const [pollCounts, setPollCounts] = useState([]); // State to store the poll ID
+  const [liked, setLiked] = useState(false);
 
-   //personal id 
-   let id=localStorage.getItem('Id')
+  const handleCheckboxChange = () => {
+    setLiked(!liked);
+  };
+
+  //personal id
+  let id = localStorage.getItem("Id");
 
   function handleData(e) {
     setSelectedOption(e.target.value);
@@ -25,7 +40,7 @@ function Polling() {
     if (selectedOption && pollId) {
       try {
         const url = `http://localhost:5000/poll/voting/${pollId}/${selectedOption}`;
-        await axios.post(url,{userID:id});
+        await axios.post(url, { userID: id });
 
         const Toast = Swal.mixin({
           toast: true,
@@ -93,7 +108,7 @@ function Polling() {
   }, []);
 
   return (
-    <Row className="polling_row"  >
+    <Row className="polling_row">
       <div className="pollingBody">
         <Col md={12} sm={12}>
           {fetchData.map((apiData) => (
@@ -110,7 +125,9 @@ function Polling() {
                 >
                   <Card.Title>{apiData.question}</Card.Title>
                   <Stack direction="horizontal" gap={2}>
-                    <Badge bg="primary" className="Badge">{apiData.category}</Badge>
+                    <Badge bg="primary" className="Badge">
+                      {apiData.category}
+                    </Badge>
                   </Stack>
 
                   {votedPollIds.includes(apiData.poll_id) ? (
@@ -148,6 +165,36 @@ function Polling() {
                             </Button>
                           )}
                         </Form>
+                        <hr />
+                        <Row>
+                          <Col sm={3} md={3} lg={3} xl={3}>
+                          
+                              <input
+                                type="checkbox"
+                                checked={liked}
+                                onChange={handleCheckboxChange}
+                                style={{ display: "none" }}
+                                id="like-checkbox"
+                              />
+                              <label
+                                htmlFor="like-checkbox"
+                                style={{ cursor: "pointer" }}
+                              >
+                                {liked ? (
+                                  <FaHeart
+                                    style={{ color: "red", fontSize: "24px" }}
+                                  />
+                                ) : (
+                                  <FaRegHeart style={{ fontSize: "24px" }} />
+                                )}
+                              </label>
+                              <span style={{ marginLeft: "8px" }}>Like</span>
+                          
+                          </Col>
+                          <Col sm={3} md={3} lg={3} xl={3}></Col>
+                          <Col sm={3} md={3} lg={3} xl={3}></Col>
+                          <Col sm={3} md={3} lg={3} xl={3}></Col>
+                        </Row>
                       </Card.Body>
                     </Card>
                   )}

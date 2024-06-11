@@ -11,12 +11,10 @@ function Home({ children }) {
       <Row>
         
           <Row className="fixed-top">
-            <Col xs={12}>
+            <Col xs={12}  >
               <Header />
             </Col>
           </Row>
-        
-
         <Row>
           <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
             <SideNavBar />

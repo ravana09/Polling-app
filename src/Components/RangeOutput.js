@@ -6,13 +6,17 @@ import { GiCheckMark } from "react-icons/gi";
 
 function RangeOutput({ pollId, selectOption }) {
   const [pollResults, setPollResults] = useState([]);
-  let [higherColur,setHignColour]=useState("")
+  let [higherColur,setHignColour]=useState("");
+
+   //personal id
+   let id = localStorage.getItem("Id");
  
   useEffect(() => {
     const fetchPollResults = async () => {
       try {
+        let url=`http://localhost:5000/poll/getbyid/${pollId}`
         const res = await axios.get(
-          `http://localhost:5000/poll/getbyid/${pollId}`
+          url,{ userID: id }
         );
         setPollResults(res.data.options);
         console.log(res.data.options);

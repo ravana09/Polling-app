@@ -42,8 +42,6 @@ function NavBar() {
     // }
   }
 
- 
-
   // Function to handle sign-out
   function handleSignOut() {
     localStorage.clear();
@@ -102,7 +100,13 @@ function NavBar() {
                           className="Nav-Links"
                           onClick={() => handleClick("/VotedLIst")}
                         >
-                          Voted POlls
+                          Voted Polls
+                        </Nav.Link>
+                        <Nav.Link
+                          className="Nav-Links"
+                          onClick={() => handleClick("/SearchingPoll")}
+                        >
+                          Search A poll
                         </Nav.Link>
                       </div>
                       <b>
@@ -119,7 +123,6 @@ function NavBar() {
 
               <Button
                 onClick={handleSignOut}
-               
                 className="d-flex align-items-end m-10 signOut "
               >
                 <Row>
@@ -143,7 +146,7 @@ function NavBar() {
                     onClick={() => handleClick("/polling")}
                     style={{ paddingLeft: 20 }}
                   >
-                  Poll List
+                    Poll List
                   </Nav.Link>
                   <Nav.Link
                     className="Nav-Links"
@@ -159,16 +162,28 @@ function NavBar() {
                     Clients
                   </Nav.Link>
                   <Nav.Link
-                    onClick={() => handleClick("/home")}
+                    className="Nav-Links"
+                    onClick={() => handleClick("/VotedLIst")}
                     style={{ paddingLeft: 20 }}
                   >
-                    Contact
+                    Voted Polls
+                  </Nav.Link>
+                  <Nav.Link
+                    className="Nav-Links"
+                    onClick={() => handleClick("/SearchingPoll")}
+                    style={{ paddingLeft: 20 }}
+                  >
+                    Search A poll
                   </Nav.Link>
                   {/* Sign-out button */}
                   <Nav.Link
                     onClick={handleSignOut}
-                    
-                    style={{ paddingLeft: 20, backgroundColor: "#FF895D" ,width:100,height:"auto"}}
+                    style={{
+                      paddingLeft: 20,
+                      backgroundColor: "#FF895D",
+                      width: 100,
+                      height: "auto",
+                    }}
                     className="d-flex align-items-end "
                   >
                     Sign Out

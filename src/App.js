@@ -12,6 +12,9 @@ import AddPoll from './Components/AddPoll';
 import SideNavBar from './Components/Navbar';
 import GooogleForm from './Components/GooogleForm';
 import VotedLIst from './Components/VotedLIst';
+import Like from './Components/Tools/Like';
+import Trending from './Components/Trending/Trending';
+import SearchingPoll from './Components/SearchingPoll';
 
 function App() {
   return (
@@ -22,6 +25,8 @@ function App() {
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/NewPassword" element={<NewPassword />} />
         <Route path="/GooogleForm" element={<GooogleForm />} />
+        <Route path="/Like" element={<Like />} />
+        <Route path="/Trending" element={<Trending />} />
 
         
        
@@ -30,6 +35,7 @@ function App() {
         <Route path="/RangeOutput" element={<WithHomeLayout component={<RangeOutput />} />} />
         <Route path="/AddPoll" element={<WithHomeLayout component={<AddPoll />} />} />
         <Route path="/VotedLIst" element={<WithHomeLayout component={<VotedLIst />} />} />
+        <Route path="/SearchingPoll" element={<WithHomeLayout component={<SearchingPoll/>} />} />
       </Routes>
     </BrowserRouter>
   );

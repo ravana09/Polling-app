@@ -4,6 +4,9 @@
   top:0px
 } */
 
+.AddPoll-PollsCard{
+  position: fixed;
+}
 .AddPoll-Container {
   background-color: #dae0e6;
   /* width: 100%; */

@@ -3,6 +3,7 @@ import "../Components/Range.css";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { GiCheckMark } from "react-icons/gi";
+import Like from "./Tools/Like";
 
 function RangeOutput({ pollId, selectOption }) {
   const [pollResults, setPollResults] = useState([]);
@@ -96,6 +97,8 @@ function RangeOutput({ pollId, selectOption }) {
                                   </span>
                                 </b>
                               </div>
+                             
+                        
                             </div>
                           </div>
                         );
@@ -106,7 +109,14 @@ function RangeOutput({ pollId, selectOption }) {
                   </Card.Body>
                 </Card>
               </Card.Body>
-              {/* <Card.Footer className="text-muted">Poll Results</Card.Footer> */}
+              <Row>
+              <Col sm={3} md={3} lg={3} xl={3}>
+              <Like pollId={pollId} />
+              </Col>
+              <Col sm={3} md={3} lg={3} xl={3}></Col>
+              <Col sm={3} md={3} lg={3} xl={3}></Col>
+              <Col sm={3} md={3} lg={3} xl={3}></Col>
+            </Row>
             </Card>
           </Col>
         </div>

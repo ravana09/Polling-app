@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../Components/Polling.css";
-import {
-  Card,
-  Col,
-  Form,
-  Row,
-  Button,
-  Stack,
-  Badge,
-} from "react-bootstrap";
+import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
-import { FaRegHeart, FaHeart } from 'react-icons/fa';
+// import Like from "./Tools/Like";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 function Polling() {
   const [fetchData, setFetchData] = useState([]);
@@ -22,14 +15,11 @@ function Polling() {
     return storedVotedPollIds ? JSON.parse(storedVotedPollIds) : [];
   });
   const [pollId, setPollId] = useState("");
+//like 
+  const [liked, setLiked] = useState(false);
 
-  const[votedPoll,setVOtedPoll]=useState(false)
+  const [votedPoll, setVOtedPoll] = useState(false);
   // const [pollCounts, setPollCounts] = useState([]);
-  // const [liked, setLiked] = useState(false);
-
-  // const handleCheckboxChange = () => {
-  //   setLiked(!liked);
-  // };
 
   const id = localStorage.getItem("Id");
 
@@ -61,17 +51,19 @@ function Polling() {
             icon: "success",
             title: "Your Poll has Been Saved",
           });
-          
 
           if (!votedPollIds.includes(pollId)) {
             const updatedVotedPollIds = [...votedPollIds, pollId];
             setVotedPollIds(updatedVotedPollIds);
-            localStorage.setItem("votedPollIds", JSON.stringify(updatedVotedPollIds));
-            setVOtedPoll(true)
+            localStorage.setItem(
+              "votedPollIds",
+              JSON.stringify(updatedVotedPollIds)
+            );
+            setVOtedPoll(true);
           }
         }
       } catch (error) {
-        console.error("Error voting:",  error.message);
+        console.error("Error voting:", error.message);
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -85,7 +77,9 @@ function Polling() {
         });
         Toast.fire({
           icon: "error",
-          title: `Error voting: ${error.response ? error.response.data.error : error.message}`,
+          title: `Error voting: ${
+            error.response ? error.response.data.error : error.message
+          }`,
         });
       }
     }
@@ -116,16 +110,59 @@ function Polling() {
     fetchVotedPolls();
   }, [id]);
 
+  //Like 
+
+ 
+  const userId = localStorage.getItem("Id");
+
+  useEffect(() => {
+    // Fetch the initial like status when the component mounts
+    const fetchLikedStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/poll/getliked/${userId}`);
+      
+        const likedPolls = response.data.likedPolls; 
+        setLiked(likedPolls.includes(pollId));
+      } catch (error) {
+        console.error("Error fetching liked status:", error);
+      }
+    };
+
+    if (userId && pollId) {
+      fetchLikedStatus();
+    }
+  }, [userId, pollId]);
+
+  const handleCheckboxChange = async () => {
+    const newLikedStatus = !liked;
+
+    try {
+      await axios.post(`http://localhost:5000/poll/like/${pollId}`, {
+        userID: userId,
+        liked: newLikedStatus,
+      });
+      setLiked(newLikedStatus);
+    } catch (error) {
+      console.error("Error updating liked status:", error);
+      console.error("Detailed error information:", error.response || error.message);
+    }
+  };
+
+
   return (
     <Row className="polling_row">
       <div className="pollingBody">
         <Col md={12} sm={12}>
-        {fetchData.map((apiData) => (
+          {fetchData.map((apiData) => (
             <div key={apiData.poll_id}>
               <Card className="card">
                 <Card.Title className="poll-Title">{apiData.title}</Card.Title>
                 <Card.Body
-                  className={`polling ${votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""}`}
+                  className={`polling ${
+                    votedPollIds.includes(apiData.poll_id)
+                      ? "polling-range"
+                      : ""
+                  }`}
                 >
                   <Card.Title>{apiData.question}</Card.Title>
                   <Stack direction="horizontal" gap={2}>
@@ -168,33 +205,35 @@ function Polling() {
                               Vote
                             </Button>
                           )}
+                          <Row>
+                            <Col sm={3} md={3} lg={3} xl={3}>
+                              <input
+                                type="checkbox"
+                                checked={liked}
+                                onChange={handleCheckboxChange}
+                                style={{ display: "none" }}
+                                id="like-checkbox"
+                              />
+                              <label
+                                htmlFor="like-checkbox"
+                                style={{ cursor: "pointer" }}
+                              >
+                                {liked ? (
+                                  <FaHeart
+                                    style={{ color: "red", fontSize: "24px" }}
+                                  />
+                                ) : (
+                                  <FaRegHeart style={{ fontSize: "24px" }} />
+                                )}
+                              </label>
+                              <span style={{ marginLeft: "8px" }}>Like</span>
+                            </Col>
+                            <Col sm={3} md={3} lg={3} xl={3}></Col>
+                            <Col sm={3} md={3} lg={3} xl={3}></Col>
+                            <Col sm={3} md={3} lg={3} xl={3}></Col>
+                          </Row>
                         </Form>
                         <hr />
-                        {/* <Row>
-                          <Col sm={3} md={3} lg={3} xl={3}>
-                            <input
-                              type="checkbox"
-                              checked={liked}
-                              onChange={handleCheckboxChange}
-                              style={{ display: "none" }}
-                              id="like-checkbox"
-                            />
-                            <label
-                              htmlFor="like-checkbox"
-                              style={{ cursor: "pointer" }}
-                            >
-                              {liked ? (
-                                <FaHeart style={{ color: "red", fontSize: "24px" }} />
-                              ) : (
-                                <FaRegHeart style={{ fontSize: "24px" }} />
-                              )}
-                            </label>
-                            <span style={{ marginLeft: "8px" }}>Like</span>
-                          </Col>
-                          <Col sm={3} md={3} lg={3} xl={3}></Col>
-                          <Col sm={3} md={3} lg={3} xl={3}></Col>
-                          <Col sm={3} md={3} lg={3} xl={3}></Col>
-                        </Row> */}
                       </Card.Body>
                     </Card>
                   )}

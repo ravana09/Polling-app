@@ -3,35 +3,33 @@ import { Container, Row, Col } from "react-bootstrap";
 import Header from "../Components/Header";
 import "../Components/Home.css";
 import SideNavBar from "./Navbar";
-import Trending from "./Trending";
+import Trending from "./Trending/Trending";
 
 function Home({ children }) {
   return (
     <>
-    <Container fluid>
       <Row>
-        
+        <Container fluid style={{ marginLeft: "0px" }}>
           <Row className="fixed-top">
-            <Col xs={12}  >
+            <Col xs={12}>
               <Header />
             </Col>
           </Row>
-        <Row>
-          <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
-            <SideNavBar />
-          </Col>
-          <Col xs={12} md={6} lg={6} xl={6} className="Home-Body">
-            {children}
-          </Col>
-          <Col xs={12} md={3} lg={3} xl={3} className="Home-Body">
-          <Trending/>
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
+              <SideNavBar />
+            </Col>
+            <Col xs={12} md={6} lg={6} xl={6} className="Home-Body">
+              {children}
+            </Col>
+            <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
+              <Trending />
+            </Col>
+          </Row>
+        </Container>
       </Row>
-    </Container>
     </>
   );
 }
 
 export default Home;
-  

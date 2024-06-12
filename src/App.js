@@ -11,6 +11,7 @@ import Header from './Components/Header';
 import AddPoll from './Components/AddPoll';
 import SideNavBar from './Components/Navbar';
 import GooogleForm from './Components/GooogleForm';
+import VotedLIst from './Components/VotedLIst';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
        
         <Route path="/RangeOutput" element={<WithHomeLayout component={<RangeOutput />} />} />
         <Route path="/AddPoll" element={<WithHomeLayout component={<AddPoll />} />} />
+        <Route path="/VotedLIst" element={<WithHomeLayout component={<VotedLIst />} />} />
       </Routes>
     </BrowserRouter>
   );

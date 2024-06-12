@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import "../Components/Range.css";
 import React, { useEffect, useState } from "react";
@@ -6,20 +7,16 @@ import { GiCheckMark } from "react-icons/gi";
 
 function RangeOutput({ pollId, selectOption }) {
   const [pollResults, setPollResults] = useState([]);
-  let [higherColur,setHignColour]=useState("");
 
-   //personal id
-   let id = localStorage.getItem("Id");
- 
+  // Personal ID
+  const id = localStorage.getItem("Id");
+
   useEffect(() => {
     const fetchPollResults = async () => {
       try {
-        let url=`http://localhost:5000/poll/getbyid/${pollId}`
-        const res = await axios.get(
-          url,{ userID: id }
-        );
+        const url = `http://localhost:5000/poll/getbyid/${pollId}`;
+        const res = await axios.get(url, { userID: id });
         setPollResults(res.data.options);
-        console.log(res.data.options);
       } catch (error) {
         console.error("Error fetching poll results:", error);
       }
@@ -27,7 +24,6 @@ function RangeOutput({ pollId, selectOption }) {
 
     fetchPollResults();
   }, [pollId]);
-  console.log(pollResults.option);
 
   const totalVotes = pollResults.reduce(
     (total, option) => total + option.votes,
@@ -45,7 +41,7 @@ function RangeOutput({ pollId, selectOption }) {
               <Card.Body>
                 <Card className="rangeInnerCard">
                   <Card.Header className="cardHeader">
-                    {totalVotes}.total votes
+                    {totalVotes} total votes
                   </Card.Header>
                   <Card.Body>
                     {pollResults.length > 0 ? (
@@ -62,9 +58,7 @@ function RangeOutput({ pollId, selectOption }) {
                                 className="Range-Colour"
                                 style={{
                                   width: `${percentage}%`,
-                                  backgroundColor:
-                                  option.votes === maxVotes ? "#FF895D" : "#B7CAD4",
-                                  
+                                  backgroundColor: option.votes === maxVotes ? "#FF895D" : "#B7CAD4",
                                 }}
                               ></div>
                               <div>
@@ -74,22 +68,29 @@ function RangeOutput({ pollId, selectOption }) {
                                       position: "relative",
                                       bottom: 35,
                                       marginLeft: 10,
-                                      fontSize:15
-                                      
+                                      fontSize: 15,
                                     }}
                                   >
                                     {selectOption === option.option ? (
                                       <>
-                                      <span>{` ${option.votes}   `}{" "}</span>
-                                        
-                                        <span style={{marginLeft:10,marginRight:5}}>{option.option}</span>
-                                        <GiCheckMark />
+                                        <span>{` ${option.votes}   `}{" "}</span>
+                                        <span style={{ marginLeft: 10, marginRight: 5 }}>
+                                          <GiCheckMark />
+                                        </span>
                                       </>
                                     ) : (
-                                      <>
-                                       <span >{option.votes} </span><span style={{marginLeft:10}}>  {option.option} </span>   
-                                       </>
+                                      <span>{` ${option.votes}   `}</span>
                                     )}
+                                  </span>
+                                  <span
+                                    style={{
+                                      position: "relative",
+                                      bottom: 35,
+                                      left: 200,
+                                      fontSize: 15,
+                                    }}
+                                  >
+                                    {option.option}
                                   </span>
                                 </b>
                               </div>
@@ -98,12 +99,11 @@ function RangeOutput({ pollId, selectOption }) {
                         );
                       })
                     ) : (
-                      <div>No data available</div>
+                      <p>No poll results found.</p>
                     )}
                   </Card.Body>
                 </Card>
               </Card.Body>
-              {/* <Card.Footer className="text-muted">Poll Results</Card.Footer> */}
             </Card>
           </Col>
         </div>

@@ -8,7 +8,6 @@ import {
   Button,
   Stack,
   Badge,
-
 } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -16,19 +15,23 @@ import RangeOutput from "./RangeOutput";
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
 function Polling() {
-  const [fetchData, setFetchData] = useState([]); // State to fetch data
+  const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
-  const [votedPollIds, setVotedPollIds] = useState([]); // State to store voted poll IDs
+  const [votedPollIds, setVotedPollIds] = useState(() => {
+    const storedVotedPollIds = localStorage.getItem("votedPollIds");
+    return storedVotedPollIds ? JSON.parse(storedVotedPollIds) : [];
+  });
   const [pollId, setPollId] = useState("");
-  const [pollCounts, setPollCounts] = useState([]); // State to store the poll ID
-  const [liked, setLiked] = useState(false);
 
-  const handleCheckboxChange = () => {
-    setLiked(!liked);
-  };
+  const[votedPoll,setVOtedPoll]=useState(false)
+  // const [pollCounts, setPollCounts] = useState([]);
+  // const [liked, setLiked] = useState(false);
 
-  //personal id
-  let id = localStorage.getItem("Id");
+  // const handleCheckboxChange = () => {
+  //   setLiked(!liked);
+  // };
+
+  const id = localStorage.getItem("Id");
 
   function handleData(e) {
     setSelectedOption(e.target.value);
@@ -40,40 +43,35 @@ function Polling() {
     if (selectedOption && pollId) {
       try {
         const url = `http://localhost:5000/poll/voting/${pollId}/${selectedOption}`;
-        await axios.post(url, { userID: id });
+        const response = await axios.post(url, { userID: id });
 
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Your Poll has Been Saved",
-        });
+        if (response.status === 200) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Your Poll has Been Saved",
+          });
+          
 
-        // Check if the poll ID has already been voted on
-        if (votedPollIds.includes(pollId)) {
-          // Increment the counter for the poll ID
-          const updatedCounts = pollCounts.map((count) =>
-            count.pollId === pollId
-              ? { ...count, count: count.count + 1 }
-              : count
-          );
-          setPollCounts(updatedCounts);
-        } else {
-          // Add the voted poll ID to the list of voted poll IDs
-          setVotedPollIds([...votedPollIds, pollId]);
-          // Initialize the counter for the poll ID
-          setPollCounts([...pollCounts, { pollId: pollId, count: 1 }]);
+          if (!votedPollIds.includes(pollId)) {
+            const updatedVotedPollIds = [...votedPollIds, pollId];
+            setVotedPollIds(updatedVotedPollIds);
+            localStorage.setItem("votedPollIds", JSON.stringify(updatedVotedPollIds));
+            setVOtedPoll(true)
+          }
         }
       } catch (error) {
+        console.error("Error voting:",  error.message);
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -87,7 +85,7 @@ function Polling() {
         });
         Toast.fire({
           icon: "error",
-          title: `Error voting: ${error.message}`,
+          title: `Error voting: ${error.response ? error.response.data.error : error.message}`,
         });
       }
     }
@@ -98,14 +96,26 @@ function Polling() {
       try {
         const res = await axios.get("http://localhost:5000/poll/getall");
         setFetchData(res.data);
-        console.log(res.data);
       } catch (err) {
         console.log("Error", err);
       }
     };
 
-    fetchPollData();
-  }, []);
+    const fetchVotedPolls = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/poll/voted/${id}`);
+        const { pollIds } = response.data;
+        setVotedPollIds(pollIds);
+        localStorage.setItem("votedPollIds", JSON.stringify(pollIds));
+
+      } catch (error) {
+        console.error("Error fetching voted polls:", error);
+      }
+    };
+
+    fetchPollData(fetchVotedPolls());
+    
+  }, [id]);
 
   return (
     <Row className="polling_row">
@@ -118,9 +128,7 @@ function Polling() {
 
                 <Card.Body
                   className={`polling ${
-                    votedPollIds.includes(apiData.poll_id)
-                      ? "polling-range"
-                      : ""
+                    votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""
                   }`}
                 >
                   <Card.Title>{apiData.question}</Card.Title>
@@ -130,7 +138,7 @@ function Polling() {
                     </Badge>
                   </Stack>
 
-                  {votedPollIds.includes(apiData.poll_id) ? (
+                  {votedPollIds.includes(apiData.poll_id)&&votedPoll ? (
                     <RangeOutput
                       pollId={apiData.poll_id}
                       selectOption={selectedOption}
@@ -166,35 +174,31 @@ function Polling() {
                           )}
                         </Form>
                         <hr />
-                        <Row>
+                        {/* <Row>
                           <Col sm={3} md={3} lg={3} xl={3}>
-                          
-                              <input
-                                type="checkbox"
-                                checked={liked}
-                                onChange={handleCheckboxChange}
-                                style={{ display: "none" }}
-                                id="like-checkbox"
-                              />
-                              <label
-                                htmlFor="like-checkbox"
-                                style={{ cursor: "pointer" }}
-                              >
-                                {liked ? (
-                                  <FaHeart
-                                    style={{ color: "red", fontSize: "24px" }}
-                                  />
-                                ) : (
-                                  <FaRegHeart style={{ fontSize: "24px" }} />
-                                )}
-                              </label>
-                              <span style={{ marginLeft: "8px" }}>Like</span>
-                          
+                            <input
+                              type="checkbox"
+                              checked={liked}
+                              onChange={handleCheckboxChange}
+                              style={{ display: "none" }}
+                              id="like-checkbox"
+                            />
+                            <label
+                              htmlFor="like-checkbox"
+                              style={{ cursor: "pointer" }}
+                            >
+                              {liked ? (
+                                <FaHeart style={{ color: "red", fontSize: "24px" }} />
+                              ) : (
+                                <FaRegHeart style={{ fontSize: "24px" }} />
+                              )}
+                            </label>
+                            <span style={{ marginLeft: "8px" }}>Like</span>
                           </Col>
                           <Col sm={3} md={3} lg={3} xl={3}></Col>
                           <Col sm={3} md={3} lg={3} xl={3}></Col>
                           <Col sm={3} md={3} lg={3} xl={3}></Col>
-                        </Row>
+                        </Row> */}
                       </Card.Body>
                     </Card>
                   )}

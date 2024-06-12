@@ -100,9 +100,9 @@ function NavBar() {
                         </Nav.Link>
                         <Nav.Link
                           className="Nav-Links"
-                          onClick={() => handleClick("/home")}
+                          onClick={() => handleClick("/VotedLIst")}
                         >
-                          Contact
+                          Voted POlls
                         </Nav.Link>
                       </div>
                       <b>

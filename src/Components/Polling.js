@@ -103,33 +103,29 @@ function Polling() {
 
     const fetchVotedPolls = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/poll/voted/${id}`);
+        const url = `http://localhost:5000/poll/getvoted/${id}`;
+        const response = await axios.get(url);
         const { pollIds } = response.data;
         setVotedPollIds(pollIds);
-        localStorage.setItem("votedPollIds", JSON.stringify(pollIds));
-
       } catch (error) {
         console.error("Error fetching voted polls:", error);
       }
     };
 
-    fetchPollData(fetchVotedPolls());
-    
+    fetchPollData();
+    fetchVotedPolls();
   }, [id]);
 
   return (
     <Row className="polling_row">
       <div className="pollingBody">
         <Col md={12} sm={12}>
-          {fetchData.map((apiData) => (
+        {fetchData.map((apiData) => (
             <div key={apiData.poll_id}>
               <Card className="card">
                 <Card.Title className="poll-Title">{apiData.title}</Card.Title>
-
                 <Card.Body
-                  className={`polling ${
-                    votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""
-                  }`}
+                  className={`polling ${votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""}`}
                 >
                   <Card.Title>{apiData.question}</Card.Title>
                   <Stack direction="horizontal" gap={2}>
@@ -137,11 +133,11 @@ function Polling() {
                       {apiData.category}
                     </Badge>
                   </Stack>
-
-                  {votedPollIds.includes(apiData.poll_id)&&votedPoll ? (
+                  {votedPollIds.includes(apiData.poll_id) ? (
                     <RangeOutput
                       pollId={apiData.poll_id}
                       selectOption={selectedOption}
+                      setSelectedOption={setSelectedOption}
                     />
                   ) : (
                     <Card className="innerCard">

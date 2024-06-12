@@ -31,17 +31,21 @@
   background-color: #fafafb;
   border: none;
   margin-bottom: 20px;
+  /* border: 0.1px solid rgba(0, 0, 0, 0.2); */
+
 }
 
-.card:hover {
+/* .card:hover {
   background-color: #edeff1;
   cursor: pointer;
   border-radius: 20px;
-}
+} */
 
 .polling-range {
   background-color: #edeff1;
   border-radius: 20px;
+  border: 0.1px solid rgba(0, 0, 0, 0.2); 
+
 }
 
 .innerCard {
@@ -49,10 +53,10 @@
   border: 0.1px solid rgba(0, 0, 0, 0.2);
 }
 
-.innerCard:hover {
+/* .innerCard:hover {
   background-color: #fafafb;
   cursor: pointer;
-}
+} */
 
 .formRadio {
   font-size: medium;

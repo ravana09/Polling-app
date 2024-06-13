@@ -58,6 +58,7 @@
   cursor: pointer;
 }
 
+
 .formRadio {
   font-size: medium;
   font-family: sans-serif;
@@ -76,6 +77,13 @@
 
   margin-top: 10px;
 }
+
+.Comments_Card{
+  width: 100%;
+  background-color: #edeff1;
+
+}
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {

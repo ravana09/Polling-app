@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "../Components/Polling.css";
-import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Form,
+  Row,
+  Button,
+  Stack,
+  Badge,
+  Nav,
+} from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 function Polling() {
-
   //fetching data from api (getall)
   const [fetchData, setFetchData] = useState([]);
 
@@ -26,9 +34,15 @@ function Polling() {
   //like
   const [likedPolls, setLikedPolls] = useState(false);
 
-  const [likeClikedPolls,setLikeClickPolls]=useState('')
- 
-  const [likeCount, setLikeCount] = useState({});
+  const [likeClikedPolls, setLikeClickPolls] = useState("");
+
+  // const [likeCount, setLikeCount] = useState({});
+
+  //comments
+
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const[clickedComments,setClickedComments]=useState('')
 
   //poll Searching
   const [searchingPoll, setSearchingPoll] = useState("");
@@ -42,7 +56,7 @@ function Polling() {
     setSelectedOption(e.target.value);
   };
 
-  //voting function 
+  //voting function
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -65,13 +79,18 @@ function Polling() {
           if (!votedPollIds.includes(pollId)) {
             const updatedVotedPollIds = [...votedPollIds, pollId];
             setVotedPollIds(updatedVotedPollIds);
-            localStorage.setItem("votedPollIds", JSON.stringify(updatedVotedPollIds));
+            localStorage.setItem(
+              "votedPollIds",
+              JSON.stringify(updatedVotedPollIds)
+            );
           }
         }
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: `Error voting: ${error.response ? error.response.data.error : error.message}`,
+          title: `Error voting: ${
+            error.response ? error.response.data.error : error.message
+          }`,
           toast: true,
           position: "top-end",
           showConfirmButton: false,
@@ -108,57 +127,76 @@ function Polling() {
     fetchVotedPolls();
   }, [id]);
 
-     //Search poll
-     useEffect(() => {
-      const fetchPollById = async () => {
-        if (searchingPoll) {
-          try {
-            const response = await axios.get(`http://localhost:5000/poll/getbyid/${searchingPoll}`);
-            setFetchData([response.data]);
-          } catch (err) {
-            console.error(err);
-          }
+  //Search poll
+  useEffect(() => {
+    const fetchPollById = async () => {
+      if (searchingPoll) {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/poll/getbyid/${searchingPoll}`
+          );
+          setFetchData([response.data]);
+        } catch (err) {
+          console.error(err);
         }
-      };
-  
-      fetchPollById();
-    }, [searchingPoll]);
+      }
+    };
 
-    const displayedData = searchResults ? [searchResults] : fetchData;
+    fetchPollById();
+  }, [searchingPoll]);
 
+  const displayedData = searchResults ? [searchResults] : fetchData;
 
-  //Like function 
+  //Like function
 
   //liking a poll
   const handleCheckboxChange = async (pollId) => {
-    setLikeClickPolls(pollId)
-    console.log(pollId)
-  
-    setLikedPolls(!likedPolls)
-    try {
-      const response = await axios.post(`http://localhost:5000/poll/like/${pollId}`, {
-        userID: id,
-      });
-      if(response.status===200){
-        
-      }
+    setLikeClickPolls(pollId);
+    console.log(pollId);
 
-      
+    setLikedPolls(!likedPolls);
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/poll/like/${pollId}`,
+        {
+          userID: id,
+        }
+      );
+      if (response.status === 200) {
+      }
     } catch (err) {
       console.error("Error in Liking ", err);
     }
 
-    try{
-      const response = await axios.get(`http://localhost:5000/poll/getliked/${id}`)
-      console.log(response)
-    }catch(err){
-      console.error("Error in fetching liked polls", err)
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/poll/getliked/${id}`
+      );
+      console.log(response);
+    } catch (err) {
+      console.error("Error in fetching liked polls", err);
     }
   };
 
- 
+  //Comments
 
-  
+  const handleComment = (pollId) => {
+    console.log(pollId)
+    setClickedComments(pollId)
+   
+    setShowComments(!showComments);
+
+  };
+  console.log(clickedComments)
+
+  const handleCommentSubmit = () => {
+    // Logic to submit comment
+    console.log("New comment:", newComment);
+    // Assuming you want to close the comments section after submitting a comment
+    setShowComments(false);
+    // Clear input field after submitting comment
+    setNewComment("");
+  };
 
   return (
     <div>
@@ -182,7 +220,13 @@ function Polling() {
                   <Card.Title className="poll-Title">
                     {apiData.title}
                   </Card.Title>
-                  <Card.Body className={`polling ${votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""}`}>
+                  <Card.Body
+                    className={`polling ${
+                      votedPollIds.includes(apiData.poll_id)
+                        ? "polling-range"
+                        : ""
+                    }`}
+                  >
                     <Card.Title>{apiData.question}</Card.Title>
                     <Stack direction="horizontal" gap={2}>
                       <Badge bg="primary" className="Badge">
@@ -190,10 +234,16 @@ function Polling() {
                       </Badge>
                     </Stack>
                     {votedPollIds.includes(apiData.poll_id) ? (
-                      <RangeOutput pollId={apiData.poll_id} selectOption={selectedOption} setSelectedOption={setSelectedOption} />
+                      <RangeOutput
+                        pollId={apiData.poll_id}
+                        selectOption={selectedOption}
+                        setSelectedOption={setSelectedOption}
+                      />
                     ) : (
                       <Card className="innerCard">
-                        <Card.Header className="cardHeader">Featured</Card.Header>
+                        <Card.Header className="cardHeader">
+                          Featured
+                        </Card.Header>
                         <Card.Body>
                           <Form onSubmit={handleSubmit}>
                             {apiData.options.map((option, index) => (
@@ -213,7 +263,10 @@ function Polling() {
                               </Card.Title>
                             ))}
                             {apiData.poll_id === pollId && (
-                              <Button type="submit" style={{ margin: 10, backgroundColor: "grey" }}>
+                              <Button
+                                type="submit"
+                                style={{ margin: 10, backgroundColor: "grey" }}
+                              >
                                 Vote
                               </Button>
                             )}
@@ -223,23 +276,71 @@ function Polling() {
                       </Card>
                     )}
                   </Card.Body>
-                  
+
                   <Row>
-                    <Col sm={3} md={3} lg={3} xl={3}>
-                      <Button onClick={() => handleCheckboxChange(apiData.poll_id)}>
-                        {likedPolls&& (likeClikedPolls===apiData.poll_id) ? (
+                    <Col>
+                      {/* Like Button */}
+                      <Button
+                        onClick={() => handleCheckboxChange(apiData.poll_id)}
+                        style={{backgroundColor:"#EDEFF1",border:"none"}}
+                      >
+                        {likedPolls && likeClikedPolls === apiData.poll_id ? (
                           <FaHeart style={{ color: "red", fontSize: "24px" }} />
                         ) : (
-                          <FaHeart style={{ fontSize: "24px" }} />
+                          <FaHeart style={{color:'white', fontSize: "24px" }} />
                         )}
                       </Button>
-                    </Col>
-                    <Col>
-                    
+                      <span>Like</span>
+
+                      {/* comment button */}
+                      <Button variant="primary" onClick={()=>handleComment(apiData.poll_id)}>
+                        {showComments   ? "Close Comments" : "Comments"}
+                      </Button>
+                      <Card className="Comments_Card">
+                        {showComments && clickedComments===(apiData.poll_id)&&(
+                          <Card.Body>
+                            <Form onSubmit={handleCommentSubmit}>
+                              <Form.Group controlId="newComment">
+                                <Form.Label>Comments</Form.Label>
+                                <Form.Control
+                                  as="textarea"
+                                  rows={3}
+                                 
+                                  
+                                />
+                              </Form.Group>
+                              <Row>
+                                <Col sm={12} md={9} lg={9} xl={9}>
+                                  <Form.Group
+                                    className="mb-3 mt-2"
+                                    controlId="exampleForm.ControlInput1"
+                                  >
+                                    <Form.Control
+                                      type=""
+                                      placeholder="Add a Comment"
+                                      name="Comments"
+                                      value={newComment}
+                                      onChange={(e) =>
+                                        setNewComment(e.target.value)
+                                      }
+                                    />
+                                  </Form.Group>
+                                  
+                                </Col>
+                                <Col sm={12} md={3} lg={3} xl={3}>
+                                <Button variant="primary" type="submit" className="mb-3 mt-2">
+                                    Submit
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </Form>
+                          </Card.Body>
+                        )}
+                      </Card>
                     </Col>
                   </Row>
                 </Card>
-                <hr/>
+                <hr />
               </div>
             ))}
           </Col>

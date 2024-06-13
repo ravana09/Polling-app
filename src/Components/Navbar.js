@@ -102,12 +102,12 @@ function NavBar() {
                         >
                           Voted Polls
                         </Nav.Link>
-                        <Nav.Link
+                        {/* <Nav.Link
                           className="Nav-Links"
                           onClick={() => handleClick("/SearchingPoll")}
                         >
                           Search A poll
-                        </Nav.Link>
+                        </Nav.Link> */}
                       </div>
                       <b>
                         {" "}

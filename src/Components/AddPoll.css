@@ -5,11 +5,12 @@
 } */
 
 .AddPoll-PollsCard{
-  position: fixed;
+
+  width: 100%;
 }
 .AddPoll-Container {
   background-color: #dae0e6;
-  /* width: 100%; */
+  width: 100%;
   height: auto;
 }
 

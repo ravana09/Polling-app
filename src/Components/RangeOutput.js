@@ -3,7 +3,7 @@ import "../Components/Range.css";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { GiCheckMark } from "react-icons/gi";
-import Like from "./Tools/Like";
+
 
 function RangeOutput({ pollId, selectOption }) {
   const [pollResults, setPollResults] = useState([]);
@@ -28,7 +28,7 @@ function RangeOutput({ pollId, selectOption }) {
 
     fetchPollResults();
   }, [pollId]);
-  console.log(pollResults.option);
+  
 
   const totalVotes = pollResults.reduce(
     (total, option) => total + option.votes,
@@ -44,8 +44,8 @@ function RangeOutput({ pollId, selectOption }) {
       <Row>
         <div className="polling">
           <Col md={12} sm={12}>
-            <Card className="range-Card">
-              <Card.Body>
+            {/* <Card className="range-Card">
+              <Card.Body> */}
                 <Card className="rangeInnerCard">
                   <Card.Header className="cardHeader">
                     {totalVotes}.total votes
@@ -107,17 +107,13 @@ function RangeOutput({ pollId, selectOption }) {
                       <div>No data available</div>
                     )}
                   </Card.Body>
+             
                 </Card>
-              </Card.Body>
-              <Row>
-              <Col sm={3} md={3} lg={3} xl={3}>
-              <Like pollId={pollId} />
-              </Col>
-              <Col sm={3} md={3} lg={3} xl={3}></Col>
-              <Col sm={3} md={3} lg={3} xl={3}></Col>
-              <Col sm={3} md={3} lg={3} xl={3}></Col>
-            </Row>
-            </Card>
+            
+              {/* </Card.Body>
+              
+             
+            </Card> */}
           </Col>
         </div>
       </Row>

@@ -20,7 +20,7 @@ function RangeOutput({ pollId, selectOption }) {
           url,{ userID: id }
         );
         setPollResults(res.data.options);
-        console.log(res.data.options);
+        // console.log(res.data.options);
       } catch (error) {
         console.error("Error fetching poll results:", error);
       }

@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../Components/Polling.css";
-import {
-  Card,
-  Col,
-  Form,
-  Row,
-  Button,
-  Stack,
-  Badge,
-  Nav,
-} from "react-bootstrap";
+import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function Polling() {
   //fetching data from api (getall)
@@ -38,11 +30,6 @@ function Polling() {
 
   // const [likeCount, setLikeCount] = useState({});
 
-  //comments
-
-  const [showComments, setShowComments] = useState(false);
-  const [newComment, setNewComment] = useState("");
-  const[clickedComments,setClickedComments]=useState('')
 
   //poll Searching
   const [searchingPoll, setSearchingPoll] = useState("");
@@ -50,6 +37,9 @@ function Polling() {
 
   //user id from local stroraghe (login)
   const id = localStorage.getItem("Id");
+
+  //Navigation
+  let Navigate = useNavigate();
 
   //options handling
   const handleData = (e) => {
@@ -102,32 +92,36 @@ function Polling() {
   };
 
   //Fetching Data
+
   useEffect(() => {
-    const fetchPollData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/poll/getall");
-        setFetchData(res.data);
-      } catch (err) {
-        console.error("Error", err);
-      }
-    };
-
-    const fetchVotedPolls = async () => {
-      try {
-        const url = `http://localhost:5000/poll/getvoted/${id}`;
-        const response = await axios.get(url);
-        const { pollIds } = response.data;
-        setVotedPollIds(pollIds);
-      } catch (error) {
-        console.error("Error fetching voted polls:", error);
-      }
-    };
-
     fetchPollData();
     fetchVotedPolls();
   }, [id]);
 
+  const fetchPollData = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/poll/getall");
+      setFetchData(res.data);
+    } catch (err) {
+      console.error("Error", err);
+    }
+  };
+
+  const fetchVotedPolls = async () => {
+    try {
+      const url = `http://localhost:5000/poll/getvoted/${id}`;
+      const response = await axios.get(url);
+      const { pollIds } = response.data;
+      setVotedPollIds(pollIds);
+    } catch (error) {
+      console.error("Error fetching voted polls:", error);
+    }
+  };
+
+  
+
   //Search poll
+
   useEffect(() => {
     const fetchPollById = async () => {
       if (searchingPoll) {
@@ -178,25 +172,59 @@ function Polling() {
     }
   };
 
+  //Handle poll
+
+  function handlePoll(poll) {
+    // setClickedComments(poll)
+    let pollClicked = poll;
+    // setBackButton(!backButton);
+    Navigate('/Comments',{state:[pollClicked]})
+
+    // try {
+    //   const fetchPollById = async () => {
+    //     if (pollClicked) {
+    //       try {
+    //         const response = await axios.get(
+    //           `http://localhost:5000/poll/getbyid/${pollClicked}`
+    //         );
+    //         setFetchData([response.data]);
+    //         console.log([response.data]);
+    //       } catch (err) {
+    //         console.error(err);
+    //       }
+    //     }
+    //   };
+    //   fetchPollById();
+    // } catch (err) {
+    //   console.error(err);
+    // }
+  }
+
+  // function handleBackBUtton(){
+  //   fetchPollData();
+  //   fetchVotedPolls();
+   
+    
+  // }
+
   //Comments
 
-  const handleComment = (pollId) => {
-    console.log(pollId)
-    setClickedComments(pollId)
-   
-    setShowComments(!showComments);
+  // const handleComment = (pollId) => {
+  //   console.log(pollId);
+  //   setClickedComments(pollId);
 
-  };
-  console.log(clickedComments)
+  //   setShowComments(!showComments);
+  // };
+  // console.log(clickedComments);
 
-  const handleCommentSubmit = () => {
-    // Logic to submit comment
-    console.log("New comment:", newComment);
-    // Assuming you want to close the comments section after submitting a comment
-    setShowComments(false);
-    // Clear input field after submitting comment
-    setNewComment("");
-  };
+  // const handleCommentSubmit = () => {
+  //   // Logic to submit comment
+  //   console.log("New comment:", newComment);
+  //   // Assuming you want to close the comments section after submitting a comment
+  //   setShowComments(false);
+  //   // Clear input field after submitting comment
+  //   setNewComment("");
+  // };
 
   return (
     <div>
@@ -215,11 +243,15 @@ function Polling() {
         <div className="pollingBody">
           <Col md={12} sm={12}>
             {displayedData.map((apiData) => (
-              <div key={apiData.poll_id}>
+              <div
+                key={apiData.poll_id}
+              
+              >
                 <Card className="card">
                   <Card.Title className="poll-Title">
                     {apiData.title}
                   </Card.Title>
+
                   <Card.Body
                     className={`polling ${
                       votedPollIds.includes(apiData.poll_id)
@@ -227,6 +259,8 @@ function Polling() {
                         : ""
                     }`}
                   >
+                 
+
                     <Card.Title>{apiData.question}</Card.Title>
                     <Stack direction="horizontal" gap={2}>
                       <Badge bg="primary" className="Badge">
@@ -282,61 +316,67 @@ function Polling() {
                       {/* Like Button */}
                       <Button
                         onClick={() => handleCheckboxChange(apiData.poll_id)}
-                        style={{backgroundColor:"#EDEFF1",border:"none"}}
+                        style={{ backgroundColor: "inherit", border: "none" }}
                       >
                         {likedPolls && likeClikedPolls === apiData.poll_id ? (
                           <FaHeart style={{ color: "red", fontSize: "24px" }} />
                         ) : (
-                          <FaHeart style={{color:'white', fontSize: "24px" }} />
+                          <FaRegHeart
+                            style={{ color: "black", fontSize: "24px" }}
+                          />
                         )}
                       </Button>
                       <span>Like</span>
 
                       {/* comment button */}
-                      <Button variant="primary" onClick={()=>handleComment(apiData.poll_id)}>
-                        {showComments   ? "Close Comments" : "Comments"}
+                      <Button
+                        variant="primary"
+                        onClick={(e) => {
+                          handlePoll(apiData.poll_id);
+                        }}
+                      >
+                        Comments
                       </Button>
-                      <Card className="Comments_Card">
-                        {showComments && clickedComments===(apiData.poll_id)&&(
-                          <Card.Body>
-                            <Form onSubmit={handleCommentSubmit}>
-                              <Form.Group controlId="newComment">
-                                <Form.Label>Comments</Form.Label>
-                                <Form.Control
-                                  as="textarea"
-                                  rows={3}
-                                 
-                                  
-                                />
-                              </Form.Group>
-                              <Row>
-                                <Col sm={12} md={9} lg={9} xl={9}>
-                                  <Form.Group
-                                    className="mb-3 mt-2"
-                                    controlId="exampleForm.ControlInput1"
-                                  >
-                                    <Form.Control
-                                      type=""
-                                      placeholder="Add a Comment"
-                                      name="Comments"
-                                      value={newComment}
-                                      onChange={(e) =>
-                                        setNewComment(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  
-                                </Col>
-                                <Col sm={12} md={3} lg={3} xl={3}>
-                                <Button variant="primary" type="submit" className="mb-3 mt-2">
-                                    Submit
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </Form>
-                          </Card.Body>
-                        )}
-                      </Card>
+                      {/* <Card className="Comments_Card">
+                        {showComments &&
+                          clickedComments === apiData.poll_id && (
+                            <Card.Body>
+                              <Form onSubmit={handleCommentSubmit}>
+                                <Form.Group controlId="newComment">
+                                  <Form.Label>Comments</Form.Label>
+                                  <Form.Control as="textarea" rows={3} />
+                                </Form.Group>
+                                <Row>
+                                  <Col sm={12} md={9} lg={9} xl={9}>
+                                    <Form.Group
+                                      className="mb-3 mt-2"
+                                      controlId="exampleForm.ControlInput1"
+                                    >
+                                      <Form.Control
+                                        type=""
+                                        placeholder="Add a Comment"
+                                        name="Comments"
+                                        value={newComment}
+                                        onChange={(e) =>
+                                          setNewComment(e.target.value)
+                                        }
+                                      />
+                                    </Form.Group>
+                                  </Col>
+                                  <Col sm={12} md={3} lg={3} xl={3}>
+                                    <Button
+                                      variant="primary"
+                                      type="submit"
+                                      className="mb-3 mt-2"
+                                    >
+                                      Submit
+                                    </Button>
+                                  </Col>
+                                </Row>
+                              </Form>
+                            </Card.Body>
+                          )}
+                      </Card> */}
                     </Col>
                   </Row>
                 </Card>

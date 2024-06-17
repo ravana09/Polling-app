@@ -6,55 +6,40 @@ import axios from "axios";
 import RangeOutput from "./RangeOutput";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import loadingGif from "../Images/Loading.gif";
+import PollEndingTime from "./Timing/PollEndingTime";
+import PollStartingTime from "./Timing/PollStartingTime";
 
 function Polling() {
-  //fetching data from api (getall)
   const [fetchData, setFetchData] = useState([]);
-
-  //options
   const [selectedOption, setSelectedOption] = useState("");
-
-  //voting
   const [votedPollIds, setVotedPollIds] = useState(() => {
     const storedVotedPollIds = localStorage.getItem("votedPollIds");
     return storedVotedPollIds ? JSON.parse(storedVotedPollIds) : [];
   });
-
-  //poolid
   const [pollId, setPollId] = useState("");
-
-  //like
   const [likedPolls, setLikedPolls] = useState(false);
-
   const [likeClikedPolls, setLikeClickPolls] = useState("");
-
-  // const [likeCount, setLikeCount] = useState({});
-
-
-  //poll Searching
   const [searchingPoll, setSearchingPoll] = useState("");
   const [searchResults, setSearchResults] = useState(null);
+  // const[catogery,setCategory]=useState({})
+  const [loading, setLoading] = useState(true); // Loading state
 
-  //user id from local stroraghe (login)
+  //user id
   const id = localStorage.getItem("Id");
-
-  //Navigation
   let Navigate = useNavigate();
 
-  //options handling
   const handleData = (e) => {
     setSelectedOption(e.target.value);
   };
 
-  //voting function
+  //voating 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (selectedOption && pollId) {
       try {
         const url = `http://localhost:5000/poll/voting/${pollId}/${selectedOption}`;
-        const response = await axios.post(url, { userID: id });
-
+        const response = await axios.post(url, { user_id: id });
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
@@ -65,7 +50,6 @@ function Polling() {
             timer: 3000,
             timerProgressBar: true,
           });
-
           if (!votedPollIds.includes(pollId)) {
             const updatedVotedPollIds = [...votedPollIds, pollId];
             setVotedPollIds(updatedVotedPollIds);
@@ -90,24 +74,28 @@ function Polling() {
       }
     }
   };
-
-  //Fetching Data
-
+//gettting all data
   useEffect(() => {
     fetchPollData();
     fetchVotedPolls();
   }, [id]);
 
   const fetchPollData = async () => {
+    setLoading(true); // Start loading
     try {
       const res = await axios.get("http://localhost:5000/poll/getall");
       setFetchData(res.data);
+      // console.log(res.data);
+
+      // setCategory(res.data.category)
     } catch (err) {
       console.error("Error", err);
     }
+    setLoading(false); // Stop loading
   };
 
   const fetchVotedPolls = async () => {
+    setLoading(true); // Start loading
     try {
       const url = `http://localhost:5000/poll/getvoted/${id}`;
       const response = await axios.get(url);
@@ -116,15 +104,15 @@ function Polling() {
     } catch (error) {
       console.error("Error fetching voted polls:", error);
     }
+    setLoading(false); // Stop loading
   };
 
-  
 
-  //Search poll
-
+  //search
   useEffect(() => {
     const fetchPollById = async () => {
       if (searchingPoll) {
+        setLoading(true); // Start loading
         try {
           const response = await axios.get(
             `http://localhost:5000/poll/getbyid/${searchingPoll}`
@@ -133,21 +121,18 @@ function Polling() {
         } catch (err) {
           console.error(err);
         }
+        setLoading(false); // Stop loading
       }
     };
-
     fetchPollById();
   }, [searchingPoll]);
 
   const displayedData = searchResults ? [searchResults] : fetchData;
 
-  //Like function
 
-  //liking a poll
+  //like
   const handleCheckboxChange = async (pollId) => {
     setLikeClickPolls(pollId);
-    console.log(pollId);
-
     setLikedPolls(!likedPolls);
     try {
       const response = await axios.post(
@@ -161,7 +146,6 @@ function Polling() {
     } catch (err) {
       console.error("Error in Liking ", err);
     }
-
     try {
       const response = await axios.get(
         `http://localhost:5000/poll/getliked/${id}`
@@ -172,65 +156,21 @@ function Polling() {
     }
   };
 
-  //Handle poll
-
+  //comment 
   function handlePoll(poll) {
-    // setClickedComments(poll)
     let pollClicked = poll;
-    // setBackButton(!backButton);
-    Navigate('/Comments',{state:[pollClicked]})
-
-    // try {
-    //   const fetchPollById = async () => {
-    //     if (pollClicked) {
-    //       try {
-    //         const response = await axios.get(
-    //           `http://localhost:5000/poll/getbyid/${pollClicked}`
-    //         );
-    //         setFetchData([response.data]);
-    //         console.log([response.data]);
-    //       } catch (err) {
-    //         console.error(err);
-    //       }
-    //     }
-    //   };
-    //   fetchPollById();
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    Navigate("/Comments", { state: [pollClicked] });
   }
 
-  // function handleBackBUtton(){
-  //   fetchPollData();
-  //   fetchVotedPolls();
-   
-    
-  // }
+  //
 
-  //Comments
-
-  // const handleComment = (pollId) => {
-  //   console.log(pollId);
-  //   setClickedComments(pollId);
-
-  //   setShowComments(!showComments);
-  // };
-  // console.log(clickedComments);
-
-  // const handleCommentSubmit = () => {
-  //   // Logic to submit comment
-  //   console.log("New comment:", newComment);
-  //   // Assuming you want to close the comments section after submitting a comment
-  //   setShowComments(false);
-  //   // Clear input field after submitting comment
-  //   setNewComment("");
-  // };
+ 
 
   return (
     <div>
       <Row className="polling_row">
         <Form>
-          <Form.Group controlId="exampleForm.ControlInput1">
+          <Form.Group controlId="exampleForm.ControlInput1 mb-7">
             <Form.Control
               type="text"
               placeholder="Enter a Poll ID"
@@ -242,147 +182,130 @@ function Polling() {
         </Form>
         <div className="pollingBody">
           <Col md={12} sm={12}>
-            {displayedData.map((apiData) => (
-              <div
-                key={apiData.poll_id}
-              
-              >
-                <Card className="card">
-                  <Card.Title className="poll-Title">
-                    {apiData.title}
-                  </Card.Title>
-
-                  <Card.Body
-                    className={`polling ${
-                      votedPollIds.includes(apiData.poll_id)
-                        ? "polling-range"
-                        : ""
-                    }`}
-                  >
-                 
-
-                    <Card.Title>{apiData.question}</Card.Title>
-                    <Stack direction="horizontal" gap={2}>
-                      <Badge bg="primary" className="Badge">
-                        {apiData.category}
-                      </Badge>
-                    </Stack>
-                    {votedPollIds.includes(apiData.poll_id) ? (
-                      <RangeOutput
-                        pollId={apiData.poll_id}
-                        selectOption={selectedOption}
-                        setSelectedOption={setSelectedOption}
-                      />
-                    ) : (
-                      <Card className="innerCard">
-                        <Card.Header className="cardHeader">
-                          Featured
-                        </Card.Header>
-                        <Card.Body>
-                          <Form onSubmit={handleSubmit}>
-                            {apiData.options.map((option, index) => (
-                              <Card.Title key={index} style={{ margin: 10 }}>
-                                <Form.Check
-                                  type="radio"
-                                  label={option.option}
-                                  value={option.option}
-                                  onChange={(e) => {
-                                    handleData(e);
-                                    setPollId(apiData.poll_id);
-                                  }}
-                                  checked={selectedOption === option.option}
-                                  className="formRadio custom-radio"
-                                  style={{ margin: 10 }}
-                                />
-                              </Card.Title>
-                            ))}
-                            {apiData.poll_id === pollId && (
-                              <Button
-                                type="submit"
-                                style={{ margin: 10, backgroundColor: "grey" }}
-                              >
-                                Vote
-                              </Button>
-                            )}
-                          </Form>
-                          <hr />
-                        </Card.Body>
-                      </Card>
-                    )}
-                  </Card.Body>
-
-                  <Row>
-                    <Col>
-                      {/* Like Button */}
-                      <Button
-                        onClick={() => handleCheckboxChange(apiData.poll_id)}
-                        style={{ backgroundColor: "inherit", border: "none" }}
-                      >
-                        {likedPolls && likeClikedPolls === apiData.poll_id ? (
-                          <FaHeart style={{ color: "red", fontSize: "24px" }} />
-                        ) : (
-                          <FaRegHeart
-                            style={{ color: "black", fontSize: "24px" }}
-                          />
-                        )}
-                      </Button>
-                      <span>Like</span>
-
-                      {/* comment button */}
-                      <Button
-                        variant="primary"
-                        onClick={(e) => {
-                          handlePoll(apiData.poll_id);
-                        }}
-                      >
-                        Comments
-                      </Button>
-                      {/* <Card className="Comments_Card">
-                        {showComments &&
-                          clickedComments === apiData.poll_id && (
-                            <Card.Body>
-                              <Form onSubmit={handleCommentSubmit}>
-                                <Form.Group controlId="newComment">
-                                  <Form.Label>Comments</Form.Label>
-                                  <Form.Control as="textarea" rows={3} />
-                                </Form.Group>
-                                <Row>
-                                  <Col sm={12} md={9} lg={9} xl={9}>
-                                    <Form.Group
-                                      className="mb-3 mt-2"
-                                      controlId="exampleForm.ControlInput1"
-                                    >
-                                      <Form.Control
-                                        type=""
-                                        placeholder="Add a Comment"
-                                        name="Comments"
-                                        value={newComment}
-                                        onChange={(e) =>
-                                          setNewComment(e.target.value)
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </Col>
-                                  <Col sm={12} md={3} lg={3} xl={3}>
-                                    <Button
-                                      variant="primary"
-                                      type="submit"
-                                      className="mb-3 mt-2"
-                                    >
-                                      Submit
-                                    </Button>
-                                  </Col>
-                                </Row>
-                              </Form>
-                            </Card.Body>
-                          )}
-                      </Card> */}
-                    </Col>
-                  </Row>
-                </Card>
-                <hr />
+            {loading ? (
+              <div className="loading">
+                <img src={loadingGif} alt="Loading..." />
               </div>
-            ))}
+            ) : (
+              displayedData.map((apiData) => (
+                <div key={apiData.poll_id}>
+                  <Card className="card">
+                    <Card.Title className="poll-Title">
+                      {apiData.title}
+                    </Card.Title>
+
+                    <PollStartingTime
+                    createdTime={apiData.created_date}
+                    />
+                    <Card.Body
+                      className={`polling ${
+                        votedPollIds.includes(apiData.poll_id)
+                          ? "polling-range"
+                          : ""
+                      }`}
+                    >
+                      <Card.Title>{apiData.question}</Card.Title>
+                      <Stack direction="horizontal" gap={2}>
+                        <Badge bg="primary" className="Badge">
+                          {apiData.category?.category_name}
+                        </Badge>
+                      </Stack>
+                      {votedPollIds.includes(apiData.poll_id) ? (
+                        <RangeOutput
+                          pollId={apiData.poll_id}
+                          selectOption={selectedOption}
+                          setSelectedOption={setSelectedOption}
+                          createdTime={apiData.created_date}
+                          endingTime={apiData.expirationTime}
+                        />
+                      ) : (
+                        <Card className="innerCard">
+                          <Card.Header className="cardHeader">
+                            <Row>
+                              <Col sm={4} md={4} lg={4} xl={4}>   {apiData.voters.length}. votes</Col>
+                              <Col sm={4} md={4} lg={4} xl={4}></Col>
+                              <Col sm={4} md={4} lg={4} xl={4}>
+                              
+                              <PollEndingTime
+                              createdTime={apiData.created_date}
+                              endingTime={apiData.expirationTime}
+                              
+                              />
+                              </Col>
+                            </Row>
+                  
+
+
+                  </Card.Header>
+                          <Card.Body>
+                            <Form onSubmit={handleSubmit}>
+                              {apiData.options.map((option, index) => (
+                                <Card.Title key={index} style={{ margin: 10 }}>
+                                  <Form.Check
+                                    type="radio"
+                                    label={option.option}
+                                    value={option.option}
+                                    onChange={(e) => {
+                                      handleData(e);
+                                      setPollId(apiData.poll_id);
+                                    }}
+                                    checked={selectedOption === option.option}
+                                    className="formRadio custom-radio"
+                                    style={{ margin: 10 }}
+                                  />
+                                </Card.Title>
+                              ))}
+                              {apiData.poll_id === pollId && (
+                                <Button
+                                  type="submit"
+                                  style={{
+                                    margin: 10,
+                                    backgroundColor: "grey",
+                                  }}
+                                >
+                                  Vote
+                                </Button>
+                              )}
+                            </Form>
+                            <hr />
+                          </Card.Body>
+                        </Card>
+                      )}
+                    </Card.Body>
+                    <Row>
+                      <Col sm={3} md={3} lg={3} xl={3}>
+                        <Button
+                          onClick={() => handleCheckboxChange(apiData.poll_id)}
+                          style={{ backgroundColor: "inherit", border: "none" }}
+                        >
+                          {likedPolls && likeClikedPolls === apiData.poll_id ? (
+                            <FaHeart
+                              style={{ color: "red", fontSize: "24px" }}
+                            />
+                          ) : (
+                            <FaRegHeart
+                              style={{ color: "black", fontSize: "24px" }}
+                            />
+                          )}
+                        </Button>
+                        <span>Like</span>
+                      </Col>
+                      <Col sm={3} md={3} lg={3} xl={3}>
+                        <Button
+                          variant="primary"
+                          onClick={(e) => {
+                            handlePoll(apiData.poll_id);
+                          }}
+                        >
+                          Comments
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card>
+                  <hr />
+                </div>
+              ))
+            )}
           </Col>
         </div>
       </Row>

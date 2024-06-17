@@ -79,12 +79,15 @@ function SignUp() {
       const response = await axios.post(
         "http://localhost:5000/api/createuser",
         {
+         
           user_name: values.Name,
           email: values.Email,
           phone_number: values.MobileNumber,
           password: values.Password,
         }
+       
       );
+      console.log(response.data)
       if (response.status === 201) {
         Swal.fire({
           icon: "success",

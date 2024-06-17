@@ -33,7 +33,7 @@ function Trending() {
                   <ListGroup variant="flush">
                     <ListGroup.Item>Poll ID: {apidata.poll_id}</ListGroup.Item>
                     <ListGroup.Item>Question: {apidata.question}</ListGroup.Item>
-                    <ListGroup.Item>Total Votes: {apidata.totalVotes}</ListGroup.Item>
+                    <ListGroup.Item>Total Votes: {apidata.voters.length}</ListGroup.Item>
                   </ListGroup>
                 </Card.Text>
               </Card.Body>

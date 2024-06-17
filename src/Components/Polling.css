@@ -10,7 +10,7 @@
   width: 100%;
   max-width: 1000px;
   border-radius: 20px;
-  padding: 15px;
+ 
 }
 
 .Badge{
@@ -21,13 +21,13 @@
   font-size: 24px;
   padding: 10px;
 }
-.polling {
+/* .polling {
   height: auto;
-}
+} */
 
 .card {
   width: 100%;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   background-color: #fafafb;
   border: none;
   margin-bottom: 20px;
@@ -41,21 +41,28 @@
   border-radius: 20px;
 }
 
+
+
+
+
 .polling-range {
   background-color: #edeff1;
   border-radius: 20px;
-  border: 0.1px solid rgba(0, 0, 0, 0.2); 
+  /* border: 0.1px solid rgba(0, 0, 0, 0.2);  */
 
 }
 
 .innerCard {
   width: 100%;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+
 }
 
-.innerCard:hover {
-  background-color: #fafafb;
+.innerCard :hover {
+  background-color: #ffffff;
   cursor: pointer;
+  border-radius: 20px;
 }
 
 
@@ -74,8 +81,8 @@
   width: 100%;
   background-color: #edeff1;
   border-radius: 20px;
-
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .Comments_Card{

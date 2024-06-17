@@ -188,12 +188,24 @@ function Comments() {
     return <div>Loading...</div>;
   }
 
+  const handleBackBUtton=()=>{
+    Navigate("/polling")
+  }
+
   return (
     <div className="comments-section">
       <div>
         <Card className="card">
           <Card.Title className="poll-Title">{pollData.title}</Card.Title>
-          <MdNavigateBefore />
+          <Button onClick={()=>{
+            handleBackBUtton()
+          }}
+          className="BackButton"
+          
+          >
+         
+            <MdNavigateBefore />
+          </Button>
 
           <Card.Body
             className={`polling ${

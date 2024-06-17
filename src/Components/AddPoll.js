@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Components/AddPoll.css";
 import { Button, Card, Col, Container, Form, Nav, Row } from "react-bootstrap";
 import { RiDeleteBin6Fill } from "react-icons/ri";
@@ -8,25 +8,24 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 function AddPoll() {
-  // Title and Questions
   const [data, setData] = useState({
-    Title: "",
-    Question: "",
-    desc: '',
+    title: "",
+    question: "",
+    desc: "",
     options: [{ option: "" }, { option: "" }],
-    expirationTime: ""
+    expirationTime: "",
   });
 
-  // personal id 
-  const id = localStorage.getItem('Id');
+  const id = localStorage.getItem("Id");
 
   const handleChanges = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const [activeTab, setActiveTab] = useState("poll");
-  const [duration, setDuration] = useState(5);
-  const [category, setCategory] = useState("Music");
+  const [duration, setDuration] = useState(1);
+  const [category, setCategory] = useState([]);
+  const [CatogryChoose, setCatogerChoose] = useState("");
 
   const handleOptionChange = (index, event) => {
     const newOptions = [...data.options];
@@ -43,11 +42,33 @@ function AddPoll() {
     setData({ ...data, options: newOptions });
   };
 
+  //catogery id
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/Category/getall"
+        );
+        console.log(response.data);
+        setCategory(Array.isArray(response.data) ? response.data : []);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(CatogryChoose);
+
   const createPoll = async (e) => {
     e.preventDefault();
 
-    // Validate the form
-    if (!data.Title || !data.Question || data.options.some(option => !option.option)) {
+    if (
+      !data.title ||
+      !data.question ||
+      data.options.some((option) => !option.option)
+    ) {
       Swal.fire({
         icon: "error",
         title: "All fields are required",
@@ -56,16 +77,15 @@ function AddPoll() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/poll/create', {
-        question: data.Question,
-        title: data.Title,
-        category: category,
+      const response = await axios.post("http://localhost:5000/poll/create", {
+        question: data.question,
+        title: data.title,
+        category: CatogryChoose,
         options: data.options,
         createdBy: id,
-        expirationTime: ""
+        desc: data.desc,
+        duration: duration,
       });
-
-      console.log(response);
 
       if (response.status === 201) {
         Swal.fire({
@@ -79,16 +99,15 @@ function AddPoll() {
         });
 
         setData({
-          Title: "",
-          Question: "",
-          desc: '',
+          title: "",
+          question: "",
+          desc: "",
           options: [{ option: "" }, { option: "" }],
-          expirationTime: ""
+          expirationTime: "",
         });
         setCategory("Music");
         setDuration(5);
       }
-
     } catch (error) {
       console.error("Error creating poll:", error);
 
@@ -105,15 +124,68 @@ function AddPoll() {
     }
   };
 
-  const handlePoll = () => (
+  const renderOptions = () => (
+    <Col className="option_card">
+      {data.options.map((option, index) => (
+        <Form.Group className="mb-3" key={index}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IoOptionsSharp />
+            <Form.Control
+              type="text"
+              placeholder={`Option ${index + 1}`}
+              name="options"
+              value={option.option}
+              onChange={(e) => handleOptionChange(index, e)}
+              required
+            />
+            {index > 1 && (
+              <RiDeleteBin6Fill
+                variant="danger"
+                onClick={() => handleDeleteOption(index)}
+                style={{ marginLeft: "10px", cursor: "pointer" }}
+              />
+            )}
+          </div>
+        </Form.Group>
+      ))}
+      <Row>
+        <Col sm={6} md={5}>
+          <Button variant="secondary" className="AddButton" onClick={addOption}>
+            Add Option
+          </Button>
+        </Col>
+        <Col sm={6} md={7}>
+          <div style={{ marginTop: 10 }}>
+            <p>
+              Voting Period:
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                }}
+              >
+                <option value={1}>1 days</option>
+                <option value={2}>2 days</option>
+                <option value={3}>3 days</option>
+              </select>
+            </p>
+          </div>
+        </Col>
+      </Row>
+    </Col>
+  );
+
+  const renderPollForm = () => (
     <Card className="AddPoll-PollsCard">
       <Form onSubmit={createPoll}>
         <Form.Group className="mb-3" controlId="pollTitle">
           <Form.Control
             type="text"
             placeholder="Enter Your Title"
-            name="Title"
-            value={data.Title}
+            name="title"
+            value={data.title}
             onChange={handleChanges}
             required
           />
@@ -123,68 +195,14 @@ function AddPoll() {
             as="textarea"
             placeholder="Enter poll question"
             className="AddPoll-textArea"
-            name="Question"
-            value={data.Question}
+            name="question"
+            value={data.question}
             onChange={handleChanges}
             required
           />
         </Form.Group>
-
         <Row>
-          <Col className="option_card">
-            {data.options.map((option, index) => (
-              <Form.Group className="mb-3" key={index}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <IoOptionsSharp />
-                  <Form.Control
-                    type="text"
-                    placeholder={`Option ${index + 1}`}
-                    name="options"
-                    value={option.option}
-                    onChange={(e) => handleOptionChange(index, e)}
-                    required
-                  />
-                  {index > 1 && (
-                    <RiDeleteBin6Fill
-                      variant="danger"
-                      onClick={() => handleDeleteOption(index)}
-                      style={{ marginLeft: "10px", cursor: "pointer" }}
-                    />
-                  )}
-                </div>
-              </Form.Group>
-            ))}
-            <Row>
-              <Col sm={6} md={5}>
-                <Button
-                  variant="secondary"
-                  className="AddButton"
-                  onClick={addOption}
-                >
-                  Add Option
-                </Button>
-              </Col>
-              <Col sm={6} md={7}>
-                <div style={{ marginTop: 10 }}>
-                  <p>
-                    Voting Period:
-                    <select
-                      value={duration}
-                      onChange={(e) => setDuration(e.target.value)}
-                      style={{
-                        backgroundColor: "transparent",
-                        border: "none",
-                      }}
-                    >
-                      <option value={5}>5 days</option>
-                      <option value={10}>10 days</option>
-                      <option value={15}>15 days</option>
-                    </select>
-                  </p>
-                </div>
-              </Col>
-            </Row>
-          </Col>
+          {renderOptions()}
           <Col>
             <Card className="Notification_card">
               <Card.Body>
@@ -206,26 +224,33 @@ function AddPoll() {
             </Card>
           </Col>
         </Row>
-
         <hr />
         <Row>
           <Col>
-            Select Category :
+            Select Category:
             <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              value={CatogryChoose}
+              onChange={(e) => setCatogerChoose(e.target.value)}
               style={{ backgroundColor: "transparent", border: "none" }}
             >
-              <option value="Music">Music</option>
-              <option value="Sports">Sports</option>
-              <option value="Education">Education</option>
+              {Array.isArray(category) &&
+                category.map((cat, index) => (
+                  <option key={index} value={cat._id}>
+                    {cat.category_name}
+                  </option>
+                ))}
             </select>
           </Col>
+
           <Col className="d-flex justify-content-end">
             <Button variant="secondary" className="Cancel-Buttons">
               Cancel
             </Button>
-            <Button type="submit" className="Addpoll-Buttons" style={{ marginLeft: '10px' }}>
+            <Button
+              type="submit"
+              className="Addpoll-Buttons"
+              style={{ marginLeft: "10px" }}
+            >
               Post
             </Button>
           </Col>
@@ -243,7 +268,7 @@ function AddPoll() {
       case "Image":
         return handleImage();
       default:
-        return handlePoll();
+        return renderPollForm();
     }
   };
 
@@ -276,20 +301,12 @@ function AddPoll() {
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link
-                    eventKey="link"
-                    disabled
-                    className="AddPoll-Navbar"
-                  >
+                  <Nav.Link eventKey="link" disabled className="AddPoll-Navbar">
                     Link
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link
-                    eventKey="post"
-                    disabled
-                    className="AddPoll-Navbar"
-                  >
+                  <Nav.Link eventKey="post" disabled className="AddPoll-Navbar">
                     Post
                   </Nav.Link>
                 </Nav.Item>

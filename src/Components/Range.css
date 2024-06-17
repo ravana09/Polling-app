@@ -3,10 +3,14 @@
 .range-Card {
   /* background-color: #edeff1; */
   background-color: white;
-  border: 0.1px solid rgba(0, 0, 0, 0.2);
- 
+  /* border: 0.1px solid rgba(0, 0, 0, 0.2);
+  */
 }
 
+.card .rangeInnerCard:hover{
+  background-color: white;
+
+}
 .range-Card:hover{
   background-color: white;
   /* background-color: #fafcff; */
@@ -14,14 +18,16 @@
 }
 .rangeInnerCard{
   width: 100%;
-  background-color: #FAFAFB;
+  background-color: white;
+  border-radius: 20px;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
   
  
 }
+
 .rangeInnerCard:hover{
   width: 100%;
-  background-color: #FAFAFB;
+  background-color: white;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
 }
 

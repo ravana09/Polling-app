@@ -17,6 +17,7 @@ import Trending from './Components/Trending/Trending';
 import Comments from './Components/Tools/Comments';
 import PollEndingTime from './Components/Timing/PollEndingTime';
 import PollStartingTime from './Components/Timing/PollStartingTime';
+import UserDetails from './Components/User/UserDetails';
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/GooogleForm" element={<GooogleForm />} />
 
         <Route path="/Trending" element={<Trending />} />
+        <Route path="/UserDetails" element={<UserDetails />} />
 
         
        

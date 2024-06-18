@@ -165,7 +165,10 @@ function Polling() {
     Navigate("/Comments", { state: [pollClicked] });
   }
 
-  //
+  //user
+  const handleUser = () => {
+    Navigate("/UserDetails", { state: { UserId: id } });
+  };
 
   return (
     // <TimerContext.Provider value={{timer,setTimer}}>
@@ -190,11 +193,12 @@ function Polling() {
               </div>
             ) : (
               displayedData.map((apiData) => (
-                <div key={apiData.poll_id}>
+                <div key={apiData._id}>
                   <Card className="card">
-                  
-                    <Link>{apiData.createdBy.user_name} </Link>
-                    
+                    <Link onClick={handleUser}>
+                      {apiData.createdBy.user_name}
+                    </Link>
+
                     <h6>
                       {apiData.title}{" "}
                       <span>
@@ -204,7 +208,7 @@ function Polling() {
 
                     <Card.Body
                       className={`polling ${
-                        votedPollIds.includes(apiData.poll_id)
+                        votedPollIds.includes(apiData._id)
                           ? "polling-range"
                           : ""
                       }`}
@@ -215,9 +219,9 @@ function Polling() {
                           {apiData.category?.category_name}
                         </Badge>
                       </Stack>
-                      {votedPollIds.includes(apiData.poll_id) ? (
+                      {votedPollIds.includes(apiData._id) ? (
                         <RangeOutput
-                          pollId={apiData.poll_id}
+                          pollId={apiData._id}
                           selectOption={selectedOption}
                           setSelectedOption={setSelectedOption}
                           createdTime={apiData.created_date}
@@ -250,7 +254,7 @@ function Polling() {
                                     value={option.option}
                                     onChange={(e) => {
                                       handleData(e);
-                                      setPollId(apiData.poll_id);
+                                      setPollId(apiData._id);
                                     }}
                                     checked={selectedOption === option.option}
                                     className="formRadio custom-radio"
@@ -258,7 +262,7 @@ function Polling() {
                                   />
                                 </Card.Title>
                               ))}
-                              {apiData.poll_id === pollId && timer && (
+                              {apiData._id === pollId && timer && (
                                 <Button
                                   type="submit"
                                   style={{
@@ -278,10 +282,10 @@ function Polling() {
                     <Row>
                       <Col sm={3} md={3} lg={3} xl={3}>
                         <Button
-                          onClick={() => handleCheckboxChange(apiData.poll_id)}
+                          onClick={() => handleCheckboxChange(apiData._id)}
                           style={{ backgroundColor: "inherit", border: "none" }}
                         >
-                          {likedPolls && likeClikedPolls === apiData.poll_id ? (
+                          {likedPolls && likeClikedPolls === apiData._id ? (
                             <FaHeart
                               style={{ color: "red", fontSize: "24px" }}
                             />
@@ -297,7 +301,7 @@ function Polling() {
                         <Button
                           variant="primary"
                           onClick={(e) => {
-                            handlePoll(apiData.poll_id);
+                            handlePoll(apiData._id);
                           }}
                         >
                           Comments

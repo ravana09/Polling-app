@@ -33,21 +33,21 @@ function PollEndingTime({endingTime}) {
      
      if (days > 0) {
 
-        setResult(`${days} 
+        setResult(` Poll Ends in ${days} 
      
            days`);
         
       } else if (hours > 0) {
-        setResult(`${hours} 
+        setResult(`Poll Ends in ${hours} 
       
           hours`);
         
       } else if (minutes > 0) {
-        setResult(`${minutes}
+        setResult( ` Poll Ends in ${minutes}
             minutes`);
         
       } else {
-        setResult(`${seconds} seconds`);
+        setResult(` Poll Ends in ${seconds} seconds`);
         
       }
 
@@ -76,7 +76,7 @@ function PollEndingTime({endingTime}) {
     <div >
       
     
-      <div>Poll Ends in {result}</div>
+      <div> {result}</div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import "../Components/Navbar.css";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { BsArrowBarRight } from "react-icons/bs";
 import RangeOutput from "./RangeOutput";
@@ -33,14 +33,12 @@ function NavBar() {
   function handleClick(input) {
     navigate(input);
     handleClose();
-    // if (input === "/AddPoll") {
-    //   Switch view to AddPoll when Add Poll button is clicked
-    //   switchView("AddPoll");
-    // } else {
-    //   navigate(input);
-    //   handleClose();
-    // }
   }
+
+  const userID = localStorage.getItem("Id");
+  // console.log(userID)
+
+
 
   // Function to handle sign-out
   function handleSignOut() {
@@ -66,7 +64,10 @@ function NavBar() {
     }, 1000);
   }
 
-  // Return JSX for NavBar component
+  function handleUser(){
+    navigate("/UserDetails",{state:userID});
+  }
+
   return (
     <>
       <Row>
@@ -102,23 +103,36 @@ function NavBar() {
                         >
                           Voted Polls
                         </Nav.Link>
-                        {/* <Nav.Link
-                          className="Nav-Links"
-                          onClick={() => handleClick("/SearchingPoll")}
-                        >
-                          Search A poll
-                        </Nav.Link> */}
                       </div>
                       <b>
                         {" "}
                         <hr />
                       </b>
-
-                      {/* Sign-out button */}
                     </Nav>
-                    {/* </Navbar.Collapse> */}
                   </Col>
                 </Row>
+              </Navbar>
+              <hr style={{ color: "grey" }} />
+              <Navbar id="desktop_view" expand="lg" className="p-0">
+                <Row className="w-100 m-0">
+                  <Col md={12} sm={12} className="p-0">
+                    <Nav defaultActiveKey="/home" className="flex-column ">
+                      <div>
+                        <Nav.Link
+                          onClick={handleUser}
+                          className="Nav-Links"
+                        >
+                          User Details
+                        </Nav.Link>
+                      </div>
+                      <b>
+                        {" "}
+                        <hr />
+                      </b>
+                    </Nav>
+                  </Col>
+                </Row>
+                <hr />
               </Navbar>
 
               <Button

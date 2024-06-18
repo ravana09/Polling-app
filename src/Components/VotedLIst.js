@@ -42,7 +42,7 @@ function VotedList() {
 
   // Filter fetchData based on votedPollIds
   const votedPollData = fetchData.filter((poll) =>
-    votedPollIds.includes(poll.poll_id)
+    votedPollIds.includes(poll._id)
   );
   console.log(votedPollData.data)
 
@@ -51,7 +51,7 @@ function VotedList() {
       <div className="pollingBody">
         <Col md={12} sm={12}>
           {votedPollData.map((apiData) => (
-            <div key={apiData.poll_id}>
+            <div key={apiData._id}>
 
               <Card className="card">
                 <Card.Title className="poll-Title">{apiData.title} </Card.Title>
@@ -59,7 +59,7 @@ function VotedList() {
                     createdTime={apiData.created_date}
                     />
                 <Card.Body
-                  className={`polling ${votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""}`}
+                  className={`polling ${votedPollIds.includes(apiData._id) ? "polling-range" : ""}`}
                 >
                   <Card.Title>{apiData.question}</Card.Title>
                   <Stack direction="horizontal" gap={2}>
@@ -67,9 +67,9 @@ function VotedList() {
                       {apiData.category?.category_name}
                     </Badge>
                   </Stack>
-                  {votedPollIds.includes(apiData.poll_id) ? (
+                  {votedPollIds.includes(apiData._id) ? (
                     <RangeOutput
-                      pollId={apiData.poll_id}
+                      pollId={apiData._id}
                       selectOption={selectedOption}
                       setSelectedOption={setSelectedOption}
                       createdTime={apiData.created_date}
@@ -86,10 +86,10 @@ function VotedList() {
              {/* <Row> */}
                       {/* <Col sm={3} md={3} lg={3} xl={3}>
                         <Button
-                          onClick={() => handleCheckboxChange(apiData.poll_id)}
+                          onClick={() => handleCheckboxChange(apiData._id)}
                           style={{ backgroundColor: "inherit", border: "none" }}
                         >
-                          {likedPolls && likeClikedPolls === apiData.poll_id ? (
+                          {likedPolls && likeClikedPolls === apiData._id ? (
                             <FaHeart
                               style={{ color: "red", fontSize: "24px" }}
                             />
@@ -105,7 +105,7 @@ function VotedList() {
                         <Button
                           variant="primary"
                           onClick={(e) => {
-                            handlePoll(apiData.poll_id);
+                            handlePoll(apiData._id);
                           }}
                         >
                           Comments

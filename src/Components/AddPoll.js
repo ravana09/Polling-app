@@ -49,7 +49,7 @@ function AddPoll() {
         const response = await axios.get(
           "http://localhost:5000/Category/getall"
         );
-        console.log(response.data);
+        // console.log(response.data);
         setCategory(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
         console.log(err);
@@ -59,7 +59,7 @@ function AddPoll() {
     fetchData();
   }, []);
 
-  console.log(CatogryChoose);
+  // console.log(CatogryChoose);
 
   const createPoll = async (e) => {
     e.preventDefault();
@@ -166,9 +166,9 @@ function AddPoll() {
                   border: "none",
                 }}
               >
-                <option value={1}>1 days</option>
-                <option value={2}>2 days</option>
-                <option value={3}>3 days</option>
+                <option value={1}> 1 Hours</option>
+                <option value={2}>2 Hours</option>
+                <option value={3}>3 Hours</option>
               </select>
             </p>
           </div>

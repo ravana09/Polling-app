@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import "../Components/Polling.css";
 import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loadingGif from "../Images/Loading.gif";
 import PollEndingTime from "./Timing/PollEndingTime";
 import PollStartingTime from "./Timing/PollStartingTime";
+
+// export  const TimerContext=createContext()
 
 function Polling() {
   const [fetchData, setFetchData] = useState([]);
@@ -22,6 +24,9 @@ function Polling() {
   const [likeClikedPolls, setLikeClickPolls] = useState("");
   const [searchingPoll, setSearchingPoll] = useState("");
   const [searchResults, setSearchResults] = useState(null);
+
+  const [timer, setTimer] = useState(true);
+
   // const[catogery,setCategory]=useState({})
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -33,7 +38,7 @@ function Polling() {
     setSelectedOption(e.target.value);
   };
 
-  //voating 
+  //voating
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOption && pollId) {
@@ -74,7 +79,7 @@ function Polling() {
       }
     }
   };
-//gettting all data
+  //gettting all data
   useEffect(() => {
     fetchPollData();
     fetchVotedPolls();
@@ -85,7 +90,7 @@ function Polling() {
     try {
       const res = await axios.get("http://localhost:5000/poll/getall");
       setFetchData(res.data);
-      // console.log(res.data);
+      console.log(res.data);
 
       // setCategory(res.data.category)
     } catch (err) {
@@ -107,7 +112,6 @@ function Polling() {
     setLoading(false); // Stop loading
   };
 
-
   //search
   useEffect(() => {
     const fetchPollById = async () => {
@@ -128,7 +132,6 @@ function Polling() {
   }, [searchingPoll]);
 
   const displayedData = searchResults ? [searchResults] : fetchData;
-
 
   //like
   const handleCheckboxChange = async (pollId) => {
@@ -156,7 +159,7 @@ function Polling() {
     }
   };
 
-  //comment 
+  //comment
   function handlePoll(poll) {
     let pollClicked = poll;
     Navigate("/Comments", { state: [pollClicked] });
@@ -164,9 +167,8 @@ function Polling() {
 
   //
 
- 
-
   return (
+    // <TimerContext.Provider value={{timer,setTimer}}>
     <div>
       <Row className="polling_row">
         <Form>
@@ -190,13 +192,16 @@ function Polling() {
               displayedData.map((apiData) => (
                 <div key={apiData.poll_id}>
                   <Card className="card">
-                    <Card.Title className="poll-Title">
-                      {apiData.title}
-                    </Card.Title>
+                  
+                    <Link>{apiData.createdBy.user_name} </Link>
+                    
+                    <h6>
+                      {apiData.title}{" "}
+                      <span>
+                        <PollStartingTime createdTime={apiData.created_date} />
+                      </span>
+                    </h6>
 
-                    <PollStartingTime
-                    createdTime={apiData.created_date}
-                    />
                     <Card.Body
                       className={`polling ${
                         votedPollIds.includes(apiData.poll_id)
@@ -222,21 +227,19 @@ function Polling() {
                         <Card className="innerCard">
                           <Card.Header className="cardHeader">
                             <Row>
-                              <Col sm={4} md={4} lg={4} xl={4}>   {apiData.voters.length}. votes</Col>
+                              <Col sm={4} md={4} lg={4} xl={4}>
+                                {" "}
+                                {apiData.voters.length}. votes
+                              </Col>
                               <Col sm={4} md={4} lg={4} xl={4}></Col>
                               <Col sm={4} md={4} lg={4} xl={4}>
-                              
-                              <PollEndingTime
-                              createdTime={apiData.created_date}
-                              endingTime={apiData.expirationTime}
-                              
-                              />
+                                <PollEndingTime
+                                  createdTime={apiData.created_date}
+                                  endingTime={apiData.expirationTime}
+                                />
                               </Col>
                             </Row>
-                  
-
-
-                  </Card.Header>
+                          </Card.Header>
                           <Card.Body>
                             <Form onSubmit={handleSubmit}>
                               {apiData.options.map((option, index) => (
@@ -255,7 +258,7 @@ function Polling() {
                                   />
                                 </Card.Title>
                               ))}
-                              {apiData.poll_id === pollId && (
+                              {apiData.poll_id === pollId && timer && (
                                 <Button
                                   type="submit"
                                   style={{
@@ -310,6 +313,7 @@ function Polling() {
         </div>
       </Row>
     </div>
+    // </TimerContext.Provider>
   );
 }
 

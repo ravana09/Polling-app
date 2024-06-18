@@ -1,43 +1,66 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { TimerContext } from "../Polling";
+
 
 function PollEndingTime({endingTime}) {
   // console.log(createdTime)
-  const [date, setDate] = useState(endingTime);
+  let [date, setDate] = useState(endingTime);
   const [result, setResult] = useState("");
+ 
+
+
 
   useEffect(() => {
     let dateTimer;
 
     const timer = () => {
       const currentTime = parseInt(Date.now());
+      // console.log(currentTime)
     
       const targetTime = parseInt(new Date(date).getTime());
       // console.log(typeof(targetTime))
-      let timeDifference = targetTime - currentTime;
+      let timeDifference = ((targetTime - currentTime)-5.5*60*60*1000);
       // console.log(timeDifference)
       //  timeDifference = parseInt(timeDifference)
 
-      if (timeDifference <= 0) {
-        setResult("Poll has been Ended !");
-        clearInterval(dateTimer);
-        return;
-      }
-
+    
       const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-      if (days > 0) {
-        setResult(`${days} days`);
+     
+     
+     if (days > 0) {
+
+        setResult(`${days} 
+     
+           days`);
+        
       } else if (hours > 0) {
-        setResult(`${hours} hours`);
+        setResult(`${hours} 
+      
+          hours`);
+        
       } else if (minutes > 0) {
-        setResult(`${minutes} minutes`);
+        setResult(`${minutes}
+            minutes`);
+        
       } else {
         setResult(`${seconds} seconds`);
+        
+      }
+
+      if (timeDifference <= 0) {
+       
+        setResult("Poll Ended !");
+        clearInterval(dateTimer);
+        return;
       }
     };
+
+    
+
 
     if (date) {
       dateTimer = setInterval(timer, 1000);
@@ -53,7 +76,7 @@ function PollEndingTime({endingTime}) {
     <div >
       
     
-      <div>{result}</div>
+      <div>Poll Ends in {result}</div>
     </div>
   );
 }

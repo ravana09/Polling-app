@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Stack, Badge, Button } from "react-bootstrap";
 import RangeOutput from "./RangeOutput"; // Import the RangeOutput component
+import PollStartingTime from "./Timing/PollStartingTime";
 
 function VotedList() {
   const [votedPollIds, setVotedPollIds] = useState([]);
@@ -51,8 +52,12 @@ function VotedList() {
         <Col md={12} sm={12}>
           {votedPollData.map((apiData) => (
             <div key={apiData.poll_id}>
+
               <Card className="card">
-                <Card.Title className="poll-Title">{apiData.title}</Card.Title>
+                <Card.Title className="poll-Title">{apiData.title} </Card.Title>
+                <PollStartingTime
+                    createdTime={apiData.created_date}
+                    />
                 <Card.Body
                   className={`polling ${votedPollIds.includes(apiData.poll_id) ? "polling-range" : ""}`}
                 >

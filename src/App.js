@@ -16,6 +16,7 @@ import VotedLIst from './Components/VotedLIst';
 import Trending from './Components/Trending/Trending';
 import Comments from './Components/Tools/Comments';
 import PollEndingTime from './Components/Timing/PollEndingTime';
+import PollStartingTime from './Components/Timing/PollStartingTime';
 
 
 
@@ -41,6 +42,7 @@ function App() {
         <Route path="/VotedLIst" element={<WithHomeLayout component={<VotedLIst />} />} />
         <Route path="/Comments" element={<WithHomeLayout component={<Comments />} />} />
         <Route path="/PollEndingTime" element={<WithHomeLayout component={<PollEndingTime />} />} />
+        <Route path="/PollStartingTime" element={<WithHomeLayout component={<PollStartingTime />} />} />
    
       </Routes>
     </BrowserRouter>

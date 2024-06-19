@@ -30,9 +30,9 @@ function Polling() {
   // const[catogery,setCategory]=useState({})
   const [loading, setLoading] = useState(true); // Loading state
 
-  //user id
-  const id = localStorage.getItem("Id");
-  let Navigate = useNavigate();
+  //user UserId
+  const UserId = localStorage.getItem("Id");
+  let navigate = useNavigate();
 
   const handleData = (e) => {
     setSelectedOption(e.target.value);
@@ -44,7 +44,7 @@ function Polling() {
     if (selectedOption && pollId) {
       try {
         const url = `http://localhost:5000/poll/voting/${pollId}/${selectedOption}`;
-        const response = await axios.post(url, { user_id: id });
+        const response = await axios.post(url, { user_id: UserId });
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
@@ -83,7 +83,7 @@ function Polling() {
   useEffect(() => {
     fetchPollData();
     fetchVotedPolls();
-  }, [id]);
+  }, [UserId]);
 
   const fetchPollData = async () => {
     setLoading(true); // Start loading
@@ -102,7 +102,7 @@ function Polling() {
   const fetchVotedPolls = async () => {
     setLoading(true); // Start loading
     try {
-      const url = `http://localhost:5000/poll/getvoted/${id}`;
+      const url = `http://localhost:5000/poll/getvoted/${UserId}`;
       const response = await axios.get(url);
       const { pollIds } = response.data;
       setVotedPollIds(pollIds);
@@ -141,7 +141,7 @@ function Polling() {
       const response = await axios.post(
         `http://localhost:5000/poll/like/${pollId}`,
         {
-          userID: id,
+          userID: UserId,
         }
       );
       if (response.status === 200) {
@@ -151,7 +151,7 @@ function Polling() {
     }
     try {
       const response = await axios.get(
-        `http://localhost:5000/poll/getliked/${id}`
+        `http://localhost:5000/poll/getliked/${UserId}`
       );
       console.log(response);
     } catch (err) {
@@ -162,12 +162,13 @@ function Polling() {
   //comment
   function handlePoll(poll) {
     let pollClicked = poll;
-    Navigate("/Comments", { state: [pollClicked] });
+    navigate("/Comments", { state: [pollClicked] });
   }
 
   //user
-  const handleUser = () => {
-    Navigate("/UserDetails", { state: { UserId: id } });
+  const handleUser = (UserId) => {
+    console.log(UserId)
+    navigate("/UserDetails", { state: { userID: UserId } });
   };
 
   return (
@@ -195,9 +196,9 @@ function Polling() {
               displayedData.map((apiData) => (
                 <div key={apiData._id}>
                   <Card className="card">
-                    <Link onClick={handleUser}>
+                    <Button onClick={()=>{handleUser(apiData.createdBy._id)}} style={{fontSize:20}}>
                       {apiData.createdBy.user_name}
-                    </Link>
+                    </Button>
 
                     <h6>
                       {apiData.title}{" "}

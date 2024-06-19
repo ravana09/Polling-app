@@ -65,7 +65,7 @@ function NavBar() {
   }
 
   function handleUser(){
-    navigate("/UserDetails",{state:userID});
+    navigate("/UserDetails", { state: { userID: userID }});
   }
 
   return (
@@ -74,8 +74,8 @@ function NavBar() {
         <Col>
           <div className="sidebar">
             <Container>
-              <Navbar id="desktop_view" expand="lg" className="p-0">
-                <Row className="w-100 m-0">
+              <Navbar id="desktop_view" expand="lg" >
+                <Row >
                   <Col md={12} sm={12} className="p-0">
                     <Nav defaultActiveKey="/home" className="flex-column ">
                       <div>
@@ -85,12 +85,12 @@ function NavBar() {
                         >
                           Poll List
                         </Nav.Link>
-                        <Nav.Link
+                        {/* <Nav.Link
                           className="Nav-Links"
                           onClick={() => handleClick("/polling")}
                         >
                           Services
-                        </Nav.Link>
+                        </Nav.Link> */}
                         <Nav.Link
                           className="Nav-Links"
                           onClick={() => handleClick("/AddPoll")}
@@ -126,7 +126,7 @@ function NavBar() {
                         </Nav.Link>
                       </div>
                       <b>
-                        {" "}
+                       
                         <hr />
                       </b>
                     </Nav>
@@ -169,12 +169,12 @@ function NavBar() {
                   >
                     Add Poll
                   </Nav.Link>
-                  <Nav.Link
+                  {/* <Nav.Link
                     onClick={() => handleClick("/home")}
                     style={{ paddingLeft: 20 }}
                   >
                     Clients
-                  </Nav.Link>
+                  </Nav.Link> */}
                   <Nav.Link
                     className="Nav-Links"
                     onClick={() => handleClick("/VotedLIst")}

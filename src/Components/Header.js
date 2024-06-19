@@ -15,7 +15,7 @@ function Header() {
   function handleClick() {}
   return (
     <>
-      <Row  xs={12} md={12} lg={12} xl={12}>
+      <Row  xs={12} md={12} lg={12} xl={12} className="fixed-top">
         <Col >
           <Navbar expand="lg" className=" Header">
             <Container>

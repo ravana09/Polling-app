@@ -33,7 +33,7 @@ function App() {
         <Route path="/GooogleForm" element={<GooogleForm />} />
 
         <Route path="/Trending" element={<Trending />} />
-        <Route path="/UserDetails" element={<UserDetails />} />
+        
 
         
        
@@ -45,6 +45,7 @@ function App() {
         <Route path="/Comments" element={<WithHomeLayout component={<Comments />} />} />
         <Route path="/PollEndingTime" element={<WithHomeLayout component={<PollEndingTime />} />} />
         <Route path="/PollStartingTime" element={<WithHomeLayout component={<PollStartingTime />} />} />
+        <Route path="/UserDetails" element={<WithHomeLayout component={<UserDetails />} />} />
    
       </Routes>
     </BrowserRouter>

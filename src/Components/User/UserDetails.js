@@ -42,12 +42,12 @@ function UserDetails() {
                 <Col xs={12} md={12} lg={12} xl={12}>
                   <Row style={{ position: "relative" }}>
                     <Col>
-                      <Image src={CoverImage} className="Cover_img" fluid  />
-                     
+                      <Image src={CoverImage} className="Cover_img" fluid />
+
                       <Card.Title className="user_Name">
                         {userDetails.user_name}
                       </Card.Title>
-                      <Card.Text >
+                      <Card.Text>
                         {" "}
                         user Folllowers:
                         {userDetails.user_followers?.user_followers || 0}{" "}
@@ -73,9 +73,7 @@ function UserDetails() {
                   </Row>
                 </Col>
               </Row>
-              <Polling />
-
-             
+              <Polling userId={userID} />
             </Card>
           </Col>
         </Container>

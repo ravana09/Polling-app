@@ -209,18 +209,18 @@ function Comments() {
 
           <Card.Body
             className={`polling ${
-              votedPollIds.includes(pollData.poll_id) ? "polling-range" : ""
+              votedPollIds.includes(pollData._id) ? "polling-range" : ""
             }`}
           >
             <Card.Title>{pollData.question}</Card.Title>
             <Stack direction="horizontal" gap={2}>
               <Badge bg="primary" className="Badge">
-                {pollData.category}
+                {pollData.category?.category_name}
               </Badge>
             </Stack>
             {votedPollIds.includes(pollData.poll_id) ? (
               <RangeOutput
-                pollId={pollData.poll_id}
+                pollId={pollData._id}
                 selectOption={selectedOption}
                 setSelectedOption={setSelectedOption}
               />
@@ -237,7 +237,7 @@ function Comments() {
                           value={option.option}
                           onChange={(e) => {
                             handleData(e);
-                            setPollId(pollData.poll_id);
+                            setPollId(pollData._id);
                           }}
                           checked={selectedOption === option.option}
                           className="formRadio custom-radio"
@@ -245,7 +245,7 @@ function Comments() {
                         />
                       </Card.Title>
                     ))}
-                    {pollData.poll_id === pollId && (
+                    {pollData._id === pollId && (
                       <Button
                         type="submit"
                         style={{ margin: 10, backgroundColor: "grey" }}
@@ -264,10 +264,10 @@ function Comments() {
             <Col>
               {/* Like Button */}
               <Button
-                onClick={() => handleCheckboxChange(pollData.poll_id)}
+                onClick={() => handleCheckboxChange(pollData._id)}
                 style={{ backgroundColor: "inherit", border: "none" }}
               >
-                {likedPolls && likeClikedPolls === pollData.poll_id ? (
+                {likedPolls && likeClikedPolls === pollData._id ? (
                   <FaHeart style={{ color: "red", fontSize: "24px" }} />
                 ) : (
                   <FaRegHeart style={{ color: "black", fontSize: "24px" }} />
@@ -308,7 +308,7 @@ function Comments() {
                             {UserName}: {comment}{" "}
                             <Button
                               onClick={() =>
-                                handleCheckboxChange(pollData.poll_id)
+                                handleCheckboxChange(pollData._id)
                               }
                               style={{
                                 backgroundColor: "inherit",

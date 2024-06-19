@@ -12,7 +12,7 @@ import PollStartingTime from "./Timing/PollStartingTime";
 
 // export  const TimerContext=createContext()
 
-function Polling() {
+function Polling({ userDetailsId }) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState(() => {
@@ -22,7 +22,7 @@ function Polling() {
   const [pollId, setPollId] = useState("");
   const [likedPolls, setLikedPolls] = useState(false);
   const [likeClikedPolls, setLikeClickPolls] = useState("");
-  const [searchingPoll, setSearchingPoll] = useState("");
+  const [searchingPoll, setSearchingPoll] = useState();
   const [searchResults, setSearchResults] = useState(null);
 
   const [timer, setTimer] = useState(true);
@@ -30,8 +30,15 @@ function Polling() {
   // const[catogery,setCategory]=useState({})
   const [loading, setLoading] = useState(true); // Loading state
 
+  //userDetails poll
+  let [userDetails, setuserDetails] = useState(false);
+
+  let otherUserid=userDetailsId
+
   //user UserId
-  const UserId = localStorage.getItem("Id");
+  
+  let  UserId = localStorage.getItem("Id");
+  
   let navigate = useNavigate();
 
   const handleData = (e) => {
@@ -79,26 +86,28 @@ function Polling() {
       }
     }
   };
-  //gettting all data
   useEffect(() => {
-    fetchPollData();
-    fetchVotedPolls();
-  }, [UserId]);
-
+    if (userDetails===true) {
+      getUserDetailsData();
+      // getUserDetailsVotedPolls();
+    } else {
+      fetchPollData();
+      fetchVotedPolls();
+    }
+  }, [userDetails]); // Adding userDetails as a dependency to useEffect
+  
   const fetchPollData = async () => {
     setLoading(true); // Start loading
     try {
       const res = await axios.get("http://localhost:5000/poll/getall");
       setFetchData(res.data);
       console.log(res.data);
-
-      // setCategory(res.data.category)
     } catch (err) {
-      console.error("Error", err);
+      console.error("Error fetching poll data:", err);
     }
     setLoading(false); // Stop loading
   };
-
+  
   const fetchVotedPolls = async () => {
     setLoading(true); // Start loading
     try {
@@ -111,7 +120,34 @@ function Polling() {
     }
     setLoading(false); // Stop loading
   };
-
+  
+  // Getting user details id
+  const getUserDetailsData = async () => {
+    setLoading(true); // Start loading
+    try {
+      const res = await axios.get("http://localhost:5000/poll/getall");
+      // Filter polls based on userDetailsId
+      const userPolls = res.data.filter(poll => poll.createdBy._id === otherUserid);
+      setFetchData(userPolls);
+    } catch (err) {
+      console.error("Error fetching user details data:", err);
+    }
+    setLoading(false); // Stop loading
+  };
+  
+  // const getUserDetailsVotedPolls = async () => {
+  //   setLoading(true); // Start loading
+  //   try {
+  //     const url = `http://localhost:5000/poll/getvoted/${otherUserid}`;
+  //     const response = await axios.get(url);
+  //     const { pollIds } = response.data;
+  //     setVotedPollIds(pollIds);
+  //   } catch (error) {
+  //     console.error("Error fetching user details voted polls:", error);
+  //   }
+  //   setLoading(false); // Stop loading
+  // };
+  
   //search
   useEffect(() => {
     const fetchPollById = async () => {
@@ -167,7 +203,9 @@ function Polling() {
 
   //user
   const handleUser = (UserId) => {
-    console.log(UserId)
+    console.log(UserId);
+    setuserDetails(true);
+
     navigate("/UserDetails", { state: { userID: UserId } });
   };
 
@@ -196,7 +234,12 @@ function Polling() {
               displayedData.map((apiData) => (
                 <div key={apiData._id}>
                   <Card className="card">
-                    <Button onClick={()=>{handleUser(apiData.createdBy._id)}} style={{fontSize:20}}>
+                    <Button
+                      onClick={() => {
+                        handleUser(apiData.createdBy._id);
+                      }}
+                      style={{ fontSize: 20 }}
+                    >
                       {apiData.createdBy.user_name}
                     </Button>
 

@@ -18,7 +18,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
         let url = `http://localhost:5000/poll/getbyid/${pollId}`;
         const res = await axios.get(url, { user_id: id });
         setPollResults(res.data.options);
-        console.log(res.data.options);
+        // console.log(res.data.options);
       } catch (error) {
         console.error("Error fetching poll results:", error);
       }

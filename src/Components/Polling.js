@@ -11,9 +11,9 @@ import PollEndingTime from "./Timing/PollEndingTime";
 import PollStartingTime from "./Timing/PollStartingTime";
 import { userDetailsContext } from "./User/UserDetails";
 
-// export  const TimerContext=createContext()
+export  const TimerContext=createContext()
 
-function Polling({pollingState}) {
+function Polling({ pollingState,userDeatilsPoll }) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState(() => {
@@ -35,14 +35,14 @@ function Polling({pollingState}) {
   let [userDetails, setuserDetails] = useState(false);
 
   //from userDetils. comp
-  let otherUserid= useContext(userDetailsContext);
+  let otherUserid = useContext(userDetailsContext);
 
-  console.log(otherUserid,'otheruserid')
+  console.log(otherUserid, "otheruserid");
 
   //user UserId
-  
-  let  UserId = localStorage.getItem("Id");
-  
+
+  let UserId = localStorage.getItem("Id");
+
   let navigate = useNavigate();
 
   const handleData = (e) => {
@@ -91,20 +91,28 @@ function Polling({pollingState}) {
     }
   };
 
-  console.log(pollingState,'polling state')
+  
   // get all
   useEffect(() => {
-    if (pollingState===true) {
-      console.log(userDetails,'useEffect')
-      getUserDetailsData();
+
+   if (userDeatilsPoll===true) {
+     setFetchData('')
+     setLoading(true); // Stop loading
+      console.log(pollingState, "polling state");   
+      setFetchData(pollingState )
+  
+      console.log(pollingState,"userPolllings")
       getUserDetailsVotedPolls();
-    } else {
-      console.log(userDetails,'useEffect else')
+    }else{
+      console.log(userDetails, "useEffect else");
       fetchPollData();
       fetchVotedPolls();
     }
+
+
+
   }, [userDetails]); // Adding userDetails as a dependency to useEffect
-  
+
   const fetchPollData = async () => {
     setLoading(true); // Start loading
     try {
@@ -113,10 +121,12 @@ function Polling({pollingState}) {
       console.log(res.data);
     } catch (err) {
       console.error("Error fetching poll data:", err);
+
+      
     }
     setLoading(false); // Stop loading
   };
-  
+
   const fetchVotedPolls = async () => {
     setLoading(true); // Start loading
     try {
@@ -129,23 +139,9 @@ function Polling({pollingState}) {
     }
     setLoading(false); // Stop loading
   };
-  
-  // Getting user details id
-  const getUserDetailsData = async () => {
-    setLoading(true); // Start loading
-    try {
-      const res = await axios.get("http://localhost:5000/poll/getall");
-      // Filter polls based on userDetailsId
-      console.log(otherUserid)
-      const userPolls = res.data.filter(poll => poll.createdBy._id === otherUserid);
-      setFetchData(userPolls);
-      console.log(userPolls)
-    } catch (err) {
-      console.error("Error fetching user details data:", err);
-    }
-    setLoading(false); // Stop loading
-  };
-  
+
+
+
   const getUserDetailsVotedPolls = async () => {
     setLoading(true); // Start loading
     try {
@@ -158,7 +154,7 @@ function Polling({pollingState}) {
     }
     setLoading(false); // Stop loading
   };
-  
+
   //search
   useEffect(() => {
     const fetchPollById = async () => {
@@ -220,10 +216,10 @@ function Polling({pollingState}) {
     navigate("/UserDetails", { state: { userID: UserId } });
   };
 
-  console.log(userDetails)
+  // console.log(userDetails);
 
   return (
-    // <TimerContext.Provider value={{timer,setTimer}}>
+    <TimerContext.Provider value={{timer,setTimer}}>
     <div>
       <Row className="polling_row">
         <Form>
@@ -239,11 +235,12 @@ function Polling({pollingState}) {
         </Form>
         <div className="pollingBody">
           <Col md={12} sm={12}>
-            {loading ? (
-              <div className="loading">
-                <img src={loadingGif} alt="Loading..." />
-              </div>
-            ) : (
+            {
+            // loading ? (
+            //   <div className="loading">
+            //    <h1>Loading......</h1>
+            //   </div>
+            // ) : (
               displayedData.map((apiData) => (
                 <div key={apiData._id}>
                   <Card className="card">
@@ -369,12 +366,12 @@ function Polling({pollingState}) {
                   <hr />
                 </div>
               ))
-            )}
+            }
           </Col>
         </div>
       </Row>
     </div>
-    // </TimerContext.Provider>
+     </TimerContext.Provider>
   );
 }
 

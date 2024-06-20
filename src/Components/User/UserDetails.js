@@ -9,17 +9,17 @@ import CoverImage from "../Images/CoverImg.jpg";
 import profile from "../Images/Profile.jpeg";
 import Polling from "../Polling";
 
-export const  userDetailsContext=createContext();
+export const userDetailsContext = createContext();
 
 function UserDetails() {
   const [userDetails, setUserDetails] = useState([]);
-  
+
   const location = useLocation();
   const { userID } = location.state || null;
 
   console.log(userID, "userid");
 
-  let pollingState =true
+  let userDeatilsPoll = true;
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -28,7 +28,7 @@ function UserDetails() {
           `http://localhost:5000/api/getprofile/${userID}`
         );
         setUserDetails(response.data.user);
-        console.log(response.data.user);
+        // console.log(response.data.user);
       } catch (err) {
         console.log(err);
       }
@@ -37,66 +37,39 @@ function UserDetails() {
     fetchUserDetails();
   }, [userID]);
 
+  let userpolls = userDetails.created_polls || [];
+  console.log(userpolls, "polling data");
+
   return (
-    <userDetailsContext.Provider value={ userID }>
- 
-    <>
-      <Row>
-        <Container fluid>
-          <Col xs={12} md={12} lg={12} xl={12} className="User_page">
-            <Card>
-              <Row>
-                <Col xs={12} md={12} lg={12} xl={12}>
-                  <Row style={{ position: "relative" }}>
-                    <Col>
-                      <Image src={CoverImage} className="Cover_img" fluid />
+    <userDetailsContext.Provider value={userID}>
+      <Container fluid>
+        <Card className="User_page" style={{ position: "relative" }}>
+          <Image src={CoverImage} className="Cover_img" fluid />
 
-                      <Card.Title className="user_Name">
-                        {userDetails.user_name}
-                      </Card.Title>
-                      <Card.Text>
-                        {" "}
-                        user Folllowers:
-                        {userDetails.user_followers?.user_followers || 0}{" "}
-                      </Card.Text>
-                      <Card.Text>
-                        {" "}
-                        Phone Number: {userDetails.phone_number}{" "}
-                      </Card.Text>
-                      <Card.Text> Email: {userDetails.email}</Card.Text>
+          <Card.Title className="user_Name">{userDetails.user_name}</Card.Title>
+          <div className="other_details">
+            <Card.Text>
+              {" "}
+              Folllowers:
+              {userDetails.user_followers?.user_followers || 0}{" "}
+            </Card.Text>
+            <Card.Text> Phone Number: {userDetails.phone_number} </Card.Text>
+            <Card.Text> Email: {userDetails.email}</Card.Text>
 
-                      <Card.Text>
-                        {" "}
-                        Joined date: {userDetails.joined_date}
-                      </Card.Text>
+            <Card.Text> Joined date: {userDetails.joined_date}</Card.Text>
+          </div>
+          <Image src={profile} roundedCircle className="Profile_img" />
 
-                      <Image
-                        src={profile}
-                        roundedCircle
-                        className="Profile_img"
-                      />
-                    </Col>
-{/*                    
-                     {userDetails.created_polls.map((poll,index) => {
-                    <div key={index}>
-                        <li>{poll.poll_id}</li>;
-                        </div>
-                      })} */}
-                    
-                    <Card.Body></Card.Body>
-                  </Row>
-                </Col>
-              </Row>
-
-              <Polling 
-              pollingState={pollingState}
-              />
-
-            </Card>
-          </Col>
-        </Container>
-      </Row>
-    </>
+          <Card.Body>
+            
+          </Card.Body>
+        </Card>
+        
+        <Polling
+              pollingState={userpolls}
+              userDeatilsPoll={userDeatilsPoll}
+            />
+      </Container>
     </userDetailsContext.Provider>
   );
 }

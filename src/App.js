@@ -19,9 +19,6 @@ import PollEndingTime from './Components/Timing/PollEndingTime';
 import PollStartingTime from './Components/Timing/PollStartingTime';
 import UserDetails from './Components/User/UserDetails';
 
-
-
-
 function App() {
   return (
     <BrowserRouter>
@@ -31,29 +28,22 @@ function App() {
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/NewPassword" element={<NewPassword />} />
         <Route path="/GooogleForm" element={<GooogleForm />} />
-
         <Route path="/Trending" element={<Trending />} />
-        
-
-        
-       
-        <Route path="/Polling" element={<WithHomeLayout component={<Polling />} />} />
-       
-        <Route path="/RangeOutput" element={<WithHomeLayout component={<RangeOutput />} />} />
-        <Route path="/AddPoll" element={<WithHomeLayout component={<AddPoll />} />} />
-        <Route path="/VotedLIst" element={<WithHomeLayout component={<VotedLIst />} />} />
-        <Route path="/Comments" element={<WithHomeLayout component={<Comments />} />} />
-        <Route path="/PollEndingTime" element={<WithHomeLayout component={<PollEndingTime />} />} />
-        <Route path="/PollStartingTime" element={<WithHomeLayout component={<PollStartingTime />} />} />
-        <Route path="/UserDetails" element={<WithHomeLayout component={<UserDetails />} />} />
-   
+        <Route path="/Polling" element={<WithHomeLayout component={<Polling />} showTrending={true} />} />
+        <Route path="/RangeOutput" element={<WithHomeLayout component={<RangeOutput />} showTrending={true} />} />
+        <Route path="/AddPoll" element={<WithHomeLayout component={<AddPoll />} showTrending={true} />} />
+        <Route path="/VotedLIst" element={<WithHomeLayout component={<VotedLIst />} showTrending={true} />} />
+        <Route path="/Comments" element={<WithHomeLayout component={<Comments />} showTrending={true} />} />
+        <Route path="/PollEndingTime" element={<WithHomeLayout component={<PollEndingTime />} showTrending={true} />} />
+        <Route path="/PollStartingTime" element={<WithHomeLayout component={<PollStartingTime />} showTrending={true} />} />
+        <Route path="/UserDetails" element={<WithHomeLayout component={<UserDetails />} showTrending={false} />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
-function WithHomeLayout({ component }) {
-  return <Home>{component}</Home>;
+function WithHomeLayout({ component, showTrending }) {
+  return <Home showTrending={showTrending}>{component}</Home>;
 }
 
 export default App;

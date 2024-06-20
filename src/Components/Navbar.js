@@ -189,6 +189,12 @@ function NavBar() {
                   >
                     Search A poll
                   </Nav.Link>
+                  <Nav.Link
+                          onClick={handleUser}
+                          className="Nav-Links"
+                        >
+                          User Details
+                        </Nav.Link>
                   {/* Sign-out button */}
                   <Nav.Link
                     onClick={handleSignOut}

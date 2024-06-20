@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { Card, Col, Container, Image, ListGroup, Row } from "react-bootstrap";
 import Header from "../Header";
 import NavBar from "../Navbar";
@@ -9,12 +9,17 @@ import CoverImage from "../Images/CoverImg.jpg";
 import profile from "../Images/Profile.jpeg";
 import Polling from "../Polling";
 
+export const  userDetailsContext=createContext();
+
 function UserDetails() {
   const [userDetails, setUserDetails] = useState([]);
+  
   const location = useLocation();
   const { userID } = location.state || null;
 
   console.log(userID, "userid");
+
+  let pollingState =true
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -33,6 +38,8 @@ function UserDetails() {
   }, [userID]);
 
   return (
+    <userDetailsContext.Provider value={ userID }>
+ 
     <>
       <Row>
         <Container fluid>
@@ -69,16 +76,28 @@ function UserDetails() {
                         className="Profile_img"
                       />
                     </Col>
+{/*                    
+                     {userDetails.created_polls.map((poll,index) => {
+                    <div key={index}>
+                        <li>{poll.poll_id}</li>;
+                        </div>
+                      })} */}
+                    
                     <Card.Body></Card.Body>
                   </Row>
                 </Col>
               </Row>
-              <Polling userId={userID} />
+
+              <Polling 
+              pollingState={pollingState}
+              />
+
             </Card>
           </Col>
         </Container>
       </Row>
     </>
+    </userDetailsContext.Provider>
   );
 }
 

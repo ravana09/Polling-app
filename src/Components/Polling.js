@@ -9,10 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 import loadingGif from "../Images/Loading.gif";
 import PollEndingTime from "./Timing/PollEndingTime";
 import PollStartingTime from "./Timing/PollStartingTime";
+import { userDetailsContext } from "./User/UserDetails";
 
 // export  const TimerContext=createContext()
 
-function Polling({ userDetailsId }) {
+function Polling({pollingState}) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState(() => {
@@ -33,7 +34,10 @@ function Polling({ userDetailsId }) {
   //userDetails poll
   let [userDetails, setuserDetails] = useState(false);
 
-  let otherUserid=userDetailsId
+  //from userDetils. comp
+  let otherUserid= useContext(userDetailsContext);
+
+  console.log(otherUserid,'otheruserid')
 
   //user UserId
   
@@ -86,11 +90,16 @@ function Polling({ userDetailsId }) {
       }
     }
   };
+
+  console.log(pollingState,'polling state')
+  // get all
   useEffect(() => {
-    if (userDetails===true) {
+    if (pollingState===true) {
+      console.log(userDetails,'useEffect')
       getUserDetailsData();
-      // getUserDetailsVotedPolls();
+      getUserDetailsVotedPolls();
     } else {
+      console.log(userDetails,'useEffect else')
       fetchPollData();
       fetchVotedPolls();
     }
@@ -127,26 +136,28 @@ function Polling({ userDetailsId }) {
     try {
       const res = await axios.get("http://localhost:5000/poll/getall");
       // Filter polls based on userDetailsId
+      console.log(otherUserid)
       const userPolls = res.data.filter(poll => poll.createdBy._id === otherUserid);
       setFetchData(userPolls);
+      console.log(userPolls)
     } catch (err) {
       console.error("Error fetching user details data:", err);
     }
     setLoading(false); // Stop loading
   };
   
-  // const getUserDetailsVotedPolls = async () => {
-  //   setLoading(true); // Start loading
-  //   try {
-  //     const url = `http://localhost:5000/poll/getvoted/${otherUserid}`;
-  //     const response = await axios.get(url);
-  //     const { pollIds } = response.data;
-  //     setVotedPollIds(pollIds);
-  //   } catch (error) {
-  //     console.error("Error fetching user details voted polls:", error);
-  //   }
-  //   setLoading(false); // Stop loading
-  // };
+  const getUserDetailsVotedPolls = async () => {
+    setLoading(true); // Start loading
+    try {
+      const url = `http://localhost:5000/poll/getvoted/${otherUserid}`;
+      const response = await axios.get(url);
+      const { pollIds } = response.data;
+      setVotedPollIds(pollIds);
+    } catch (error) {
+      console.error("Error fetching user details voted polls:", error);
+    }
+    setLoading(false); // Stop loading
+  };
   
   //search
   useEffect(() => {
@@ -204,10 +215,12 @@ function Polling({ userDetailsId }) {
   //user
   const handleUser = (UserId) => {
     console.log(UserId);
-    setuserDetails(true);
+    setuserDetails(!userDetails);
 
     navigate("/UserDetails", { state: { userID: UserId } });
   };
+
+  console.log(userDetails)
 
   return (
     // <TimerContext.Provider value={{timer,setTimer}}>

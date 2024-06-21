@@ -14,7 +14,7 @@ function VotedList() {
   useEffect(() => {
     const fetchPollData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/poll/getall");
+        const res = await axios.get("http://49.204.232.254:84/polls/getall");
         setFetchData(res.data);
       } catch (err) {
         console.log("Error", err);
@@ -24,9 +24,10 @@ function VotedList() {
     const fetchVotedPolls = async () => {
       console.log(User_id)
       try {
-        const url = `http://localhost:5000/poll/getvoted/${User_id}`;
-      
-        const response = await axios.get(url);
+        const url = "http://49.204.232.254:84/polls/getvoted";
+      const response = await axios.get(url, {
+        user_id: User_id,
+      });
         const { pollIds } = response.data;
         setVotedPollIds(pollIds);
         console.log(pollIds)

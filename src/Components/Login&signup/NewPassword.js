@@ -23,12 +23,11 @@ function NewPassword() {
 
   async function handleSubmit(values, { setSubmitting }) {
     try {
+      let identification = localStorage.getItem("MobileNUmber");
       const response = await axios.post(
-        `http://localhost:5000/api/updateuser/${localStorage.getItem(
-          "MobileNUmber"
-        )}`,
-        {
-          password: values.newPassword,
+        "http://49.204.232.254:84/api/updateuser",{
+          identifier: identification,
+          password:values.newPassword
         }
       );
 

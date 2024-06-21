@@ -1,5 +1,5 @@
 import React from "react";
-import "../Components/Header.css";
+import "../Components/header.css";
 import { Col, Container, Form, Nav, Navbar, Row } from "react-bootstrap";
 
 function Header() {
@@ -17,7 +17,7 @@ function Header() {
     <>
       <Row  xs={12} md={12} lg={12} xl={12} className="fixed-top">
         <Col >
-          <Navbar expand="lg" className=" Header">
+          <Navbar expand="lg" className="Header">
             <Container>
               <Navbar.Brand className="Header-Title">GT POLL</Navbar.Brand>
 

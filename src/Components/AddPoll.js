@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "../Components/AddPoll.css";
+// import "../Components/Addpoll.css";
+import'../Components/add.css'
+
 import { Button, Card, Col, Container, Form, Nav, Row } from "react-bootstrap";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { IoOptionsSharp } from "react-icons/io5";
@@ -47,10 +49,10 @@ function AddPoll() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/Category/getall"
+          "http://49.204.232.254:84/category/getall"
         );
-        // console.log(response.data);
-        setCategory(Array.isArray(response.data) ? response.data : []);
+        console.log(response.data);
+        setCategory(response.data ? response.data : []);
       } catch (err) {
         console.log(err);
       }
@@ -59,7 +61,7 @@ function AddPoll() {
     fetchData();
   }, []);
 
-  // console.log(CatogryChoose);
+  console.log(CatogryChoose,"categoryyid");
 
   const createPoll = async (e) => {
     e.preventDefault();
@@ -77,7 +79,7 @@ function AddPoll() {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/poll/create", {
+      const response = await axios.post("http://49.204.232.254:84/polls/create", {
         question: data.question,
         title: data.title,
         category: CatogryChoose,
@@ -85,6 +87,7 @@ function AddPoll() {
         createdBy: id,
         desc: data.desc,
         duration: duration,
+       
       });
 
       if (response.status === 201) {
@@ -105,8 +108,8 @@ function AddPoll() {
           options: [{ option: "" }, { option: "" }],
           expirationTime: "",
         });
-        setCategory("Music");
-        setDuration(5);
+        setCategory(" ");
+        setDuration(0);
       }
     } catch (error) {
       console.error("Error creating poll:", error);
@@ -233,11 +236,14 @@ function AddPoll() {
               onChange={(e) => setCatogerChoose(e.target.value)}
               style={{ backgroundColor: "transparent", border: "none" }}
             >
-              {Array.isArray(category) &&
-                category.map((cat, index) => (
-                  <option key={index} value={cat._id}>
-                    {cat.category_name}
+             
+              { category.map((category, index) => (
+                
+                  <option key={index} value={category._id}>
+                    {category.category_name}
+                   
                   </option>
+                 
                 ))}
             </select>
           </Col>

@@ -1,7 +1,8 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Header from "../Components/Header";
-import "../Components/Home.css";
+import "../Components/home.css";
+
 import SideNavBar from "./Navbar";
 import Trending from "./Trending/Trending";
 

@@ -53,16 +53,20 @@ function ForgetPassword() {
     if (setIsOtpSent) {
       navigate("/NewPassword");
     } else {
+      
     }
   }
 
   const MobileSendOTP = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/mobileauth/send-otp-sms",
+        "http://49.204.232.254:84/mobileauth/send-otp-sms",
         {
           number: formData.PhoneNumber,
+          appName:"POLL APP"
         }
+        
+    
       );
 
       if (response.status === 200) {
@@ -128,7 +132,7 @@ function ForgetPassword() {
   const MobileOTPVerification = async (setFieldError) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/mobileauth/verify-otp-sms",
+        "http://49.204.232.254:84/mobileauth/verify-otp-sms",
         {
           number: formData.PhoneNumber,
           otp: formData.MobileOtp,

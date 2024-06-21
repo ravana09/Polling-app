@@ -1,23 +1,21 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from './Components/Login';
-import SignUp from './Components/SignUp';
 import Home from './Components/Home';
 import Polling from './Components/Polling';
 import RangeOutput from './Components/RangeOutput';
-import ForgetPassword from './Components/ForgetPassword';
-import NewPassword from './Components/NewPassword';
-import Header from './Components/Header';
 import AddPoll from './Components/AddPoll';
-import SideNavBar from './Components/Navbar';
-import GooogleForm from './Components/GooogleForm';
 import VotedLIst from './Components/VotedLIst';
-
 import Trending from './Components/Trending/Trending';
 import Comments from './Components/Tools/Comments';
 import PollEndingTime from './Components/Timing/PollEndingTime';
 import PollStartingTime from './Components/Timing/PollStartingTime';
 import UserDetails from './Components/User/UserDetails';
+import Login from './Components/Login&signup/Login';
+import SignUp from './Components/Login&signup/SignUp';
+import ForgetPassword from './Components/Login&signup/ForgetPassword';
+import NewPassword from './Components/Login&signup/NewPassword';
+import GoogleForm from './Components/Login&signup/GooogleForm';
+import MobileNum from './Components/Login&signup/MobileNum';
 
 function App() {
   return (
@@ -27,8 +25,10 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/NewPassword" element={<NewPassword />} />
-        <Route path="/GooogleForm" element={<GooogleForm />} />
+        <Route path="/GooogleForm" element={<GoogleForm />} />
         <Route path="/Trending" element={<Trending />} />
+        <Route path="/MobileNumberVerify" element={<MobileNum />} />
+
         <Route path="/Polling" element={<WithHomeLayout component={<Polling />} showTrending={true} />} />
         <Route path="/RangeOutput" element={<WithHomeLayout component={<RangeOutput />} showTrending={true} />} />
         <Route path="/AddPoll" element={<WithHomeLayout component={<AddPoll />} showTrending={true} />} />

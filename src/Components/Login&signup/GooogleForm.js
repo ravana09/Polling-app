@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../Components/Login.css";
+import "../Login&signup/Login.css";
 
 function GoogleForm() {
   const [showMobileOtpInput, setShowMobileOtpInput] = useState(false);

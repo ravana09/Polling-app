@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Card, Col, Form, Row, Container } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons";
-import "../Components/Login.css";
+import "../Login&signup/Login.css";
 import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 
@@ -50,7 +50,8 @@ function Login() {
   async function handleSubmit() {
     try {
       // Api Calling
-      const response = await axios.post("http://localhost:5000/log/loginuser", {
+      let url="http://49.204.232.254:84/log/loginuser"
+      const response = await axios.post(url, {
         phone_number: formData.PhoneNumber,
         password: formData.Password,
       });

@@ -6,7 +6,7 @@
 
 .AddPoll-PollsCard{
 
-  width: 100%;
+  width: 150%;
 }
 .AddPoll-Container {
   background-color: #dae0e6;
@@ -34,14 +34,14 @@
 
 .Addpoll-Buttons {
   background-color: #ff4500;
-  width: 150px;
+  width: 100%;
   color: white;
   border-radius: 20px;
 }
 .Addpoll-Buttons:hover {
   background-color: #fa6e3b;
 
-  width: 150px;
+  width: 100%;
   color: white;
   border-radius: 20px;
 }

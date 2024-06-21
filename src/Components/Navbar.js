@@ -2,13 +2,13 @@
 import React, { useState } from "react";
 import { Button, Col, Offcanvas, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import "../Components/Navbar.css";
+import "../Components/navbar.css";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 
 import { BsArrowBarRight } from "react-icons/bs";
-import RangeOutput from "./RangeOutput";
+// import RangeOutput from "./RangeOutput";
 import Swal from "sweetalert2";
 
 // Define the NavBar component

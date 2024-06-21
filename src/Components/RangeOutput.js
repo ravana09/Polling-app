@@ -1,5 +1,6 @@
 import axios from "axios";
-import "../Components/Range.css";
+import "../Components/range.css";
+
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { GiCheckMark } from "react-icons/gi";
@@ -7,35 +8,40 @@ import PollEndingTime from "./Timing/PollEndingTime";
 
 function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
   const [pollResults, setPollResults] = useState([]);
+  const [totalVotes,setTotalVotes]=useState()
   let [higherColur, setHignColour] = useState("");
 
   //personal id
   let id = localStorage.getItem("Id");
-
+console.log(pollId)
   useEffect(() => {
     const fetchPollResults = async () => {
       try {
-        let url = `http://localhost:5000/poll/getbyid/${pollId}`;
-        const res = await axios.get(url, { user_id: id });
+        const res = await axios.post(
+          "http://49.204.232.254:84/polls/getone",{
+            poll_id:pollId
+          })
         setPollResults(res.data.options);
-        // console.log(res.data.options);
+        setTotalVotes(res.data.voters.length);
       } catch (error) {
         console.error("Error fetching poll results:", error);
       }
+
+     
     };
 
     fetchPollResults();
   }, [pollId]);
 
- 
+  
 
-  const totalVotes = pollResults.reduce(
-    (total, option) => total + option.voters.length,
-    0
-  );
+  // const totalVotes = pollResults.reduce(
+  //   (total, option) => total + option.voters.length,
+  //   0
+  // );
 
   const maxVotes = Math.max(
-    ...pollResults.map((option) => option.voters.length)
+    ...pollResults.map((option) => option.count)
   );
  
 
@@ -64,7 +70,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
                 {pollResults.length > 0 ? (
                   pollResults.map((option) => {
                     const percentage =
-                      (option.voters.length / totalVotes) * 100;
+                      (option.count / totalVotes) * 100;
 
                     return (
                       <div key={option.option}>
@@ -78,7 +84,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
                             style={{
                               width: `${percentage}%`,
                               backgroundColor:
-                                option.voters.length === maxVotes
+                                option.count === maxVotes
                                   ? "#FF895D"
                                   : "#B7CAD4",
                             }}
@@ -115,7 +121,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
                                 )}
                               </span>
                             </b>
-                            <hr />
+                            
                           </div>
                         </div>
                       </div>

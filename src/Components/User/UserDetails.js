@@ -9,7 +9,7 @@ import CoverImage from "../Images/CoverImg.jpg";
 import profile from "../Images/Profile.jpeg";
 import Polling from "../Polling";
 
-// export const userDetailsContext = createContext();
+export const userDetailsContext = createContext();
 
 function UserDetails() {
   const [userDetails, setUserDetails] = useState([]);
@@ -17,7 +17,7 @@ function UserDetails() {
 
   const location = useLocation();
   const { userPhoneNUmber, userID } = location.state || null;
-  let pollingusetId=userID
+  
 
   // console.log(userPhoneNUmber, "userMobile");
   // console.log(pollingusetId, "userid");
@@ -62,7 +62,7 @@ function UserDetails() {
   // console.log(filteredVotedPolls,"filtered")
 
   return (
-    // <userDetailsContext.Provider value={{userId}}>
+    <userDetailsContext.Provider value={{OtherUserID,userDeatilsPoll,userpolls}}>
       <Container fluid>
         <Card className="User_page" style={{ position: "relative" }}>
           <Image src={CoverImage} className="Cover_img" fluid />
@@ -90,7 +90,7 @@ function UserDetails() {
             UserID={OtherUserID}/>
         )}
       </Container>
-
+</userDetailsContext.Provider>
   );
 }
 

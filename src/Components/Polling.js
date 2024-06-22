@@ -178,9 +178,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //Comments
   const handlePoll = (poll) => {
-    <Comments/>
+console.log(poll)
 
-    // navigate("/Comments", { state: { pollID: poll } });
+    navigate("/Comments", { state: { pollID: poll } });
   };
 
   //UserDeatils

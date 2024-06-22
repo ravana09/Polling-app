@@ -19,8 +19,8 @@ function UserDetails() {
   const { userPhoneNUmber, userID } = location.state || null;
   let pollingusetId=userID
 
-  console.log(userPhoneNUmber, "userMobile");
-  console.log(pollingusetId, "userid");
+  // console.log(userPhoneNUmber, "userMobile");
+  // console.log(pollingusetId, "userid");
 
   let userDeatilsPoll = true;
 
@@ -34,7 +34,7 @@ function UserDetails() {
           }
         );
         setUserDetails(response.data.user);
-        console.log(response.data.user);
+        // console.log(response.data.user);
         if(response.status===200){
         setPollData(!polldata)}
         
@@ -52,8 +52,8 @@ function UserDetails() {
      userpolls = userDetails.created_polls || null;
      OtherUserID =userID
      
-    console.log(userpolls, "polling data");
-    console.log(OtherUserID,"voted polls")
+    // console.log(userpolls, "polling data");
+    // console.log(OtherUserID,"voted polls")
   } else {
     console.log("no data");
   }

@@ -14,7 +14,7 @@ function Trending() {
     } else {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:5000/poll/top3");
+        const response = await axios.get("http://49.204.232.254:84/polls/top3");
         setData(response.data);
         console.log(response.data)
       } catch (err) {

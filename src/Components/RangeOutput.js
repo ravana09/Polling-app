@@ -13,7 +13,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
 
   //personal id
   let id = localStorage.getItem("Id");
-console.log(pollId)
+// console.log(pollId)
   useEffect(() => {
     const fetchPollResults = async () => {
       try {

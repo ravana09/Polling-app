@@ -109,7 +109,7 @@ function Login() {
         title: "User is not a register User",
       });
 
-      console.log("Signed in successfully");
+
       setTimeout(() => {
         navigate("/signup");
       }, 1000);

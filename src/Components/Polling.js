@@ -5,19 +5,16 @@ import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-// import loadingGif from "../Images/Loading.gif";
 import PollEndingTime from "./Timing/PollEndingTime";
 import PollStartingTime from "./Timing/PollStartingTime";
 import { userDetailsContext } from "./User/UserDetails";
-import Like from "./Tools/Like ";
+import { SearchContext } from "./Header";
 
 export const TimerContext = createContext();
-
 export const likeContext = createContext();
 
-function Polling({ pollingState, userDeatilsPoll }) {
+function Polling({ pollingState, userDeatilsPoll,UserID }) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState(() => {
@@ -26,40 +23,29 @@ function Polling({ pollingState, userDeatilsPoll }) {
   });
   const [pollId, setPollId] = useState("");
 
-  //search
   const [searchingPoll, setSearchingPoll] = useState();
   const [searchResults, setSearchResults] = useState(null);
 
+  const searchText = useContext(SearchContext);
   const [timer, setTimer] = useState(true);
 
-  // const[catogery,setCategory]=useState({})
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true); 
+  let [userDetails, setUserDetails] = useState(false);
 
-  //userDetails poll
-  let [userDetails, setuserDetails] = useState(false);
 
-  //from userDetils. comp
-  let otherUserid = useContext(userDetailsContext);
-
-  // console.log(otherUserid, "otheruserid");
-
-  //user UserId
-
+ const otherUserID=UserID
   let UserId = localStorage.getItem("Id");
-
   let navigate = useNavigate();
 
   const handleData = (e) => {
     setSelectedOption(e.target.value);
   };
 
-  //voating
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOption && pollId) {
       try {
-        const url = "http://49.204.232.254:84/polls/voteonpoll";
-        const response = await axios.post(url, {
+        const response = await axios.post("http://49.204.232.254:84/polls/voteonpoll", {
           poll_id: pollId,
           user_id: UserId,
           option: selectedOption,
@@ -77,18 +63,13 @@ function Polling({ pollingState, userDeatilsPoll }) {
           if (!votedPollIds.includes(pollId)) {
             const updatedVotedPollIds = [...votedPollIds, pollId];
             setVotedPollIds(updatedVotedPollIds);
-            localStorage.setItem(
-              "votedPollIds",
-              JSON.stringify(updatedVotedPollIds)
-            );
+            localStorage.setItem("votedPollIds", JSON.stringify(updatedVotedPollIds));
           }
         }
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: `Error voting: ${
-            error.response ? error.response.data.error : error.message
-          }`,
+          title: `Error voting: ${error.response ? error.response.data.error : error.message}`,
           toast: true,
           position: "top-end",
           showConfirmButton: false,
@@ -99,80 +80,75 @@ function Polling({ pollingState, userDeatilsPoll }) {
     }
   };
 
-  // get all
   useEffect(() => {
-    if (userDeatilsPoll === true) {
-      setFetchData("");
-      setLoading(true); // Stop loading
-      // console.log(pollingState, "polling state");
+    if (userDeatilsPoll) {
+      setLoading(false);
       setFetchData(pollingState);
-
-      // console.log(pollingState,"userPolllings")
-      // getUserDetailsVotedPolls();
+      console.log(pollingState,"pollid from user")
+      UserVotedPolls()
+    
     } else {
-      // console.log(userDetails, "useEffect else");
       fetchPollData();
-      // fetchVotedPolls();
+      fetchVotedPolls();
     }
-  }, [userDetails]); // Adding userDetails as a dependency to useEffect
+  }, [userDetails]);
 
   const fetchPollData = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const res = await axios.get("http://49.204.232.254:84/polls/getall");
       setFetchData(res.data);
-      console.log(res.data);
+      console.log(res.data)
     } catch (err) {
       console.error("Error fetching poll data:", err);
     }
-    setLoading(false); // Stop loading
+    setLoading(false);
   };
 
-  // const fetchVotedPolls = async () => {
-  //   setLoading(true); // Start loading
-  //   try {
-  //     const url = "http://49.204.232.254:84/polls/getvoted";
-  //     const response = await axios.get(url, {
-  //       user_id: UserId,
-  //     });
-  //     const { pollIds } = response.data;
-  //     setVotedPollIds(pollIds);
-  //   } catch (error) {
-  //     console.error("Error fetching voted polls:", error);
-  //   }
-  //   setLoading(false); // Stop loading
-  // };
-  // const getUserDetailsVotedPolls = async () => {
-  //   setLoading(true); // Start loading
-  //   try {
-  //     const url = "http://49.204.232.254:84/polls/getvoted";
-  //     const response = await axios.get(url, {
-  //       user_id: otherUserid,
-  //     });
-  //     const { pollIds } = response.data;
-  //     setVotedPollIds(pollIds);
-  //   } catch (error) {
-  //     console.error("Error fetching user details voted polls:", error);
-  //   }
-  //   setLoading(false); // Stop loading
-  // };
+  const fetchVotedPolls = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post("http://49.204.232.254:84/polls/getvoted", {
+        user_id: UserId,
+      });
+      const { pollIds } = response.data;
+      console.log(response.data)
+      setVotedPollIds(pollIds);
+    } catch (error) {
+      console.error("Error fetching voted polls:", error);
+    }
+    setLoading(false);
+  };
 
-  //search
+  const UserVotedPolls = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post("http://49.204.232.254:84/polls/getvoted", {
+        user_id: otherUserID,
+      });
+      const { pollIds } = response.data;
+      console.log(response.data)
+      setVotedPollIds(pollIds);
+    } catch (error) {
+      console.error("Error fetching voted polls:", error);
+    }
+    setLoading(false);
+  };
+  
+
   useEffect(() => {
     const fetchPollById = async () => {
       if (searchingPoll) {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
-          const response = await axios.get(
-            "http://49.204.232.254:84/polls/getone",{
-              poll_id:searchingPoll
-            }
-          );
+          const response = await axios.get("http://49.204.232.254:84/polls/search", {
+            query: searchText,
+          });
           setFetchData([response.data]);
         } catch (err) {
           console.error(err);
         }
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
     fetchPollById();
@@ -180,75 +156,45 @@ function Polling({ pollingState, userDeatilsPoll }) {
 
   const displayedData = searchResults ? [searchResults] : fetchData;
 
- 
-
-  //comment
-  function handlePoll(poll) {
-    let pollClicked = poll;
-    navigate("/Comments", { state: [pollClicked] });
-  }
-
-  //user
-  const handleUser = (UserId) => {
-    console.log(UserId);
-    setuserDetails(!userDetails);
-
-    navigate("/UserDetails", { state: { userID: UserId } });
+  const handlePoll = (poll) => {
+    navigate("/Comments", { state: [poll] });
   };
 
-  // console.log(userDetails);
+  const handleUser = (userId) => {
+    setUserDetails(!userDetails);
+    navigate("/UserDetails", { state: { userID: userId } });
+  };
 
   return (
     <TimerContext.Provider value={{ timer, setTimer }}>
       <div>
         <Row className="polling_row">
           <Form>
-            <Form.Group controlId="exampleForm.ControlInput1 mb-7">
-              <Form.Control
-                type="text"
-                placeholder="Enter a Poll ID"
-                value={searchingPoll}
-                className="searchPoll"
-                onChange={(e) => setSearchingPoll(e.target.value)}
-              />
-            </Form.Group>
+            {/* Search functionality can be added here */}
           </Form>
           <div className="pollingBody">
             <Col md={12} sm={12}>
-              {
-                // loading ? (
-                //   <div className="loading">
-                //    <h1>Loading......</h1>
-                //   </div>
-                // ) : (
+              {loading ? (
+                <div className="loading">
+                  <h1>Loading......</h1>
+                </div>
+              ) : (
                 displayedData.map((apiData) => (
                   <div key={apiData._id}>
                     <Card className="card">
-                      <Button
-                        onClick={() => {
-                          handleUser(apiData.createdBy._id);
-                        }}
-                        style={{ fontSize: 20 }}
-                      >
-                        {apiData.createdBy.user_name}
-                      </Button>
-
+                      <Link onClick={() => handleUser(apiData.createdBy._id)} style={{ fontSize: 20 }}>
+                        {apiData.createdBy?.user_name}
+                      </Link>
                       <h6>
                         {apiData.title}{" "}
                         <span>
-                          <PollStartingTime
-                            createdTime={apiData.created_date}
-                          />
+                          <PollStartingTime createdTime={apiData.created_date} />
                         </span>
                       </h6>
-
-                      <Card.Body
-                        className={`polling ${
-                          votedPollIds.includes(apiData._id)
-                            ? "polling-range"
-                            : ""
-                        }`}
-                      >
+                      <Card.Body 
+                      // className={`polling 
+                      //   ${votedPollIds.includes(apiData._id) ? "polling-range" : ""}`}
+                        >
                         <Card.Title>{apiData.question}</Card.Title>
                         <Stack direction="horizontal" gap={2}>
                           <Badge bg="primary" className="Badge">
@@ -267,26 +213,17 @@ function Polling({ pollingState, userDeatilsPoll }) {
                           <Card className="innerCard">
                             <Card.Header className="cardHeader">
                               <Row>
-                                <Col sm={4} md={4} lg={4} xl={4}>
-                                  {" "}
-                                  {apiData.voters.length}. votes
-                                </Col>
-                                <Col sm={4} md={4} lg={4} xl={4}></Col>
-                                <Col sm={4} md={4} lg={4} xl={4}>
-                                  <PollEndingTime
-                                    createdTime={apiData.created_date}
-                                    endingTime={apiData.expirationTime}
-                                  />
+                                <Col sm={4}>{apiData.count} votes</Col>
+                                <Col sm={4}></Col>
+                                <Col sm={4}>
+                                  <PollEndingTime createdTime={apiData.created_date} endingTime={apiData.expirationTime} />
                                 </Col>
                               </Row>
                             </Card.Header>
                             <Card.Body>
                               <Form onSubmit={handleSubmit}>
                                 {apiData.options.map((option, index) => (
-                                  <Card.Title
-                                    key={index}
-                                    style={{ margin: 10 }}
-                                  >
+                                  <Card.Title key={index} style={{ margin: 10 }}>
                                     <Form.Check
                                       type="radio"
                                       label={option.option}
@@ -302,13 +239,7 @@ function Polling({ pollingState, userDeatilsPoll }) {
                                   </Card.Title>
                                 ))}
                                 {apiData._id === pollId && timer && (
-                                  <Button
-                                    type="submit"
-                                    style={{
-                                      margin: 10,
-                                      backgroundColor: "grey",
-                                    }}
-                                  >
+                                  <Button type="submit" style={{ margin: 10, backgroundColor: "grey" }}>
                                     Vote
                                   </Button>
                                 )}
@@ -319,17 +250,11 @@ function Polling({ pollingState, userDeatilsPoll }) {
                         )}
                       </Card.Body>
                       <Row>
-                        <Col sm={3} md={3} lg={3} xl={3}>
-{/*                         
-                          <Like pollId={apiData._id} /> */}
+                        <Col sm={3}>
+                          {/* <Like pollId={apiData._id} /> */}
                         </Col>
-                        <Col sm={3} md={3} lg={3} xl={3}>
-                          <Button
-                            variant="primary"
-                            onClick={(e) => {
-                              handlePoll(apiData._id);
-                            }}
-                          >
+                        <Col sm={3}>
+                          <Button variant="primary" onClick={() => handlePoll(apiData._id)}>
                             Comments
                           </Button>
                         </Col>
@@ -338,7 +263,7 @@ function Polling({ pollingState, userDeatilsPoll }) {
                     <hr />
                   </div>
                 ))
-              }
+              )}
             </Col>
           </div>
         </Row>

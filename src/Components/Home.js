@@ -13,7 +13,7 @@ function Home({ children, showTrending = true }) {
         <Container fluid style={{ marginLeft: "0px" }}>
           <Row className="fixed-top">
             <Col xs={12}>
-              <Header />
+              {/* <Header /> */}
             </Col>
           </Row>
           <Row>

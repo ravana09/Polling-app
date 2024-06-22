@@ -35,7 +35,9 @@ function NavBar() {
     handleClose();
   }
 
-  const userID = localStorage.getItem("Id");
+  const userPhoneNUmber = localStorage.getItem("Users_PhoneNumber");
+
+  const userID=localStorage.getItem("Id");
   // console.log(userID)
 
 
@@ -65,7 +67,7 @@ function NavBar() {
   }
 
   function handleUser(){
-    navigate("/UserDetails", { state: { userID: userID }});
+    navigate("/UserDetails", { state: { userPhoneNUmber: userPhoneNUmber,userID:userID }});
   }
 
   return (

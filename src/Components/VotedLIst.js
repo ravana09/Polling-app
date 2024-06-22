@@ -25,7 +25,7 @@ function VotedList() {
       console.log(User_id)
       try {
         const url = "http://49.204.232.254:84/polls/getvoted";
-      const response = await axios.get(url, {
+      const response = await axios.post(url, {
         user_id: User_id,
       });
         const { pollIds } = response.data;

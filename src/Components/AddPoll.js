@@ -85,7 +85,6 @@ function AddPoll() {
         category: CatogryChoose,
         options: data.options,
         createdBy: id,
-        desc: data.desc,
         duration: duration,
        
       });
@@ -108,8 +107,8 @@ function AddPoll() {
           options: [{ option: "" }, { option: "" }],
           expirationTime: "",
         });
-        setCategory(" ");
-        setDuration(0);
+        
+       
       }
     } catch (error) {
       console.error("Error creating poll:", error);
@@ -169,6 +168,7 @@ function AddPoll() {
                   border: "none",
                 }}
               >
+                <option></option>
                 <option value={1}> 1 Hours</option>
                 <option value={2}>2 Hours</option>
                 <option value={3}>3 Hours</option>
@@ -236,7 +236,7 @@ function AddPoll() {
               onChange={(e) => setCatogerChoose(e.target.value)}
               style={{ backgroundColor: "transparent", border: "none" }}
             >
-             
+             <option></option>
               { category.map((category, index) => (
                 
                   <option key={index} value={category._id}>

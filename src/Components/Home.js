@@ -28,7 +28,7 @@ function Home({ children, showTrending = true }) {
                 <Trending />
               </Col>
             )} */}
-             <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
+             <Col xs={12} md={3} lg={3} xl={3} >
                 <Trending />
               </Col>
           </Row>

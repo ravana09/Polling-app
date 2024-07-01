@@ -305,22 +305,22 @@ function Comments() {
                           {comment.comment}
                           <button
                             onClick={() => handleReply(comment.id)}
-                            style={{ marginRight: "10px" }}Ṅ
+                            style={{ marginRight: "10px" }}
                           >
                             Reply
                           </button>
                           <button onClick={() => handleLike(comment.id)}>
                             Like
                           </button>
-                        </p>Ṅ
+                        </p>
                         <div>
-                       Ṅ   <Form.Group
+                         <Form.Group
                             className="mb-3 mt-2"
                             controlId="exampleForm.ControlInput1"
                           >
                             <Form.Control
                               type=""
-                              placeholder="Add a Comment"Ṅ
+                              placeholder="Add a Comment"
                               name="Comments"
                               value={newComment}
                               onChange={(e) => setNewComment(e.target.value)}Ṅ

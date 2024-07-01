@@ -1,50 +1,45 @@
-General Styles
-.Title {
-  position: fixed;
+:root {
+  --primary-color: #FF4500;
+  --hover-color: #fa6e3b;
+  --text-color: #76574c;
 }
 
- .sidebar {
+.Headers {
+  position: fixed;
+  margin-top: 40px;
+}
+
+.sidebar {
   width: 24.5%;
   background-color: #ffffff;
   color: rgb(244, 240, 240);
   height: 100vh;
   position: fixed;
-  font-size: 15px;
+  font-size: 20px;
   border-right: 0.1px solid rgba(0, 0, 0, 0.2);
-  /* z-index: 1040; */
 }
-
-
 
 .signOut {
   position: absolute;
-  top:75vh;
+  top: 75vh;
   margin-top: 20px;
   width: 150px;
-  background-color: #FF4500;
+  background-color: var(--primary-color);
   border: none;
 }
 
 .signOut:hover {
-  position: absolute;
-  top:75vh;
-  margin-top: 20px;
-  width: 150px;
-  background-color: #fa6e3b;
-  border: none;
+  background-color: var(--hover-color);
 }
-
 
 .Nav-Links {
   margin-top: 10px;
   font-size: 20px;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
+  color: var(--text-color);
 }
 
-.Nav-Links:hover{
-  color: #fa6e3b;
+.Nav-Links:hover {
+  color: var(--hover-color);
   text-shadow: 2px grey;
 }
 
@@ -56,12 +51,16 @@ General Styles
   .sidebar {
     width: 200px;
     height: 100vh;
-    /* padding: 10px; */
   }
 
   .main-content {
     margin-left: 200px;
     width: calc(100% - 200px);
+  }
+
+  .Mobile_container {
+    position: fixed;
+    margin-top: 150px;
   }
 }
 
@@ -75,42 +74,28 @@ General Styles
   }
 
   #Mobile_view {
-    display: block;
-    width: 100%;
+   display: contents;
+   margin-top: 50px;
   }
 
   .Mobile_container {
     margin-top: 35px;
-    margin-bottom: 0;
   }
 
-  .polling {
-    margin-top: 40px;
-  }
-
-  .polling_row {
-    margin-top: 20px;
-  }
-
-  .search-Bar {
-    display: none;
+  .Nav-Links{
+    color: #FF4500;
+    font-size: 10px;
   }
   .signOut {
-  position: absolute;
-  top:75vh;
-  margin-top: 20px;
+    position: absolute;
+    top: 75vh;
+    margin-top: 20px;
+    width: 150px;
+    background-color: var(--primary-color);
+    border: none;
+  }
 
-  width: 150px;
-  background-color: #FF4500;
-  border: none;
+  .signOut:hover {
+    background-color: var(--hover-color);
+  }
 }
-.signOut:hover {
-  position: absolute;
-  top:75vh;
-  margin-top: 20px;
-
-  width: 150px;
-  background-color: #fa6e3b;
-  border: none;
-}
-} 

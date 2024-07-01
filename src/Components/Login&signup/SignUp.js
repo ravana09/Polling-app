@@ -8,6 +8,7 @@ import signUpimg from "../Images/signupCard.jpg";
 import GoogleImg from "../Images/googleImg.png";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { PiGenderMale } from "react-icons/pi";
 
 function SignUp() {
   const [data, setData] = useState({
@@ -15,6 +16,8 @@ function SignUp() {
     Email: "",
     Password: "",
     ConfirmPassword: "",
+    dateOfBirth: 25,
+    gender: "",
   });
 
   const handleChange = (e) => {
@@ -30,6 +33,16 @@ function SignUp() {
       case "Email":
         setData({ ...data, [name]: value });
         break;
+
+      case "dateOfBirth":
+        setData({ ...data, [name]: value });
+
+        break;
+
+      case "gender":
+        setData({ ...data, [name]: value });
+        break;
+
       case "Password":
         if (value.length <= 6) {
           setData({ ...data, [name]: value });
@@ -47,6 +60,7 @@ function SignUp() {
 
   const schema = yup.object().shape({
     Name: yup.string().required("Name is required"),
+    dateOfBirth: yup.date().nullable().required("Date of Birth is required"),
     Email: yup
       .string()
       .email("Enter a valid email")
@@ -61,6 +75,9 @@ function SignUp() {
       .required("Confirm Password is required"),
   });
 
+  console.log(typeof(data.dateOfBirth));
+  console.log(data.gender);
+
   const handleSubmit = async (values, actions) => {
     try {
       let url = "http://49.204.232.254:84/api/createuser";
@@ -68,6 +85,8 @@ function SignUp() {
         user_name: values.Name,
         email: values.Email,
         password: values.Password,
+        age:data.dateOfBirth,
+        gender:data.gender,
       });
       console.log(response.data);
       if (response.status === 201) {
@@ -167,6 +186,61 @@ function SignUp() {
                           </Col>
                         </Row>
                       </Form.Group>
+                      <Row>
+                        <Col sm={12} md={5} lg={5} xl={5}>
+                          <Form.Label>Date Of Birth</Form.Label>
+                          <Form.Control
+                            type="date"
+                            placeholder="Large text"
+                            name="dateOfBirth"
+                            value={data.dateOfBirth}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="dateOfBirth"
+                            className="text-danger"
+                            component="div"
+                          />
+                        </Col>
+                        <Col sm={12} md={7} lg={7} xl={7}>
+                          <Form.Label>Gender</Form.Label>
+                          <Row>
+                            <Col md={4} lg={4} xl={4}>
+                              <Form.Check
+                                inline
+                                label="Male"
+                                name="gender"
+                                type="radio"
+                                value="male"
+                                checked={data.gender === "male"}
+                                onChange={handleChange}
+                              />
+                            </Col>
+                            <Col md={4} lg={4} xl={4}>
+                              <Form.Check
+                                inline
+                                label="Female"
+                                name="gender"
+                                type="radio"
+                                value="female"
+                                checked={data.gender === "female"}
+                                onChange={handleChange}
+                              />
+                            </Col>
+                            <Col md={4} lg={4} xl={4}>
+                              <Form.Check
+                                inline
+                                label="Others"
+                                name="gender"
+                                type="radio"
+                                value="others"
+                                checked={data.gender === "others"}
+                                onChange={handleChange}
+                              />
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
 
                       <Form.Group className="mb-3" controlId="formPassword">
                         <Form.Label>Password</Form.Label>

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Col, Offcanvas, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import "../Components/navbar.css";
+import "./SideNavBar.css";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,10 +37,8 @@ function NavBar() {
 
   const userPhoneNUmber = localStorage.getItem("Users_PhoneNumber");
 
-  const userID=localStorage.getItem("Id");
+  const userID = localStorage.getItem("Id");
   // console.log(userID)
-
-
 
   // Function to handle sign-out
   function handleSignOut() {
@@ -66,8 +64,10 @@ function NavBar() {
     }, 1000);
   }
 
-  function handleUser(){
-    navigate("/UserDetails", { state: { userPhoneNUmber: userPhoneNUmber,userID:userID }});
+  function handleUser() {
+    navigate("/UserDetails", {
+      state: { userPhoneNUmber: userPhoneNUmber, userID: userID },
+    });
   }
 
   return (
@@ -75,10 +75,10 @@ function NavBar() {
       <Row>
         <Col>
           <div className="sidebar">
-            <Container>
-              <Navbar id="desktop_view" expand="lg" >
-                <Row >
-                  <Col md={12} sm={12} className="p-0">
+            <Container className="Headers">
+              <Navbar expand="lg">
+                <Row>
+                  <Col md={12} sm={12} xl={12} lg={12} className="p-0">
                     <Nav defaultActiveKey="/home" className="flex-column ">
                       <div>
                         <Nav.Link
@@ -87,12 +87,7 @@ function NavBar() {
                         >
                           Poll List
                         </Nav.Link>
-                        {/* <Nav.Link
-                          className="Nav-Links"
-                          onClick={() => handleClick("/polling")}
-                        >
-                          Services
-                        </Nav.Link> */}
+
                         <Nav.Link
                           className="Nav-Links"
                           onClick={() => handleClick("/AddPoll")}
@@ -106,40 +101,30 @@ function NavBar() {
                           Voted Polls
                         </Nav.Link>
                       </div>
-                      <b>
-                        {" "}
-                        <hr />
-                      </b>
                     </Nav>
                   </Col>
                 </Row>
               </Navbar>
-              <hr style={{ color: "grey" }} />
+              <hr style={{ color: "grey", width: "50vh" }} />
               <Navbar id="desktop_view" expand="lg" className="p-0">
                 <Row className="w-100 m-0">
                   <Col md={12} sm={12} className="p-0">
                     <Nav defaultActiveKey="/home" className="flex-column ">
                       <div>
-                        <Nav.Link
-                          onClick={handleUser}
-                          className="Nav-Links"
-                        >
+                        <Nav.Link onClick={handleUser} className="Nav-Links">
                           User Details
                         </Nav.Link>
                       </div>
-                      <b>
-                       
-                        <hr />
-                      </b>
+                      <b></b>
                     </Nav>
                   </Col>
                 </Row>
-                <hr />
               </Navbar>
 
               <Button
                 onClick={handleSignOut}
-                className="d-flex align-items-end m-10 signOut "
+                className="signOut "
+                style={{ backgroundColor: "#FF4500", border: "none" }}
               >
                 <Row>
                   <Col md={8}> Sign Out </Col>
@@ -153,14 +138,71 @@ function NavBar() {
             </Container>
           </div>
 
-          <Navbar expand="lg" id="Mobile_view" className="bg-body-tertiary">
-            <Container className="Mobile_container">
+          <Navbar expand="lg" className="bg-body-tertiary " id="Mobile_view">
+            <Container>
+              <Navbar.Brand href="#home">GT poll</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                   <Nav.Link
                     onClick={() => handleClick("/polling")}
-                    style={{ paddingLeft: 20 }}
+                  
+                  >
+                    Poll List
+                  </Nav.Link>
+                  <Nav.Link
+                    className="Nav-Links"
+                    onClick={() => handleClick("/AddPoll")}
+                  
+                  >
+                    Add Poll
+                  </Nav.Link>
+                 
+                  <Nav.Link
+                    className="Nav-Links"
+                    onClick={() => handleClick("/VotedLIst")}
+                  
+                  >
+                    Voted Polls
+                  </Nav.Link>
+                  <Nav.Link
+                    className="Nav-Links"
+                    onClick={() => handleClick("/SearchingPoll")}
+                  
+                  >
+                    Search A poll
+                  </Nav.Link>
+                  <Nav.Link onClick={handleUser} className="Nav-Links">
+                    User Details
+                  </Nav.Link>
+                  {/* Sign-out button */}
+                  <Nav.Link
+                    onClick={handleSignOut}
+                    style={{
+                      paddingLeft: 20,
+                      backgroundColor: "#FF895D",
+                      width: 100,
+                      height: "auto",
+                    }}
+                    className="d-flex align-items-end "
+                  >
+                    Sign Out
+                  </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+
+          {/* <Navbar expand="lg" id="Mobile_view" className="bg-body-tertiary">
+            <Container className="Mobile_container"> */}
+
+          {/* <Navbar.Toggle aria-controls="basic-navbar-nav" style={{color:"black"}} />
+
+              <Navbar.Collapse id="basic-navbar-nav" style={{backgroundColor:"black"}}>
+                <Nav className="me-auto">
+                  <Nav.Link
+                    onClick={() => handleClick("/polling")}
+                  
                   >
                     Poll List
                   </Nav.Link>
@@ -177,7 +219,7 @@ function NavBar() {
                   >
                     Clients
                   </Nav.Link> */}
-                  <Nav.Link
+          {/* <Nav.Link
                     className="Nav-Links"
                     onClick={() => handleClick("/VotedLIst")}
                     style={{ paddingLeft: 20 }}
@@ -196,9 +238,9 @@ function NavBar() {
                           className="Nav-Links"
                         >
                           User Details
-                        </Nav.Link>
-                  {/* Sign-out button */}
-                  <Nav.Link
+                        </Nav.Link> */}
+          {/* Sign-out button */}
+          {/* <Nav.Link
                     onClick={handleSignOut}
                     style={{
                       paddingLeft: 20,
@@ -211,9 +253,9 @@ function NavBar() {
                     Sign Out
                   </Nav.Link>
                 </Nav>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
+              </Navbar.Collapse> */}
+          {/* </Container>
+          </Navbar> */}
         </Col>
       </Row>
     </>

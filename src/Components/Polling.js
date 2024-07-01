@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import "../Components/polling.css";
+import "./polling.css";
 
 import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
 import Swal from "sweetalert2";

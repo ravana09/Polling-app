@@ -43,24 +43,24 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
  const location =useLocation()
 //  const trendingPoll=location.state.data||null
 //  console.log(trendingPoll)
- const [trendingPoll, setTrendingPoll] = useState(null);
+//  const [trendingPoll, setTrendingPoll] = useState(null);
 
- useEffect(() => {
-  if (location.state?.data) {
-    setTrendingPoll(location.state.data);
-  } else {
-    fetchPollData();
-    fetchVotedPolls();
-  }
-}, [location.state]);
+//  useEffect(() => {
+//   if (location.state?.data) {
+//     setTrendingPoll(location.state.data);
+//   } else {
+//     fetchPollData();
+//     fetchVotedPolls();
+//   }
+// }, [location.state]);
 
-useEffect(() => {
-  if (trendingPoll) {
-    console.log("Trending polls: ", trendingPoll);
-    setLoading(false);
-    setFetchData(trendingPoll);
-  }
-}, [trendingPoll]);
+// useEffect(() => {
+//   if (trendingPoll) {
+//     console.log("Trending polls: ", trendingPoll);
+//     setLoading(false);
+//     setFetchData(trendingPoll);
+//   }
+// }, [trendingPoll]);
 
   const otherUserID = UserID;
   let UserId = localStorage.getItem("Id");
@@ -124,11 +124,11 @@ useEffect(() => {
       // console.log(pollingState,"pollid from user")
       UserVotedPolls();
     }
-    else if (trendingPoll) {
-      setLoading(false);
-      setFetchData(trendingPoll);
-      console.log("Trending polls: ", trendingPoll);
-    }
+    // else if (trendingPoll) {
+    //   setLoading(false);
+    //   setFetchData(trendingPoll);
+    //   console.log("Trending polls: ", trendingPoll);
+    // }
      else {
       fetchPollData();
       fetchVotedPolls();

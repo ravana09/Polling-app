@@ -140,35 +140,32 @@ function NavBar() {
 
           <Navbar expand="lg" className="bg-body-tertiary " id="Mobile_view">
             <Container>
-              <Navbar.Brand href="#home">GT poll</Navbar.Brand>
+              <Navbar.Brand className="NavbarTitle" style={{ color: "#FF4500",fontSize:"200%" }}>GT Poll</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                   <Nav.Link
+                    className="Nav-Links"
                     onClick={() => handleClick("/polling")}
-                  
                   >
                     Poll List
                   </Nav.Link>
                   <Nav.Link
                     className="Nav-Links"
                     onClick={() => handleClick("/AddPoll")}
-                  
                   >
                     Add Poll
                   </Nav.Link>
-                 
+
                   <Nav.Link
                     className="Nav-Links"
                     onClick={() => handleClick("/VotedLIst")}
-                  
                   >
                     Voted Polls
                   </Nav.Link>
                   <Nav.Link
                     className="Nav-Links"
                     onClick={() => handleClick("/SearchingPoll")}
-                  
                   >
                     Search A poll
                   </Nav.Link>
@@ -190,72 +187,9 @@ function NavBar() {
                   </Nav.Link>
                 </Nav>
               </Navbar.Collapse>
+             
             </Container>
           </Navbar>
-
-          {/* <Navbar expand="lg" id="Mobile_view" className="bg-body-tertiary">
-            <Container className="Mobile_container"> */}
-
-          {/* <Navbar.Toggle aria-controls="basic-navbar-nav" style={{color:"black"}} />
-
-              <Navbar.Collapse id="basic-navbar-nav" style={{backgroundColor:"black"}}>
-                <Nav className="me-auto">
-                  <Nav.Link
-                    onClick={() => handleClick("/polling")}
-                  
-                  >
-                    Poll List
-                  </Nav.Link>
-                  <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/AddPoll")}
-                    style={{ paddingLeft: 20 }}
-                  >
-                    Add Poll
-                  </Nav.Link>
-                  {/* <Nav.Link
-                    onClick={() => handleClick("/home")}
-                    style={{ paddingLeft: 20 }}
-                  >
-                    Clients
-                  </Nav.Link> */}
-          {/* <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/VotedLIst")}
-                    style={{ paddingLeft: 20 }}
-                  >
-                    Voted Polls
-                  </Nav.Link>
-                  <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/SearchingPoll")}
-                    style={{ paddingLeft: 20 }}
-                  >
-                    Search A poll
-                  </Nav.Link>
-                  <Nav.Link
-                          onClick={handleUser}
-                          className="Nav-Links"
-                        >
-                          User Details
-                        </Nav.Link> */}
-          {/* Sign-out button */}
-          {/* <Nav.Link
-                    onClick={handleSignOut}
-                    style={{
-                      paddingLeft: 20,
-                      backgroundColor: "#FF895D",
-                      width: 100,
-                      height: "auto",
-                    }}
-                    className="d-flex align-items-end "
-                  >
-                    Sign Out
-                  </Nav.Link>
-                </Nav>
-              </Navbar.Collapse> */}
-          {/* </Container>
-          </Navbar> */}
         </Col>
       </Row>
     </>

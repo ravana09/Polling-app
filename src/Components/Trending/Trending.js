@@ -25,7 +25,7 @@ function Trending() {
 
   return (
     <Row>
-      <Col sm={12} md={12} lg={12} xl={12} className="TrendingContainer">
+      <Col sm={12} md={12} lg={12} xl={12} className="TrendingContainer" id="trending_Bar">
         <Card bg={"secondary"} style={{ width: "18rem" }} className="mb-2">
           <Button variant="primary" onClick={handleTopThree}>
             {loading ? "Close the Card" : "Show Top 3 Trending Polls"}

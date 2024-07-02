@@ -17,7 +17,6 @@ function UserDetails() {
 
   const location = useLocation();
   const { userPhoneNUmber, userID } = location.state || null;
-  
 
   // console.log(userPhoneNUmber, "userMobile");
   // console.log(pollingusetId, "userid");
@@ -30,14 +29,14 @@ function UserDetails() {
         const response = await axios.post(
           "http://49.204.232.254:84/api/getProfile",
           {
-            user_id:userID
+            user_id: userID,
           }
         );
         setUserDetails(response.data.user);
         // console.log(response.data.user);
-        if(response.status===200){
-        setPollData(!polldata)}
-        
+        if (response.status === 200) {
+          setPollData(!polldata);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -45,24 +44,24 @@ function UserDetails() {
 
     fetchUserDetails();
   }, [userPhoneNUmber]);
-  let userpolls
-  let OtherUserID
+  let userpolls;
+  let OtherUserID;
 
   if (polldata === true) {
-     userpolls = userDetails.created_polls || null;
-     OtherUserID =userID
-     
+    userpolls = userDetails.created_polls || null;
+    OtherUserID = userID;
+
     // console.log(userpolls, "polling data");
     // console.log(OtherUserID,"voted polls")
-  } else {
-    console.log("no data");
   }
 
   // let filteredVotedPolls = votedPolls ? votedPolls.filter(poll => userpolls.includes(poll)) : [];
   // console.log(filteredVotedPolls,"filtered")
 
   return (
-    <userDetailsContext.Provider value={{OtherUserID,userDeatilsPoll,userpolls}}>
+    <userDetailsContext.Provider
+      value={{ OtherUserID, userDeatilsPoll, userpolls }}
+    >
       <Container fluid>
         <Card className="User_page" style={{ position: "relative" }}>
           <Image src={CoverImage} className="Cover_img" fluid />
@@ -85,12 +84,13 @@ function UserDetails() {
         </Card>
         {polldata && (
           <Polling
-           pollingState={userpolls}
-            userDeatilsPoll={userDeatilsPoll} 
-            UserID={OtherUserID}/>
+            pollingState={userpolls}
+            userDeatilsPoll={userDeatilsPoll}
+            UserID={OtherUserID}
+          />
         )}
       </Container>
-</userDetailsContext.Provider>
+    </userDetailsContext.Provider>
   );
 }
 

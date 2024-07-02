@@ -1,6 +1,21 @@
 .Home-Body{
-    margin-top: 70px;
+    position: relative;
+    top: 70px;
     background-color: #FAFAFB;
 }
+@media (max-width: 768px) {
+    .Home-Body{
+        position: relative;
+       top: 0vh;
+    }
+}
+    
+    @media (max-width: 576px) {
+        .Home-Body{
+            position: relative;
+          
+        }
+    }
+    
 
 

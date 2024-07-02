@@ -77,18 +77,23 @@
    display: contents;
    margin-top: 50px;
   }
+ .NavbarTitle{
+  color: #FF4500;
+  font-size: 200%;
+ }
 
   .Mobile_container {
     margin-top: 35px;
   }
 
   .Nav-Links{
-    color: #FF4500;
+    color: #34302f;
     font-size: 10px;
   }
   .signOut {
     position: absolute;
     top: 75vh;
+    bottom: 100vh;
     margin-top: 20px;
     width: 150px;
     background-color: var(--primary-color);

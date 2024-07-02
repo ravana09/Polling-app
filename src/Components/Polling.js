@@ -107,7 +107,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   const fetchPollData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://49.204.232.254:84/polls/getall");
+      const res = await axios.post("http://49.204.232.254:84/polls/getall",{
+        user_id: UserId,
+      });
       setFetchData(res.data);
       console.log(res.data);
     } catch (err) {

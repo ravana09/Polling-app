@@ -23,7 +23,7 @@ function Header() {
   return (
     <SearchContext.Provider value={{searchData}}>
     <>
-      <Row  xs={12} md={12} lg={12} xl={12} className="fixed-top">
+      <Row  xs={12} md={12} lg={12} xl={12} className="fixed-top" id="searchBar">
         <Col >
           <Navbar expand="lg" className="Header">
             <Container>
@@ -31,7 +31,7 @@ function Header() {
 
               <Form inline>
                 <Row>
-                  <Col xs="auto">
+                  <Col xs="auto" >
                     <Form.Control
                       type="text"
                       placeholder="Search"

@@ -5,13 +5,14 @@ import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PollEndingTime from "./Timing/PollEndingTime";
 import PollStartingTime from "./Timing/PollStartingTime";
 import { userDetailsContext } from "./User/UserDetails";
 import { SearchContext } from "./Header";
 import Like from "./Tools/Like ";
 import Comments, { CommentContext } from "./Tools/Comments";
+import { TrendingPollContext } from "./Trending/Trending";
 
 export const TimerContext = createContext();
 export const likeContext = createContext();
@@ -36,6 +37,30 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //comment poll
   // let {commentPOll, commentData } = useContext(CommentContext);
+
+  //Trending Poll id
+
+ const location =useLocation()
+//  const trendingPoll=location.state.data||null
+//  console.log(trendingPoll)
+ const [trendingPoll, setTrendingPoll] = useState(null);
+
+ useEffect(() => {
+  if (location.state?.data) {
+    setTrendingPoll(location.state.data);
+  } else {
+    fetchPollData();
+    fetchVotedPolls();
+  }
+}, [location.state]);
+
+useEffect(() => {
+  if (trendingPoll) {
+    console.log("Trending polls: ", trendingPoll);
+    setLoading(false);
+    setFetchData(trendingPoll);
+  }
+}, [trendingPoll]);
 
   const otherUserID = UserID;
   let UserId = localStorage.getItem("Id");
@@ -98,7 +123,13 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
       setFetchData(pollingState);
       // console.log(pollingState,"pollid from user")
       UserVotedPolls();
-    }  else {
+    }
+    else if (trendingPoll) {
+      setLoading(false);
+      setFetchData(trendingPoll);
+      console.log("Trending polls: ", trendingPoll);
+    }
+     else {
       fetchPollData();
       fetchVotedPolls();
     }
@@ -107,7 +138,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   const fetchPollData = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://49.204.232.254:84/polls/getall",{
+      const res = await axios.post("http://49.204.232.254:84/polls/getall", {
         user_id: UserId,
       });
       setFetchData(res.data);
@@ -180,7 +211,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //Comments
   const handlePoll = (poll) => {
-console.log(poll)
+    console.log(poll);
 
     navigate("/Comments", { state: { pollID: poll } });
   };

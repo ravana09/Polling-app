@@ -25,6 +25,7 @@ function Trending() {
       try {
         const response = await axios.get("http://49.204.232.254:84/polls/top3");
         setData(response.data);
+        // setTrend(response.data)
         console.log(response.data);
       } catch (err) {
         console.log("Error: ", err);
@@ -33,28 +34,28 @@ function Trending() {
   }
 
   // Fetch data for a single poll
-  async function handleData(e, id) {
-    e.preventDefault();
-    console.log("Clicked", id);
-    try {
-      const response = await axios.post("http://49.204.232.254:84/polls/getone", {
-        poll_id: id,
-      });
+  // async function handleData(e, id) {
+  //   e.preventDefault();
+  //   console.log("Clicked", id);
+  //   try {
+  //     const response = await axios.post("http://49.204.232.254:84/polls/getone", {
+  //       poll_id: id,
+  //     });
       
-      console.log(response.data);
-      setTrendingPoll(true)
-      Navigate(response.data)
-      // navigate('/polling',{state:{TrendingData:response.data,trendingPollStatus:trendingPoll}})
+  //     console.log(response.data);
+  //     setTrendingPoll(true)
+  //     Navigate(response.data)
+  //     // navigate('/polling',{state:{TrendingData:response.data,trendingPollStatus:trendingPoll}})
     
-    } catch (err) {
-      console.log("Error: ", err);
-    }
+  //   } catch (err) {
+  //     console.log("Error: ", err);
+  //   }
 
 
-  }
+  // }
 
-  function Navigate(data){
-    navigate('/polling',{state:{data}})
+  function Navigate(trendingPolldata){
+    navigate('/polling',{state:{data:trendingPolldata}})
   }
 
   // console.log(pollData, "polldata");
@@ -85,7 +86,7 @@ function Trending() {
                           Total Votes: {apidata.totalVotes}
                         </ListGroup.Item>
                       </ListGroup>
-                      <Button onClick={(e) => handleData(e, apidata._id)}>
+                      <Button onClick={() => Navigate(apidata._id)}>
                         Get to the Poll
                       </Button>
                     </Card.Text>

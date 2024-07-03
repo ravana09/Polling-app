@@ -36,15 +36,14 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   const [loading, setLoading] = useState(true);
   let [userDetails, setUserDetails] = useState(false);
 
+  const [likepoll,setLikepoll]=useState(false)
+
   //Trending Poll id
-
-
-
   const location = useLocation();
 
   let { data } = location.state || {};
 
-  console.log(data);
+  // console.log(data);
 
   const otherUserID = UserID;
   let UserId = localStorage.getItem("Id");
@@ -110,7 +109,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
       UserVotedPolls();
     }
      else if (data) {
-      console.log(data,"trending poll")
+      // console.log(data,"trending poll")
       fetchPollDetails(data);
       fetchVotedPolls();
     
@@ -119,9 +118,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
       
       fetchPollData();
       fetchVotedPolls();
-      console.log("polling");
+      // console.log("polling");
     }
-  }, [userDetails,data]);
+  }, [userDetails,data,likepoll]);
 
   //polling fetching
   const fetchPollData = async () => {
@@ -131,7 +130,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
         user_id: UserId,
       });
       setFetchData(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (err) {
       console.error("Error fetching poll data:", err);
     }
@@ -177,9 +176,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //trendinPoll
    async function fetchPollDetails(pollId) {
-    console.log(pollId,'function trendingPoll')
+    // console.log(pollId,'function trendingPoll')
     try {
-      console.log(pollId,"try")
+      // console.log(pollId,"try")
       const response = await axios.post("http://49.204.232.254:84/polls/getone", {
         poll_id: pollId,
       });
@@ -238,7 +237,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
             <Col md={12} sm={12}>
               {loading ? (
                 <div className="loading">
-                  <h1>Loading......</h1>
+                  {/* <h1>Loading......</h1> */}
                 </div>
               ) : (
                 fetchData.map((apiData) => (
@@ -333,8 +332,8 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                       <Row>
                         <Col sm={3}>
                           <div>
-                            <Like pollId={apiData._id} />
-                            {/* {apiData.likers.length} Like */}
+                            <Like pollId={apiData._id} setLikepoll={setLikepoll} likepoll={likepoll} />
+                            {apiData.likers.length} Like
                           </div>
                         </Col>
                         <Col sm={3}>

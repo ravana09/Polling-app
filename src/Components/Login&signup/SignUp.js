@@ -96,7 +96,7 @@ function SignUp() {
           showConfirmButton: false,
           timer: 2000,
         });
-        localStorage.setItem("signupEmail", data.Email);
+        sessionStorage.setItem("signupEmail", data.Email);
 
         setTimeout(() => {
           navigate("/MobileNumberVerify");

@@ -49,11 +49,11 @@ function MobileNum() {
   const navigate = useNavigate();
 
   async function handleSubmit() {
-    localStorage.setItem("MobileNUmber", formData.PhoneNumber);
+    sessionStorage.setItem("MobileNUmber", formData.PhoneNumber);
     if (setIsOtpSent) {
       try {
         let url = "http://49.204.232.254:84/api/updateuser";
-        let identification = localStorage.getItem("signupEmail");
+        let identification = sessionStorage.getItem("signupEmail");
         const response = await axios.post(url, {
           identifier: identification,
           phone_number: formData.PhoneNumber,

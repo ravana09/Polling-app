@@ -14,12 +14,16 @@ function PollStartingTime({ createdTime }) {
       const timeDifference = (currentTime - targetTime + 5.5 * 60 * 60 * 1000);
 
       // console.log(timeDifference,"differenc3")
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
 
-      let seconds = Math.floor((timeDifference / 1000) % 60);
-      let minutes = Math.floor((timeDifference / 1000 / 60) % 60);
-      let hours = Math.floor((timeDifference / 1000 / 60 / 60) % 24);
-      let days = Math.floor((timeDifference / 1000 / 60 / 60 / 24) % 30);
+      // let seconds = Math.floor((timeDifference / 1000) % 60);
+      // let minutes = Math.floor((timeDifference / 1000 / 60) % 60);
+      // let hours = Math.floor((timeDifference / 1000 / 60 / 60) % 24);
+      // let days = Math.floor((timeDifference / 1000 / 60 / 60 / 24) % 30);
       let months = Math.floor((timeDifference / 1000 / 60 / 60 / 24 / 30) % 12);
       let years = Math.floor(timeDifference / 1000 / 60 / 60 / 24 / 365);
 

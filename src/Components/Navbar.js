@@ -35,15 +35,15 @@ function NavBar() {
     handleClose();
   }
 
-  const userPhoneNUmber = localStorage.getItem("Users_PhoneNumber");
+  const userPhoneNUmber = sessionStorage.getItem("Users_PhoneNumber");
 
-  const userID = localStorage.getItem("Id");
+  const userID = sessionStorage.getItem("Id");
   // console.log(userID)
 
   // Function to handle sign-out
   function handleSignOut() {
-    localStorage.clear();
-    localStorage.removeItem("MobileNUmber ");
+    sessionStorage.clear();
+    sessionStorage.removeItem("MobileNUmber ");
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",

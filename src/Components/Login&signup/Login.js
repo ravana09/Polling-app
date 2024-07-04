@@ -78,12 +78,12 @@ function Login() {
         });
 
         //local storage 
-        localStorage.setItem("Users_Name", response.data.user.user_name);
-        localStorage.setItem(
+        sessionStorage.setItem("Users_Name", response.data.user.user_name);
+        sessionStorage.setItem(
           "Users_PhoneNumber",
           response.data.user.phone_number
         );
-        localStorage.setItem("Id", response.data.user._id);
+        sessionStorage.setItem("Id", response.data.user._id);
 
         console.log("Signed in successfully");
         setTimeout(() => {
@@ -113,7 +113,7 @@ function Login() {
       setTimeout(() => {
         navigate("/signup");
       }, 1000);
-      localStorage.setItem("MobileNUmber", formData.PhoneNumber);
+      sessionStorage.setItem("MobileNUmber", formData.PhoneNumber);
     }
   }
 

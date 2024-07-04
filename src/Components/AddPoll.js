@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import "../Components/Addpoll.css";
-import'../Components/add.css'
+import "../Components/add.css";
 
 import { Button, Card, Col, Container, Form, Nav, Row } from "react-bootstrap";
 import { RiDeleteBin6Fill } from "react-icons/ri";
@@ -25,7 +25,9 @@ function AddPoll() {
   };
 
   const [activeTab, setActiveTab] = useState("poll");
-  const [duration, setDuration] = useState(1);
+  const [duration, setDuration] = useState("");
+  const [hoursDifference, setHoursDifference] = useState(null);
+
   const [category, setCategory] = useState([]);
   const [CatogryChoose, setCatogerChoose] = useState("");
 
@@ -44,6 +46,22 @@ function AddPoll() {
     setData({ ...data, options: newOptions });
   };
 
+  const handleDuration = (event) => {
+    const selectedTime = +new Date(event.target.value);
+    console.log(selectedTime)
+    const currentTime = +new Date()
+    console.log(currentTime)
+
+    const timeDifference = selectedTime - currentTime;
+    let hours = (timeDifference / 1000 / 60 / 60)
+    // const hours = ((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    setDuration(event.target.value);
+    console.log(hours.toFixed(2));
+    setHoursDifference(hours.toFixed(2));
+    // Format to 2 decimal places
+  };
+
   //catogery id
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +69,7 @@ function AddPoll() {
         const response = await axios.get(
           "http://49.204.232.254:84/category/getall"
         );
-        console.log(response.data);
+        // console.log(response.data);
         setCategory(response.data ? response.data : []);
       } catch (err) {
         console.log(err);
@@ -61,7 +79,7 @@ function AddPoll() {
     fetchData();
   }, []);
 
-  console.log(CatogryChoose,"categoryyid");
+  console.log(CatogryChoose, "categoryyid");
 
   const createPoll = async (e) => {
     e.preventDefault();
@@ -79,15 +97,17 @@ function AddPoll() {
     }
 
     try {
-      const response = await axios.post("http://49.204.232.254:84/polls/create", {
-        question: data.question,
-        title: data.title,
-        category: CatogryChoose,
-        options: data.options,
-        createdBy: id,
-        duration: duration,
-       
-      });
+      const response = await axios.post(
+        "http://49.204.232.254:84/polls/create",
+        {
+          question: data.question,
+          title: data.title,
+          category: CatogryChoose,
+          options: data.options,
+          createdBy: id,
+          duration: hoursDifference,
+        }
+      );
 
       if (response.status === 201) {
         Swal.fire({
@@ -107,8 +127,6 @@ function AddPoll() {
           options: [{ option: "" }, { option: "" }],
           expirationTime: "",
         });
-        
-       
       }
     } catch (error) {
       console.error("Error creating poll:", error);
@@ -159,20 +177,14 @@ function AddPoll() {
         <Col sm={6} md={7}>
           <div style={{ marginTop: 10 }}>
             <p>
-              Voting Period:
-              <select
+              <Form.Label>Voting Period</Form.Label>
+              <Form.Control
+                type="datetime-local"
+                placeholder="Large text"
+                name="dateOfBirth"
                 value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                style={{
-                  backgroundColor: "transparent",
-                  border: "none",
-                }}
-              >
-                <option></option>
-                <option value={1}> 1 Hours</option>
-                <option value={2}>2 Hours</option>
-                <option value={3}>3 Hours</option>
-              </select>
+                onChange={handleDuration}
+              />
             </p>
           </div>
         </Col>
@@ -236,15 +248,12 @@ function AddPoll() {
               onChange={(e) => setCatogerChoose(e.target.value)}
               style={{ backgroundColor: "transparent", border: "none" }}
             >
-             <option></option>
-              { category.map((category, index) => (
-                
-                  <option key={index} value={category._id}>
-                    {category.category_name}
-                   
-                  </option>
-                 
-                ))}
+              <option></option>
+              {category.map((category, index) => (
+                <option key={index} value={category._id}>
+                  {category.category_name}
+                </option>
+              ))}
             </select>
           </Col>
 

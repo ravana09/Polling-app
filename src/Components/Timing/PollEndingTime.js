@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { TimerContext } from "../Polling";
 
 
-function PollEndingTime({endingTime}) {
+function PollEndingTime({endingTime,setpollEndtime}) {
   // console.log(createdTime)
   let [date, setDate] = useState(endingTime);
   const [result, setResult] = useState("");
@@ -55,6 +55,7 @@ function PollEndingTime({endingTime}) {
        
         setResult("Poll Ended !");
         clearInterval(dateTimer);
+        // setpollEndtime(false)
         return;
       }
     };

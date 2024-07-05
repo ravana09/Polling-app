@@ -11,7 +11,7 @@ import RangeOutput from "../RangeOutput";
 function Comments() {
   let navigate = useNavigate();
 
-  let userName = localStorage.getItem("Users_Name");
+  let userName = sessionStorage.getItem("Users_Name");
 
   const [fetchData, setFetchData] = useState({});
   const [selectedOption, setSelectedOption] = useState("");
@@ -20,16 +20,21 @@ function Comments() {
   const [timer, setTimer] = useState(true);
   const [loading, setLoading] = useState(true);
   const [userDetails, setUserDetails] = useState(false);
-  const UserId = localStorage.getItem("Id");
+  const UserId = sessionStorage.getItem("Id");
 
   const [newComment, setNewComment] = useState("");
 
   const [showComments, setShowComments] = useState([]);
 
+  const [replyComment, setReplyComment] = useState("");
+  const [replyCommentId, setReplyCommentId] = useState("");
+
   const location = useLocation();
   const { pollID } = location.state || null;
 
-  console.log(pollID);
+  const userID = sessionStorage.getItem("Id");
+  // console.log(userID, "user Id");
+
   const handleData = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -59,7 +64,7 @@ function Comments() {
           if (!votedPollIds.includes(pollId)) {
             const updatedVotedPollIds = [...votedPollIds, pollId];
             setVotedPollIds(updatedVotedPollIds);
-            localStorage.setItem(
+            sessionStorage.setItem(
               "votedPollIds",
               JSON.stringify(updatedVotedPollIds)
             );
@@ -93,7 +98,7 @@ function Comments() {
         poll_id: pollID,
       });
       setFetchData(res.data);
-      console.log(res.data);
+      // console.log(res.data);
       console.log();
     } catch (err) {
       console.error("Error fetching poll data:", err);
@@ -130,20 +135,18 @@ function Comments() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://49.204.232.254:84/comment/createcomment",
-        {
-          poll_id: pollID,
-          user_id: UserId,
-          comment: newComment,
-        }
-      );
+      if (newComment !== "") {
+        const res = await axios.post(
+          "http://49.204.232.254:84/comment/createcomment",
+          {
+            poll_id: pollID,
+            user_id: UserId,
+            comment: newComment,
+          }
+        );
+        // console.log(res.data , "comments");
+      }
       setNewComment("");
-
-      // if (res.status === 200) {
-
-      //   setComments('')
-      // }
     } catch (err) {
       console.log(err);
     }
@@ -175,14 +178,43 @@ function Comments() {
 
   //reply to comment
   const handleReply = (commentId) => {
-    // Implement reply functionality here, e.g., open a reply form
-    console.log(`Replying to comment with ID: ${commentId}`);
+    setReplyCommentId(commentId);
+    // replyPost(commentId)
+    // console.log(`Replying to comment with ID: ${commentId}`);
+  };
+
+  // console.log(replyComment,"reply Command")
+
+  //reply post 
+  const replyPost = async () => {
+    try {
+      const response = await axios.post(
+        "http://49.204.232.254:84/comment/replycomment",
+        {
+          poll_id: pollID,
+          user_id: userID,
+          reply_msg: replyComment,
+          comment_id: replyCommentId,
+        }
+      );
+      console.log(response.data, "reply comment");
+      if (response.status === 201) {
+        setReplyCommentId(null);
+        setReplyComment("");
+        setShowComments(response.data);
+        console.log(response.data, "Comment list");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    // console.log(replyCommentId, "reply post");
   };
 
   //like to comment
   const handleLike = (commentId) => {
     // Implement like functionality here, e.g., increment likes for the comment
-    console.log(`Liking comment with ID: ${commentId}`);
+    // console.log(`Liking comment with ID: ${commentId}`);
   };
 
   return (
@@ -292,6 +324,7 @@ function Comments() {
                   </Row>
                   <ul style={{ listStyleType: "none", padding: 0 }}>
                     {showComments.map((comment, index) => (
+                      
                       <li
                         key={index}
                         style={{
@@ -303,39 +336,55 @@ function Comments() {
                         <p style={{ marginBottom: "5px" }}>
                           <strong>{comment.user_id.user_name}:</strong>{" "}
                           {comment.comment}
-                          <button
-                            onClick={() => handleReply(comment.id)}
+                          <Button
+                            onClick={() => handleReply(comment._id)}
                             style={{ marginRight: "10px" }}
                           >
                             Reply
-                          </button>
-                          <button onClick={() => handleLike(comment.id)}>
+                          </Button>
+                          <button onClick={() => handleLike(comment._id)}>
                             Like
                           </button>
                         </p>
-                        <div>
-                         <Form.Group
-                            className="mb-3 mt-2"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Control
-                              type=""
-                              placeholder="Add a Comment"
-                              name="Comments"
-                              value={newComment}
-                              onChange={(e) => setNewComment(e.target.value)}Ṅ
-                            />
-                          </Form.Group>
+                        {comment._id === replyCommentId && (
+                          <div>
+                            <Row>
+                              <Col sm={9} md={9} lg={9} xl={9}>
+                                <Form.Group
+                                  className="mb-3 mt-2"
+                                  controlId="exampleForm.ControlInput1"
+                                >
+                                  <Form.Control
+                                    type=""
+                                    placeholder="Add a Comment"
+                                    name="Comments"
+                                    value={replyComment}
+                                    onChange={(e) =>
+                                      setReplyComment(e.target.value)
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col sm={3} md={3} lg={3} xl={3}>
+                                <Button
+                                  variant="primary"
+                                  type="submit"
+                                  className="mb-3 mt-2"
+                                  onClick={replyPost}
+                                >
+                                  Reply
+                                </Button>
+                              <ol>
+                                <li>
 
-                          <Button
-                            variant="primary"
-                            type="submit"
-                            className="mb-3 mt-2"
-                          >
-                            Submit
-                          </Button>
-                        </div>
+                                </li>
+                              </ol>
+                              </Col>
+                            </Row>
+                          </div>
+                        )}
                       </li>
+                      
                     ))}
                   </ul>
                 </Form>

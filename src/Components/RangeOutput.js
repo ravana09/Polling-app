@@ -12,7 +12,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
   let [higherColur, setHignColour] = useState("");
 
   //personal id
-  let id = localStorage.getItem("Id");
+  let id = sessionStorage.getItem("Id");
 // console.log(pollId)
   useEffect(() => {
     const fetchPollResults = async () => {

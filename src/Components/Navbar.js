@@ -21,19 +21,23 @@ function NavBar() {
     setShow(false);
   };
 
+
   // Function to open the Offcanvas menu
   const handleShow = () => {
     setShow(true);
   };
 
+
   // React Router's navigate function
   let navigate = useNavigate();
+
 
   // Function to handle navigation and close menu
   function handleClick(input) {
     navigate(input);
     handleClose();
   }
+
 
   const userPhoneNUmber = sessionStorage.getItem("Users_PhoneNumber");
 

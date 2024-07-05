@@ -14,7 +14,6 @@ import Like from "./Tools/Like ";
 // import Comments, { CommentContext } from "./Tools/Comments";
 // import { TrendingPollContext } from "./Trending/Trending";
 
-
 export const TimerContext = createContext();
 export const likeContext = createContext();
 
@@ -22,13 +21,15 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState(() => {
-    const storedVotedPollIds = localStorage.getItem("votedPollIds");
+    const storedVotedPollIds = sessionStorage.getItem("votedPollIds");
     return storedVotedPollIds ? JSON.parse(storedVotedPollIds) : [];
   });
   const [pollId, setPollId] = useState("");
 
   const [searchingPoll, setSearchingPoll] = useState();
-  const [searchResults, setSearchResults] = useState(null);
+  // const [searchResults, setSearchResults] = useState(null);
+
+  const [voteCount, setVoteCount] = useState(0);
 
   const searchText = useContext(SearchContext);
   const [timer, setTimer] = useState(true);
@@ -36,7 +37,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   const [loading, setLoading] = useState(true);
   let [userDetails, setUserDetails] = useState(false);
 
-  const [likepoll,setLikepoll]=useState(false)
+  const [likepoll, setLikepoll] = useState(false);
+
+  const [pollEndTime, setpollEndtime] = useState(true);
 
   //Trending Poll id
   const location = useLocation();
@@ -46,7 +49,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   // console.log(data);
 
   const otherUserID = UserID;
-  let UserId = localStorage.getItem("Id");
+  let UserId = sessionStorage.getItem("Id");
   let navigate = useNavigate();
 
   const handleData = (e) => {
@@ -79,7 +82,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
           if (!votedPollIds.includes(pollId)) {
             const updatedVotedPollIds = [...votedPollIds, pollId];
             setVotedPollIds(updatedVotedPollIds);
-            localStorage.setItem(
+            sessionStorage.setItem(
               "votedPollIds",
               JSON.stringify(updatedVotedPollIds)
             );
@@ -101,26 +104,23 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
     }
   };
 
+  //fetching data
   useEffect(() => {
     if (userDeatilsPoll) {
       setLoading(false);
       setFetchData(pollingState);
       // console.log(pollingState,"pollid from user")
       UserVotedPolls();
-    }
-     else if (data) {
-      // console.log(data,"trending poll")
+    } else if (data) {
+      // console.log(data)
       fetchPollDetails(data);
       fetchVotedPolls();
-    
-    } 
-    else {
-      
+    } else {
       fetchPollData();
       fetchVotedPolls();
       // console.log("polling");
     }
-  }, [userDetails,data,likepoll]);
+  }, [userDetails, data]);
 
   //polling fetching
   const fetchPollData = async () => {
@@ -130,7 +130,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
         user_id: UserId,
       });
       setFetchData(res.data);
-      // console.log(res.data);
+      console.log(res.data);
     } catch (err) {
       console.error("Error fetching poll data:", err);
     }
@@ -175,15 +175,18 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   };
 
   //trendinPoll
-   async function fetchPollDetails(pollId) {
+  async function fetchPollDetails(pollId) {
     // console.log(pollId,'function trendingPoll')
     try {
       // console.log(pollId,"try")
-      const response = await axios.post("http://49.204.232.254:84/polls/getone", {
-        poll_id: pollId,
-      });
+      const response = await axios.post(
+        "http://49.204.232.254:84/polls/getone",
+        {
+          poll_id: pollId,
+        }
+      );
       setFetchData([response.data]);
-      console.log(response.data)
+      console.log(response.data);
       setLoading(false);
     } catch (err) {
       console.log("Error fetching poll details:", err);
@@ -228,6 +231,11 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
     navigate("/UserDetails", { state: { userID: userId } });
   };
 
+  //category
+  const handleCatergory = (id) => {
+    console.log(id);
+  };
+
   return (
     <TimerContext.Provider value={{ timer, setTimer }}>
       <div>
@@ -237,7 +245,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
             <Col md={12} sm={12}>
               {loading ? (
                 <div className="loading">
-                  {/* <h1>Loading......</h1> */}
+                  <h1>Loading......</h1>
                 </div>
               ) : (
                 fetchData.map((apiData) => (
@@ -254,9 +262,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                       <h6>
                         {apiData.title}{" "}
                         <span>
-                          <PollStartingTime
-                            createdTime={apiData.created_date}
-                          />
+                          <PollStartingTime createdTime={apiData.createdAt} />
                         </span>
                       </h6>
                       <Card.Body
@@ -265,9 +271,11 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                       >
                         <Card.Title>{apiData.question}</Card.Title>
                         <Stack direction="horizontal" gap={2}>
-                          <Badge bg="primary" className="Badge">
-                            {apiData.category?.category_name}
-                          </Badge>
+                          <Button onClick={handleCatergory(apiData.category._id)}>
+                            
+                              {apiData.category[0]?.category_name}
+                           
+                          </Button>
                         </Stack>
                         {votedPollIds.includes(apiData._id) ? (
                           <RangeOutput
@@ -281,12 +289,14 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                           <Card className="innerCard">
                             <Card.Header className="cardHeader">
                               <Row>
-                                <Col sm={4}>{apiData.count} votes</Col>
+                                <Col sm={4}>{apiData.voters.length} votes</Col>
                                 <Col sm={4}></Col>
                                 <Col sm={4}>
                                   <PollEndingTime
                                     createdTime={apiData.created_date}
                                     endingTime={apiData.expirationTime}
+                                    // pollEndTime={pollEndTime}
+                                    setpollEndtime={setpollEndtime}
                                   />
                                 </Col>
                               </Row>
@@ -312,19 +322,21 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                                     />
                                   </Card.Title>
                                 ))}
-                                {apiData._id === pollId && timer && (
-                                  <Button
-                                    type="submit"
-                                    style={{
-                                      margin: 10,
-                                      backgroundColor: "grey",
-                                    }}
-                                  >
-                                    Vote
-                                  </Button>
-                                )}
+                                {apiData._id === pollId &&
+                                  timer &&
+                                  (
+                                    <Button
+                                      type="submit"
+                                      style={{
+                                        margin: 10,
+                                        backgroundColor: "grey",
+                                      }}
+                                    >
+                                      Vote
+                                    </Button>
+                                  )}
                               </Form>
-                              <hr />
+                              {/* <hr /> */}
                             </Card.Body>
                           </Card>
                         )}
@@ -332,7 +344,11 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                       <Row>
                         <Col sm={3}>
                           <div>
-                            <Like pollId={apiData._id} setLikepoll={setLikepoll} likepoll={likepoll} />
+                            <Like
+                              pollId={apiData._id}
+                              setLikepoll={setLikepoll}
+                              likepoll={likepoll}
+                            />
                             {apiData.likers.length} Like
                           </div>
                         </Col>
@@ -346,7 +362,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                         </Col>
                       </Row>
                     </Card>
-                    <hr />
+                    
                   </div>
                 ))
               )}

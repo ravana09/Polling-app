@@ -18,7 +18,7 @@ function AddPoll() {
     expirationTime: "",
   });
 
-  const id = localStorage.getItem("Id");
+  const id = sessionStorage.getItem("Id");
 
   const handleChanges = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -29,7 +29,7 @@ function AddPoll() {
   const [hoursDifference, setHoursDifference] = useState(null);
 
   const [category, setCategory] = useState([]);
-  const [CatogryChoose, setCatogerChoose] = useState("");
+  const [CatogryChoose, setCatogerChoose] = useState("6675021839b04a468397b2aa");
 
   const handleOptionChange = (index, event) => {
     const newOptions = [...data.options];
@@ -134,7 +134,8 @@ function AddPoll() {
       Swal.fire({
         icon: "error",
         title: "Failed to create poll",
-        text: error.response?.data?.message || "Internal server error",
+        // text: error.response?.data?.message || "Internal server error",
+        text:"Fill all Fields",
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -248,7 +249,7 @@ function AddPoll() {
               onChange={(e) => setCatogerChoose(e.target.value)}
               style={{ backgroundColor: "transparent", border: "none" }}
             >
-              <option></option>
+     
               {category.map((category, index) => (
                 <option key={index} value={category._id}>
                   {category.category_name}
@@ -312,17 +313,17 @@ function AddPoll() {
               >
                 <Nav.Item>
                   <Nav.Link eventKey="poll" className="AddPoll-Navbar">
-                    Poll
+                    poll
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey="link" disabled className="AddPoll-Navbar">
-                    Link
+   
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey="post" disabled className="AddPoll-Navbar">
-                    Post
+          
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -331,7 +332,7 @@ function AddPoll() {
                     disabled
                     className="AddPoll-Navbar"
                   >
-                    Image
+            
                   </Nav.Link>
                 </Nav.Item>
               </Nav>

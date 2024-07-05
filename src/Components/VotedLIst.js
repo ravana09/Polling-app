@@ -9,7 +9,7 @@ function VotedList() {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const User_id = localStorage.getItem("Id");
+  const User_id = sessionStorage.getItem("Id");
 
   useEffect(() => {
     const fetchPollData = async () => {

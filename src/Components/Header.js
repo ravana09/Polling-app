@@ -13,7 +13,7 @@ function Header() {
     return "";
   }
 
-  const user = localStorage.getItem("Users_Name");
+  const user = sessionStorage.getItem("Users_Name");
 
 
   console.log(searchData);

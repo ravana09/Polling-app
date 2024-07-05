@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Badge, Button, Card, Col, Form, Row, Stack } from "react-bootstrap";
+import { Badge, Button, Card, Col, Form, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { MdNavigateBefore } from "react-icons/md";
 import PollStartingTime from "../Timing/PollStartingTime";
@@ -10,52 +10,76 @@ import RangeOutput from "../RangeOutput";
 
 function Comments() {
   let navigate = useNavigate();
+  const location = useLocation();
+  const { pollID } = location.state || { pollID: null };
 
-  let userName = sessionStorage.getItem("Users_Name");
+  const userId = sessionStorage.getItem("Id");
+  const userName = sessionStorage.getItem("Users_Name");
 
   const [fetchData, setFetchData] = useState({});
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState([]);
   const [pollId, setPollId] = useState("");
-  const [timer, setTimer] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [userDetails, setUserDetails] = useState(false);
-  const UserId = sessionStorage.getItem("Id");
-
   const [newComment, setNewComment] = useState("");
-
   const [showComments, setShowComments] = useState([]);
-
   const [replyComment, setReplyComment] = useState("");
   const [replyCommentId, setReplyCommentId] = useState("");
+  const [showReplies, setShowReplies] = useState({});
 
-  const [replyForReply, setReplyforReplay] = useState([]);
-  const [showReplies, setShowReplies] = useState([]);
-  const [showReply, setShowReply] = useState(false);
-  
+  useEffect(() => {
+    fetchPollData();
+    fetchVotedPolls();
+    fetchComments();
+  }, []);
 
-  const location = useLocation();
-  const { pollID } = location.state || null;
+  const fetchPollData = async () => {
+    try {
+      const response = await axios.post("http://49.204.232.254:84/polls/getone", {
+        poll_id: pollID,
+      });
+      setFetchData(response.data);
+    } catch (error) {
+      console.error("Error fetching poll data:", error);
+    }
+  };
 
-  const userID = sessionStorage.getItem("Id");
-  // console.log(userID, "user Id");
+  const fetchVotedPolls = async () => {
+    try {
+      const response = await axios.post("http://49.204.232.254:84/polls/getvoted", {
+        user_id: userId,
+      });
+      const { pollIds } = response.data;
+      setVotedPollIds(pollIds);
+    } catch (error) {
+      console.error("Error fetching voted polls:", error);
+    }
+  };
 
-  const handleData = (e) => {
+  const fetchComments = async () => {
+    try {
+      const response = await axios.post("http://49.204.232.254:84/comment/getbyid", {
+        poll_id: pollID,
+      });
+      setShowComments(response.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const handleData = (e, pollId) => {
     setSelectedOption(e.target.value);
+    setPollId(pollId);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOption && pollId) {
       try {
-        const response = await axios.post(
-          "http://49.204.232.254:84/polls/voteonpoll",
-          {
-            poll_id: pollId,
-            user_id: UserId,
-            option: selectedOption,
-          }
-        );
+        const response = await axios.post("http://49.204.232.254:84/polls/voteonpoll", {
+          poll_id: pollId,
+          user_id: userId,
+          option: selectedOption,
+        });
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
@@ -66,21 +90,14 @@ function Comments() {
             timer: 3000,
             timerProgressBar: true,
           });
-          if (!votedPollIds.includes(pollId)) {
-            const updatedVotedPollIds = [...votedPollIds, pollId];
-            setVotedPollIds(updatedVotedPollIds);
-            sessionStorage.setItem(
-              "votedPollIds",
-              JSON.stringify(updatedVotedPollIds)
-            );
-          }
+          const updatedVotedPollIds = [...votedPollIds, pollId];
+          setVotedPollIds(updatedVotedPollIds);
+          sessionStorage.setItem("votedPollIds", JSON.stringify(updatedVotedPollIds));
         }
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: `Error voting: ${
-            error.response ? error.response.data.error : error.message
-          }`,
+          title: `Error voting: ${error.response ? error.response.data.error : error.message}`,
           toast: true,
           position: "top-end",
           showConfirmButton: false,
@@ -91,202 +108,61 @@ function Comments() {
     }
   };
 
-  useEffect(() => {
-    fetchPollData();
-    fetchVotedPolls();
-  }, [userDetails]);
-
-  const fetchPollData = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.post("http://49.204.232.254:84/polls/getone", {
-        poll_id: pollID,
-      });
-      setFetchData(res.data);
-      // console.log(res.data);
-      console.log();
-    } catch (err) {
-      console.error("Error fetching poll data:", err);
-    }
-    setLoading(false);
-  };
-
-  const fetchVotedPolls = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://49.204.232.254:84/polls/getvoted",
-        {
-          user_id: UserId,
-        }
-      );
-      const { pollIds } = response.data;
-      setVotedPollIds(pollIds);
-    } catch (error) {
-      console.error("Error fetching voted polls:", error);
-    }
-    setLoading(false);
-  };
-
-  const handleUser = (userId) => {
-    setUserDetails(!userDetails);
-    navigate("/UserDetails", { state: { userID: userId } });
-  };
-
-  //comments
-
-  //post a comment
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      if (newComment !== "") {
-        const res = await axios.post(
-          "http://49.204.232.254:84/comment/createcomment",
-          {
-            poll_id: pollID,
-            user_id: UserId,
-            comment: newComment,
-          }
-        );
-        // console.log(res.data , "comments");
+    if (newComment.trim() !== "") {
+      try {
+        const response = await axios.post("http://49.204.232.254:84/comment/createcomment", {
+          poll_id: pollID,
+          user_id: userId,
+          comment: newComment,
+        });
+        if (response.status === 200) {
+          setNewComment("");
+          fetchComments(); // Refresh comments after adding a new one
+        }
+      } catch (error) {
+        console.error("Error adding comment:", error);
       }
-      setNewComment("");
-    } catch (err) {
-      console.log(err);
     }
   };
 
-  //view all comments
-  useEffect(() => {
-    const showwAllComments = async () => {
-      try {
-        const response = await axios.post(
-          "http://49.204.232.254:84/comment/getbyid",
-          {
-            poll_id: pollID,
-          }
-        );
-
-        if (response.status === 200) {
-          setShowComments(response.data);
-          console.log(response.data, "Comment list");
-        } else {
-          console.log("comment is Not ADDDED");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    showwAllComments();
-  }, [newComment, replyComment]);
-
-  //reply to comment
   const handleReply = (commentId) => {
     setReplyCommentId(commentId);
   };
 
-  //reply post
   const replyPost = async () => {
+    if(replyComment !== ''){
     try {
-      const response = await axios.post(
-        "http://49.204.232.254:84/comment/replycomment",
-        {
-          poll_id: pollID,
-          user_id: userID,
-          reply_msg: replyComment,
-          comment_id: replyCommentId,
-        }
-      );
-      console.log(response.data, "reply comment");
+      const response = await axios.post("http://49.204.232.254:84/comment/replycomment", {
+        poll_id: pollID,
+        user_id: userId,
+        reply_msg: replyComment,
+        comment_id: replyCommentId,
+      });
       if (response.status === 201) {
         setReplyCommentId(null);
-        setReplyComment(" ");
-        setShowComments(response.data);
-        // replyForReply()
+        setReplyComment("");
+        fetchComments(); // Refresh comments after adding a reply
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.error("Error replying to comment:", error);
     }
+  }
   };
 
-  const toggleReplies = (id) => {
-    // setShowReplies(!showReplies);
-    // setShowReply(!showReply)
-
-    setReplyCommentId(id);
+  const toggleReplies = (commentId) => {
+    setShowReplies({
+      ...showReplies,
+      [commentId]: !showReplies[commentId],
+    });
   };
-
-  //like to comment
-  const handleLike = (commentId) => {};
-
-  // const renderComments = (comments) => {
-  //   return comments.map((comment) => (
-  //     <li
-  //       key={comment._id}
-  //       style={{
-  //         marginBottom: "15px",
-  //         borderBottom: "1px solid #ccc",
-  //         paddingBottom: "10px",
-  //       }}
-  //     >
-  //       <p style={{ marginBottom: "5px" }}>
-  //         <strong>{comment.user_id.user_name}:</strong> {comment.comment}
-  //         <Button
-  //           onClick={() => handleReply(comment._id)}
-  //           style={{ marginRight: "10px" }}
-  //         >
-  //           Reply
-  //         </Button>
-  //         <button onClick={() => handleLike(comment._id)}>Like</button>
-  //       </p>
-  //       {comment._id === replyCommentId && (
-  //         <div>
-  //           <Row>
-  //             <Col sm={9} md={9} lg={9} xl={9}>
-  //               <Form.Group
-  //                 className="mb-3 mt-2"
-  //                 controlId="exampleForm.ControlInput1"
-  //               >
-  //                 <Form.Control
-  //                   type=""
-  //                   placeholder="Add a Comment"
-  //                   name="Comments"
-  //                   value={replyComment}
-  //                   onChange={(e) => setReplyComment(e.target.value)}
-  //                 />
-  //               </Form.Group>
-  //             </Col>
-  //             <Col sm={3} md={3} lg={3} xl={3}>
-  //               <Button
-  //                 variant="primary"
-  //                 type="submit"
-  //                 className="mb-3 mt-2"
-  //                 onClick={replyPost}
-  //               >
-  //                 Reply
-  //               </Button>
-  //             </Col>
-  //           </Row>
-  //         </div>
-  //       )}
-  //       {comment.replies && (
-  //         <ul style={{ listStyleType: "none", padding: 0 }}>
-  //           {renderComments(comment.replies)}
-  //         </ul>
-  //       )}
-  //     </li>
-  //   ));
-  // };
 
   return (
     <div className="comments-section">
       <Card className="card">
         <div>
-          <Card.Link
-            onClick={() => handleUser(fetchData.createdBy?._id)}
-            style={{ fontSize: 20 }}
-          >
+          <Card.Link onClick={() => navigate("/UserDetails", { state: { userID: fetchData.createdBy?._id } })}>
             {fetchData.createdBy?.user_name}
           </Card.Link>
         </div>
@@ -298,11 +174,6 @@ function Comments() {
         </h6>
         <Card.Body>
           <Card.Title>{fetchData.question}</Card.Title>
-          <Stack direction="horizontal" gap={2}>
-            <Badge bg="primary" className="Badge">
-              {fetchData.category?.category_name}
-            </Badge>
-          </Stack>
           {votedPollIds.includes(fetchData._id) ? (
             <RangeOutput
               pollId={fetchData._id}
@@ -322,25 +193,15 @@ function Comments() {
                           type="radio"
                           label={option.option}
                           value={option.option}
-                          onChange={(e) => {
-                            handleData(e);
-                            setPollId(fetchData._id);
-                          }}
+                          onChange={(e) => handleData(e, fetchData._id)}
                           checked={selectedOption === option.option}
                           className="formRadio custom-radio"
                           style={{ margin: 10 }}
                         />
                       </Card.Title>
                     ))}
-
-                  {fetchData._id === pollId && timer && (
-                    <Button
-                      type="submit"
-                      style={{
-                        margin: 10,
-                        backgroundColor: "grey",
-                      }}
-                    >
+                  {fetchData._id === pollId && (
+                    <Button type="submit" style={{ margin: 10, backgroundColor: "grey" }}>
                       Vote
                     </Button>
                   )}
@@ -352,19 +213,12 @@ function Comments() {
         </Card.Body>
         <Row>
           <Col>
-            {/* Like Button */}
-
-            <span>Like</span>
-
             <Card className="Comments_Card">
               <Card.Body>
                 <Form onSubmit={handleCommentSubmit}>
                   <Row>
                     <Col sm={12} md={9} lg={9} xl={9}>
-                      <Form.Group
-                        className="mb-3 mt-2"
-                        controlId="exampleForm.ControlInput1"
-                      >
+                      <Form.Group className="mb-3 mt-2" controlId="exampleForm.ControlInput1">
                         <Form.Control
                           type=""
                           placeholder="Add a Comment"
@@ -375,18 +229,11 @@ function Comments() {
                       </Form.Group>
                     </Col>
                     <Col sm={12} md={3} lg={3} xl={3}>
-                      <Button
-                        variant="primary"
-                        type="submit"
-                        className="mb-3 mt-2"
-                      >
+                      <Button variant="primary" type="submit" className="mb-3 mt-2">
                         Submit
                       </Button>
                     </Col>
                   </Row>
-
-                  {/* comments section  */}
-
                   <ul style={{ listStyleType: "none", padding: 0 }}>
                     {showComments.map((comment, index) => (
                       <li
@@ -398,81 +245,49 @@ function Comments() {
                         }}
                       >
                         <p style={{ marginBottom: "5px" }}>
-                          <strong>{comment.user_id.user_name}:</strong>{" "}
-                          {comment.comment}
-                          
-                          <Button
-                            onClick={() => handleReply(comment._id)}
-                            style={{ marginLeft: "10px" }}
-                          >
+                          <strong>{comment.user_id.user_name}:</strong> {comment.comment}
+                          <Button onClick={() => handleReply(comment._id)} style={{ marginLeft: "10px" }}>
                             Reply
                           </Button>
-                          <button onClick={() => handleLike(comment._id)}>
-                            Like
-                          </button>
-
-                          <Button
-                            href="/"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              toggleReplies(comment._id);
-                            }}
-                          >
-                            {(showReplies[comment._id] && showReply )
-                              ? "Hide replies"
-                              : "Get replies"}
+                          <Button href="/" onClick={(e) => { e.preventDefault(); toggleReplies(comment._id); }}>
+                            {showReplies[comment._id] ? "Hide replies" : "Get replies"}
                           </Button>
                         </p>
-
                         {comment._id === replyCommentId && (
                           <div>
                             <Row>
                               <Col sm={9} md={9} lg={9} xl={9}>
-                                <Form.Group
-                                  className="mb-3 mt-2"
-                                  controlId="exampleForm.ControlInput1"
-                                >
+                                <Form.Group className="mb-3 mt-2" controlId="exampleForm.ControlInput1">
                                   <Form.Control
                                     type=""
                                     placeholder="Add a Comment"
                                     name="Comments"
                                     value={replyComment}
-                                    onChange={(e) =>
-                                      setReplyComment(e.target.value)
-                                    }
+                                    onChange={(e) => setReplyComment(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>
                               <Col sm={3} md={3} lg={3} xl={3}>
-                                <Button
-                                  variant="primary"
-                                  type="submit"
-                                  className="mb-3 mt-2"
-                                  onClick={replyPost}
-                                >
+                                <Button variant="primary" type="submit" className="mb-3 mt-2" onClick={replyPost}>
                                   Reply
                                 </Button>
                               </Col>
                             </Row>
                           </div>
                         )}
-
-                     
-
-                        {showReplies && comment._id === replyCommentId && (
-                          <ul>
+                        {showReplies[comment._id] && comment.replies && (
+                          <ul style={{ listStyleType: "none", paddingLeft: "20px" }}>
                             {comment.replies.map((reply, replyIndex) => (
                               <li
                                 key={replyIndex}
                                 style={{
-                                  marginBottom: "15px",
+                                  marginBottom: "10px",
                                   borderBottom: "1px solid #ccc",
-                                  paddingBottom: "10px",
+                                  paddingBottom: "5px",
                                 }}
                               >
                                 <p style={{ marginBottom: "5px" }}>
-                                  <strong>{reply.user_id.user_name}:</strong>{" "}
-                                  {reply.reply_msg}
+                                  <strong>{reply.user_id.user_name}:</strong> {reply.reply_msg}
                                 </p>
                               </li>
                             ))}

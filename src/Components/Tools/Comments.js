@@ -29,6 +29,11 @@ function Comments() {
   const [replyComment, setReplyComment] = useState("");
   const [replyCommentId, setReplyCommentId] = useState("");
 
+  const [replyForReply, setReplyforReplay] = useState([]);
+  const [showReplies, setShowReplies] = useState([]);
+  const [showReply, setShowReply] = useState(false);
+  
+
   const location = useLocation();
   const { pollID } = location.state || null;
 
@@ -174,18 +179,14 @@ function Comments() {
       }
     };
     showwAllComments();
-  }, [newComment]);
+  }, [newComment, replyComment]);
 
   //reply to comment
   const handleReply = (commentId) => {
     setReplyCommentId(commentId);
-    // replyPost(commentId)
-    // console.log(`Replying to comment with ID: ${commentId}`);
   };
 
-  // console.log(replyComment,"reply Command")
-
-  //reply post 
+  //reply post
   const replyPost = async () => {
     try {
       const response = await axios.post(
@@ -200,22 +201,83 @@ function Comments() {
       console.log(response.data, "reply comment");
       if (response.status === 201) {
         setReplyCommentId(null);
-        setReplyComment("");
+        setReplyComment(" ");
         setShowComments(response.data);
-        console.log(response.data, "Comment list");
+        // replyForReply()
       }
     } catch (err) {
       console.log(err);
     }
+  };
 
-    // console.log(replyCommentId, "reply post");
+  const toggleReplies = (id) => {
+    // setShowReplies(!showReplies);
+    // setShowReply(!showReply)
+
+    setReplyCommentId(id);
   };
 
   //like to comment
-  const handleLike = (commentId) => {
-    // Implement like functionality here, e.g., increment likes for the comment
-    // console.log(`Liking comment with ID: ${commentId}`);
-  };
+  const handleLike = (commentId) => {};
+
+  // const renderComments = (comments) => {
+  //   return comments.map((comment) => (
+  //     <li
+  //       key={comment._id}
+  //       style={{
+  //         marginBottom: "15px",
+  //         borderBottom: "1px solid #ccc",
+  //         paddingBottom: "10px",
+  //       }}
+  //     >
+  //       <p style={{ marginBottom: "5px" }}>
+  //         <strong>{comment.user_id.user_name}:</strong> {comment.comment}
+  //         <Button
+  //           onClick={() => handleReply(comment._id)}
+  //           style={{ marginRight: "10px" }}
+  //         >
+  //           Reply
+  //         </Button>
+  //         <button onClick={() => handleLike(comment._id)}>Like</button>
+  //       </p>
+  //       {comment._id === replyCommentId && (
+  //         <div>
+  //           <Row>
+  //             <Col sm={9} md={9} lg={9} xl={9}>
+  //               <Form.Group
+  //                 className="mb-3 mt-2"
+  //                 controlId="exampleForm.ControlInput1"
+  //               >
+  //                 <Form.Control
+  //                   type=""
+  //                   placeholder="Add a Comment"
+  //                   name="Comments"
+  //                   value={replyComment}
+  //                   onChange={(e) => setReplyComment(e.target.value)}
+  //                 />
+  //               </Form.Group>
+  //             </Col>
+  //             <Col sm={3} md={3} lg={3} xl={3}>
+  //               <Button
+  //                 variant="primary"
+  //                 type="submit"
+  //                 className="mb-3 mt-2"
+  //                 onClick={replyPost}
+  //               >
+  //                 Reply
+  //               </Button>
+  //             </Col>
+  //           </Row>
+  //         </div>
+  //       )}
+  //       {comment.replies && (
+  //         <ul style={{ listStyleType: "none", padding: 0 }}>
+  //           {renderComments(comment.replies)}
+  //         </ul>
+  //       )}
+  //     </li>
+  //   ));
+  // };
 
   return (
     <div className="comments-section">
@@ -322,9 +384,11 @@ function Comments() {
                       </Button>
                     </Col>
                   </Row>
+
+                  {/* comments section  */}
+
                   <ul style={{ listStyleType: "none", padding: 0 }}>
                     {showComments.map((comment, index) => (
-                      
                       <li
                         key={index}
                         style={{
@@ -336,16 +400,30 @@ function Comments() {
                         <p style={{ marginBottom: "5px" }}>
                           <strong>{comment.user_id.user_name}:</strong>{" "}
                           {comment.comment}
+                          
                           <Button
                             onClick={() => handleReply(comment._id)}
-                            style={{ marginRight: "10px" }}
+                            style={{ marginLeft: "10px" }}
                           >
                             Reply
                           </Button>
                           <button onClick={() => handleLike(comment._id)}>
                             Like
                           </button>
+
+                          <Button
+                            href="/"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              toggleReplies(comment._id);
+                            }}
+                          >
+                            {(showReplies[comment._id] && showReply )
+                              ? "Hide replies"
+                              : "Get replies"}
+                          </Button>
                         </p>
+
                         {comment._id === replyCommentId && (
                           <div>
                             <Row>
@@ -374,17 +452,33 @@ function Comments() {
                                 >
                                   Reply
                                 </Button>
-                              <ol>
-                                <li>
-
-                                </li>
-                              </ol>
                               </Col>
                             </Row>
                           </div>
                         )}
+
+                     
+
+                        {showReplies && comment._id === replyCommentId && (
+                          <ul>
+                            {comment.replies.map((reply, replyIndex) => (
+                              <li
+                                key={replyIndex}
+                                style={{
+                                  marginBottom: "15px",
+                                  borderBottom: "1px solid #ccc",
+                                  paddingBottom: "10px",
+                                }}
+                              >
+                                <p style={{ marginBottom: "5px" }}>
+                                  <strong>{reply.user_id.user_name}:</strong>{" "}
+                                  {reply.reply_msg}
+                                </p>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </li>
-                      
                     ))}
                   </ul>
                 </Form>

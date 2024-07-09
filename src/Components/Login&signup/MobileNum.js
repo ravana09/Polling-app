@@ -4,17 +4,23 @@ import { Button, Card, Col, Form, Row, Container } from "react-bootstrap";
 import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 import LoginImg from "../Images/signUp.jpg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 
 function MobileNum() {
+
   const [formData, setFormData] = useState({
     PhoneNumber: "",
     MobileOtp: "",
   });
+  
   const [showMobileOtpInput, setShowMobileOtpInput] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
+
+  const location = useLocation();
+  const { userDetails } = location.state || { userDetails: null };
+  console.log(userDetails)
 
   const schema = yup.object().shape({
     PhoneNumber: yup
@@ -52,18 +58,25 @@ function MobileNum() {
     sessionStorage.setItem("MobileNUmber", formData.PhoneNumber);
     if (setIsOtpSent) {
       try {
-        let url = "http://49.204.232.254:84/api/updateuser";
-        let identification = sessionStorage.getItem("signupEmail");
+       let url = "http://49.204.232.254:84/api/createuser";
+    // const response = await axios.post(url,
+          userDetails.phone_number= formData.PhoneNumber;
         const response = await axios.post(url, {
-          identifier: identification,
-          phone_number: formData.PhoneNumber,
+     
+     
+          userDetails
+       
         });
+        if(response.status===201){
+          navigate("/")
+        }
         console.log(response.data)
       } catch (err) {}
-      navigate("/");
+      
     } else {
-    }
+    
   }
+}
 
   const MobileSendOTP = async () => {
     try {
@@ -175,6 +188,8 @@ function MobileNum() {
       setFieldError("MobileOtp", "Error occurred, please try again");
     }
   };
+
+ 
 
   return (
     <div className="Body-container">

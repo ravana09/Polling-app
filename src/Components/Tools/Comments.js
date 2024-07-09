@@ -25,12 +25,15 @@ function Comments() {
   const [replyComment, setReplyComment] = useState("");
   const [replyCommentId, setReplyCommentId] = useState("");
   const [showReplies, setShowReplies] = useState({});
+  const [showReplyForReply, setShowReplyForReply] = useState(false);
+  const [showReplyForReplyId, setShowReplyForReplyId] = useState("");
+  const [ReplyForReplyComment, setReplyForReplyComment] = useState("");
 
   useEffect(() => {
     fetchPollData();
     fetchVotedPolls();
     fetchComments();
-  }, [newComment]);
+  }, [newComment,ReplyForReplyComment,replyComment]);
 
   //fetch poll data
 
@@ -193,11 +196,45 @@ function Comments() {
     });
   };
 
+  //reply for reply  comment
+  const replyForReplyPost = async () => {
+    
+    console.log(showReplyForReplyId, "Reply comments");
+    console.log(ReplyForReplyComment, "reply for reply comment ");
+    if (ReplyForReplyComment !== "") {  
+      try {
+        const response = await axios.post(
+          "http://49.204.232.254:84/comment/replycomment",
+ {
+            poll_id: pollID,
+            user_id: userId,
+            reply_msg: ReplyForReplyComment,
+            comment_id: showReplyForReplyId,
+          }
+        );
+        console.log(response.data, "response");
+
+        if (response.status === 201) {
+          setReplyCommentId(null);
+          setReplyComment("");
+          fetchComments(); // Refresh comments after adding a reply
+        }
+      } catch (error) {
+        console.error("Error replying to comment:", error);
+      }
+    }
+  };
+
+  
+
   //reply for reply
   const handleReplyReply = (commentId) => {
     console.log(commentId, "Reply for reply ");
-    return <div className="reply-for-reply">hi</div>;
+    setShowReplyForReplyId(commentId);
+    setShowReplyForReply(!showReplyForReply);
+    
   };
+  console.log(showReplyForReplyId);
 
   return (
     <div className="comments-section">
@@ -256,7 +293,7 @@ function Comments() {
                     </Button>
                   )}
                 </Form>
-                <hr />
+                {/* <hr /> */}
               </Card.Body>
             </Card>
           )}
@@ -351,7 +388,8 @@ function Comments() {
                                   className="mb-3 mt-2"
                                   onClick={replyPost}
                                 >
-                                  Reply
+                                 {showReplies[comment._id] === comment.replies? "Close Reply" : "Reply"}
+
                                 </Button>
                               </Col>
                             </Row>
@@ -377,12 +415,20 @@ function Comments() {
                               >
                                 <p style={{ marginBottom: "5px" }}>
                                   <strong>{reply.user_id.user_name}:</strong>{" "}
-                                  {reply.reply_msg}
+                                  
+                                    <a href={"/"}>
+                                      @{comment.user_id.user_name}:
+                                    </a>
+                                    <span>{reply.reply_msg}</span>{" "}
+                                  
                                   <Button
                                     onClick={() => handleReplyReply(reply._id)}
                                     style={{ marginLeft: "10px" }}
                                   >
-                                    Reply
+                                    {showReplyForReply &&
+                                    showReplyForReplyId === reply._id
+                                      ? "Close Reply"
+                                      : "Reply"}
                                   </Button>
                                   <a
                                     href="/"
@@ -391,11 +437,48 @@ function Comments() {
                                       toggleReplies(reply._id);
                                     }}
                                   >
-                                    {showReplies[reply._id]
+                                    {showReplyForReplyId[reply._id]
                                       ? "Hide replies"
                                       : "Get replies"}
                                   </a>
                                 </p>
+                                <ul>
+                                  {showReplyForReply &&
+                                    showReplyForReplyId === reply._id && (
+                                      <li>
+                                        <Row>
+                                          <Col sm={9} md={9} lg={9} xl={9}>
+                                            <Form.Group
+                                              className="mb-3 mt-2"
+                                              controlId="exampleForm.ControlInput1"
+                                            >
+                                              <Form.Control
+                                                type=""
+                                                placeholder="Add a Reply"
+                                                name="Comments"
+                                                value={ReplyForReplyComment}
+                                                onChange={(e) =>
+                                                  setReplyForReplyComment(
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </Form.Group>
+                                          </Col>
+                                          <Col sm={3} md={3} lg={3} xl={3}>
+                                            <Button
+                                              variant="primary"
+                                              type="submit"
+                                              className="mb-3 mt-2"
+                                              onClick={replyForReplyPost}
+                                            >
+                                              Reply
+                                            </Button>
+                                          </Col>
+                                        </Row>
+                                      </li>
+                                    )}
+                                </ul>
                               </li>
                             ))}
                           </ul>
@@ -409,7 +492,7 @@ function Comments() {
           </Col>
         </Row>
       </Card>
-      <hr />
+      {/* <hr /> */}
     </div>
   );
 }

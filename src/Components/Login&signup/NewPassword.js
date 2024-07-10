@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Card, Col, Form, Row, Container } from "react-bootstrap";
 import * as yup from "yup";
@@ -13,84 +13,63 @@ function NewPassword() {
   const schema = yup.object().shape({
     newPassword: yup
       .string()
-      .matches(/^[\w\d\W]{6}$/, "Password must be exactly 6 characters")
-      .required("New Password is required"),
+      .matches(/^\d{6}$/, "Password must be exactly 6 digits")
+      .required("Password is required"),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref("newPassword"), null], "Passwords must match")
       .required("Confirm Password is required"),
   });
 
-  async function handleSubmit(values, { setSubmitting }) {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       let identification = sessionStorage.getItem("MobileNUmber");
       const response = await axios.post(
-        "http://49.204.232.254:84/api/updateuser",{
+        "http://49.204.232.254:84/api/updateuser", {
           identifier: identification,
-          password:values.newPassword
+          password: values.newPassword
         }
       );
 
       if (response.status === 200) {
-        const Toast = Swal.mixin({
+        Swal.fire({
+          icon: "success",
+          title: "Password Changed",
           toast: true,
           position: "top-end",
           showConfirmButton: false,
           timer: 1000,
           timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-
-        Toast.fire({
-          icon: "success",
-          title: "Password Changed",
         });
 
         setTimeout(() => {
           navigate("/");
-        }, 2000);
+        }, 1000);
       } else {
-        const Toast = Swal.mixin({
+        Swal.fire({
+          icon: "error",
+          title: "Error changing password",
           toast: true,
           position: "top-end",
           showConfirmButton: false,
           timer: 1000,
           timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-
-        Toast.fire({
-          icon: "error",
-          title: "Error changing password",
         });
       }
     } catch (error) {
-      const Toast = Swal.mixin({
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred",
         toast: true,
         position: "top-end",
         showConfirmButton: false,
         timer: 1000,
         timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-
-      Toast.fire({
-        icon: "error",
-        title: "An error occurred",
       });
     } finally {
       setSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="Body-container">
@@ -105,27 +84,24 @@ function NewPassword() {
                 <Formik
                   initialValues={{ newPassword: "", confirmPassword: "" }}
                   validationSchema={schema}
-                  enableReinitialize
                   onSubmit={handleSubmit}
                 >
-                  {({
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    values,
-                    isSubmitting,
-                  }) => (
+                  {({ handleChange, handleSubmit, values, isSubmitting }) => (
                     <Form noValidate onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formPassword">
                         <Form.Label style={{ color: "black" }}>
                           New Password
                         </Form.Label>
                         <Form.Control
-                          type="password"
+                           type="password"
                           placeholder="Enter Your Password"
                           name="newPassword"
                           value={values.newPassword}
                           onChange={handleChange}
+                          onInput={(e) => {
+                            e.target.value = e.target.value.replace(/\D/, '').slice(0, 6);
+                          }}
+                          maxLength={6}
                           isInvalid={
                             !!values.newPassword &&
                             values.newPassword.length !== 6
@@ -148,6 +124,10 @@ function NewPassword() {
                           name="confirmPassword"
                           value={values.confirmPassword}
                           onChange={handleChange}
+                          onInput={(e) => {
+                            e.target.value = e.target.value.replace(/\D/, '').slice(0, 6);
+                          }}
+                          maxLength={6}
                           isInvalid={
                             !!values.confirmPassword &&
                             values.confirmPassword !== values.newPassword

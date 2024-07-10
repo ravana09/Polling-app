@@ -9,18 +9,17 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 function MobileNum() {
-
   const [formData, setFormData] = useState({
     PhoneNumber: "",
     MobileOtp: "",
   });
-  
+
   const [showMobileOtpInput, setShowMobileOtpInput] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
 
   const location = useLocation();
   const { userDetails } = location.state || { userDetails: null };
-  console.log(userDetails)
+  console.log(userDetails);
 
   const schema = yup.object().shape({
     PhoneNumber: yup
@@ -58,25 +57,26 @@ function MobileNum() {
     sessionStorage.setItem("MobileNUmber", formData.PhoneNumber);
     if (setIsOtpSent) {
       try {
-       let url = "http://49.204.232.254:84/api/createuser";
-    // const response = await axios.post(url,
-          userDetails.phone_number= formData.PhoneNumber;
+        let url = "http://49.204.232.254:84/api/createuser";
+        // const dataToSend = {
+        //   ...userDetails,
+        //   phone_number: formData.PhoneNumber,
+        // };
+        // console.log(dataToSend,"dataSend");
+        console.log(userDetails.userDetails);
         const response = await axios.post(url, {
-     
-     
-          userDetails
-       
+          ...userDetails,
+          phone_number: formData.PhoneNumber,
         });
-        if(response.status===201){
-          navigate("/")
+        console.log(response.data);
+        if (response.status === 201) {
+          navigate("/");
         }
-        console.log(response.data)
+        console.log(response.data);
       } catch (err) {}
-      
     } else {
-    
+    }
   }
-}
 
   const MobileSendOTP = async () => {
     try {
@@ -86,8 +86,7 @@ function MobileNum() {
           number: formData.PhoneNumber,
           appName:"POLL APP"
         }
-        
-    
+
       );
 
       if (response.status === 200) {
@@ -108,8 +107,8 @@ function MobileNum() {
           title: "OTP Sent successfully",
         });
 
-        setShowMobileOtpInput(true);
-        setIsOtpSent(true);
+    setShowMobileOtpInput(true);
+    setIsOtpSent(true);
       } else {
         const Toast = Swal.mixin({
           toast: true,
@@ -152,34 +151,34 @@ function MobileNum() {
 
   const MobileOTPVerification = async (setFieldError) => {
     try {
-      const response = await axios.post(
-        "http://49.204.232.254:84/mobileauth/verify-otp-sms",
-        {
-          number: formData.PhoneNumber,
-          otp: formData.MobileOtp,
-        }
-      );
+    const response = await axios.post(
+      "http://49.204.232.254:84/mobileauth/verify-otp-sms",
+      {
+        number: formData.PhoneNumber,
+        otp: formData.MobileOtp,
+      }
+    );
 
-      if (response.status === 200) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
+    if (response.status === 200) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
 
-        Toast.fire({
-          icon: "success",
-          title: "OTP Verified successfully",
-        });
+      Toast.fire({
+        icon: "success",
+        title: "OTP Verified successfully",
+      });
 
-        setShowMobileOtpInput(false);
-        setFormData((prevData) => ({ ...prevData, MobileOtp: "" }));
+    setShowMobileOtpInput(false);
+    setFormData((prevData) => ({ ...prevData, MobileOtp: "" }));
       } else {
         setFieldError("MobileOtp", "Invalid OTP, please try again");
       }
@@ -188,8 +187,6 @@ function MobileNum() {
       setFieldError("MobileOtp", "Error occurred, please try again");
     }
   };
-
- 
 
   return (
     <div className="Body-container">
@@ -256,6 +253,7 @@ function MobileNum() {
                               <Button
                                 onClick={() =>
                                   MobileOTPVerification(setFieldError)
+                            
                                 }
                                 variant="success"
                                 type="submit"

@@ -149,7 +149,7 @@ function SignUp() {
 
   return (
     <div className="Body-container sign_Body-container">
-      <Container >
+      <Container>
         <Row className="justify-content-center align-items-center">
           <Col xs={12} md={6} className="d-flex justify-content-center mb-3">
             <img className="LoginImages" src={signUpimg} alt="signupImage" />
@@ -158,7 +158,6 @@ function SignUp() {
             <Card
               className="SignCard mx-auto"
               style={{
-              
                 backgroundColor: "cadetblue",
               }}
             >
@@ -207,144 +206,50 @@ function SignUp() {
                         </Row>
                       </Form.Group>
                       <Row>
-                        <Col sm={6} md={6} lg={6} xl={6} >
-                        
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formDataOfBirth"
-                        >
-                          <Form.Label className="Label">Date Of Birth</Form.Label>
+                        <Col sm={6} md={6} lg={6} xl={6}>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="formDataOfBirth"
+                          >
+                            <Form.Label className="Label">
+                              Date Of Birth
+                            </Form.Label>
 
-                          <Form.Control
-                            type="date"
-                            placeholder="Large text"
+                            <Form.Control
+                              type="date"
+                              placeholder="Large text"
+                              name="dateOfBirth"
+                              value={data.dateOfBirth}
+                              onChange={handleChange}
+                            />
+                           
+                          </Form.Group>
+
+                          <ErrorMessage
                             name="dateOfBirth"
-                            value={data.dateOfBirth}
-                            onChange={handleChange}
+                            className="text-danger"
+                            component="div"
                           />
-                          {/* <Form.Group controlId="formDateOfBirth">
-                          <Col sm={4} md={4} lg={4} xl={4}>
-                            <Form.Label>Month</Form.Label>
-                            <Form.Control
-                              as="select"
-                              value={month}
-                              onChange={(e) => setMonth(e.target.value)}
-                            >
-                              <option value="01">January</option>
-                              <option value="02">February</option>
-                              <option value="03">March</option>
-                              <option value="04">April</option>
-                              <option value="05">May</option>
-                              <option value="06">June</option>
-                              <option value="07">July</option>
-                              <option value="08">August</option>
-                              <option value="09">September</option>
-                              <option value="10">October</option>
-                              <option value="11">November</option>
-                              <option value="12">December</option>
-                            </Form.Control>
-                          </Col>
-                          <Col sm={4} md={4} lg={4} xl={4}>
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control
-                              as="select"
-                              value={date}
-                              onChange={(e) => setDate(e.target.value)}
-                            >
-                              {" "}
-                              {[...Array(31)].map((_, i) => (
-                                <option
-                                  key={i + 1}
-                                  value={String(i + 1).padStart(2, "0")}
-                                >
-                                  {i + 1}
-                                </option>
-                              ))}
-                            </Form.Control>
-                          </Col>
-                          <Col sm={4} md={4} lg={4} xl={4}>
-                            <Form.Label>Year</Form.Label>
-                            <Form.Control
-                              as="select"
-                              value={year}
-                              onChange={(e) => setYear(e.target.value)}
-                            >
-                              {" "}
-                              {Array.from(
-                                { length: new Date().getFullYear() - 1900 },
-                                (_, i) => (
-                                  <option key={1901 + i} value={1901 + i}>
-                                    {1901 + i}
-                                  </option>
-                                )
-                              )}
-                            </Form.Control>
-                          </Col>
-                        </Form.Group> */}
-                        </Form.Group>
-
-                        <ErrorMessage
-                          name="dateOfBirth"
-                          className="text-danger"
-                          component="div"
-                        />
                         </Col>
-                        <Col sm={6} md={6} lg={6} xl={6} >
-                     
-                      {/* <Row>
-                        <Col sm={12} md={7} lg={7} xl={7}>
-                          <Form.Label>Gender</Form.Label>
-                          <Row>
-                            <Col sm={4} md={4} lg={4} xl={4}>
-                              <Form.Check
-                                inline
-                                label="Male"
-                                name="gender"
-                                type="radio"
-                                value="male"
-                                checked={data.gender === "male"}
-                                onChange={handleChange}
-                              />
-                            </Col>
-                            <Col sm={4}  md={4} lg={4} xl={4}>
-                              <Form.Check
-                                inline
-                                label="Female"
-                                name="gender"
-                                type="radio"
-                                value="female"
-                                checked={data.gender === "female"}
-                                onChange={handleChange}
-                              />
-                            </Col>
-                            <Col sm={4} md={4} lg={4} xl={4}>
-                              <Form.Check
-                                inline
-                                label="Others"
-                                name="gender"
-                                type="radio"
-                                value="others"
-                                checked={data.gender === "others"}
-                                onChange={handleChange}
-                              />
-                            </Col>
-                          </Row>
+                        <Col sm={6} md={6} lg={6} xl={6}>
+                         
+                          <Form.Group controlId="genderSelect">
+                            <Form.Label className="Label">Gender</Form.Label>
+                            <Form.Control
+                              as="select"
+                              name="gender"
+                              value={data.gender}
+                              onChange={handleChange}
+                            >
+                              <option value="" disabled selected hidden>
+                                Select Gender
+                              </option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                              <option value="others">Others</option>
+                            </Form.Control>
+                          </Form.Group>
                         </Col>
-                      </Row> */}
-                      <Form.Group controlId="genderSelect">
-                        <Form.Label className="Label">Gender</Form.Label>
-                        <Form.Control
-                          as="select"
-                          name="gender"
-                          value={data.gender}
-                          onChange={handleChange}
-                        >
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="others">Others</option>
-                        </Form.Control>
-                      </Form.Group>
-                      </Col>
                       </Row>
 
                       <Form.Group className="mb-3" controlId="formPassword">
@@ -368,7 +273,9 @@ function SignUp() {
                       </Form.Group>
 
                       <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label className="Label">Confirm Password</Form.Label>
+                        <Form.Label className="Label">
+                          Confirm Password
+                        </Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Enter Your Password"
@@ -401,29 +308,27 @@ function SignUp() {
                   )}
                 </Formik>
                 <div className="text-center_p">
-                <p style={{ color: "black" }}>Or Sign Up with</p>
+                  <p style={{ color: "black" }}>Or Sign Up with</p>
                 </div>
                 <div className="OtherLogin">
-                          <center>
-                            <Button
-                              variant="light"
-                              className="  Google-Column"
-                              style={{ height: "40px", width: "100% " }}
-                              onClick={() => {
-                                handleGoogle();
-                              }}
-                            >
-                              <img
-                                src={GoogleImg}
-                                alt="Google img"
-                                className="GoogleImg "
-                              />
-                              CONTINUE WITH GOOGLE
-                            </Button>
-                          </center>
-                          </div>
-
-          
+                  <center>
+                    <Button
+                      variant="light"
+                      className="  Google-Column"
+                      style={{ height: "40px", width: "100% " }}
+                      onClick={() => {
+                        handleGoogle();
+                      }}
+                    >
+                      <img
+                        src={GoogleImg}
+                        alt="Google img"
+                        className="GoogleImg "
+                      />
+                      CONTINUE WITH GOOGLE
+                    </Button>
+                  </center>
+                </div>
 
                 <div className="text-center mt-3">
                   <p style={{ color: "White" }}>

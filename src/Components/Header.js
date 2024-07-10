@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import "../Components/header.css";
+import "./PollHeader.css";
 import { Col, Container, Form, Nav, Navbar, Row } from "react-bootstrap";
 
 export const SearchContext=createContext()

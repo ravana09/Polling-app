@@ -6,6 +6,15 @@
   padding: 20px;
   background-color: cadetblue;
 }
+.Body-container:hover{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: cadetblue;
+}
+
 
 .LoginImages {
   max-width: 100%;

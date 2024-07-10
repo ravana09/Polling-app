@@ -1,60 +1,65 @@
 .GoogleImg {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
+}
+.Body-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: cadetblue;
 }
 .pasword_imp {
   color: black;
-  padding-left: 10px;
 }
 
 .SignCard {
   width: 100%;
   box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
-  padding: 10px;
-  max-width: 95%;
-  height: 95vh;
-  background-color: "cadetblue";
+  padding: 20px;
+  background-color: cadetblue;
 }
 
 .Label {
   color: white;
+}
 
-}
 .GoogleButton {
-  width: 50%;
+  width: 100%;
 }
+
 .text-center_p {
   text-align: center;
   font-size: smaller;
   margin-top: 5px;
 }
 
+.Body-container {
+  width: 100%;
+  background-color: cadetblue;
+}
+.Body-container:hover {
+  width: 100%;
+  background-color: cadetblue;
+}
+
+
 @media (max-width: 768px) {
   .sign_Body-container {
-    width: 100%;
-    height: 160vh;
-    background-color: cadetblue;
-  }
-  .SignCard {
-    width: 100%;
-    box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
     padding: 10px;
-    max-width: 95%;
-    height: 120vh;
-    background-color: "cadetblue";
   }
+
+  .SignCard {
+    padding: 15px;
+  }
+
   .text-center_p {
-    text-align: center;
     font-size: smaller;
   }
 
-  .text-center {
-    text-align: center;
-    font-size: medium;
-  }
   .pasword_imp {
-    color: black;
-    font-size: 10px;
+    font-size: 12px;
   }
 }

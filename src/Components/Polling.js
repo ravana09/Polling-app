@@ -362,7 +362,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                         </Col>
                       </Row>
                     </Card>
-                    
+                    <hr/>
                   </div>
                 ))
               )}

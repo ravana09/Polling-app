@@ -1,5 +1,5 @@
 .pollingRow {
-  margin-top: 65px;
+  margin-top: 85px;
   background-color: #fafafb;
   width: 100%;
   display: flex;
@@ -10,29 +10,23 @@
   width: 100%;
   max-width: 1000px;
   border-radius: 20px;
- 
 }
 
-.Badge{
+.Badge {
   margin: 10px;
   width: 80px;
 }
-.poll-Title{
+
+.poll-Title {
   font-size: 24px;
   padding: 10px;
 }
-/* .polling {
-  height: auto;
-} */
 
 .card {
   width: 100%;
-  /* border-radius: 20px; */
   background-color: #fafafb;
   border: none;
   margin-bottom: 20px;
-  /* border: 0.1px solid rgba(0, 0, 0, 0.2); */
-
 }
 
 .card:hover {
@@ -41,30 +35,22 @@
   border-radius: 20px;
 }
 
-
-
-
-
 .polling-range {
   background-color: #edeff1;
   border-radius: 20px;
-  /* border: 0.1px solid rgba(0, 0, 0, 0.2);  */
-
 }
 
 .innerCard {
   width: 100%;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-
 }
 
-.innerCard :hover {
+.innerCard:hover {
   background-color: #ffffff;
   cursor: pointer;
   border-radius: 20px;
 }
-
 
 .formRadio {
   font-size: medium;
@@ -77,7 +63,7 @@
   width: 100%;
 }
 
-.searchPoll{
+.searchPoll {
   width: 100%;
   background-color: #edeff1;
   border-radius: 20px;
@@ -85,12 +71,10 @@
   margin-bottom: 20px;
 }
 
-.Comments_Card{
+.Comments_Card {
   width: 100%;
   background-color: #edeff1;
-
 }
-
 
 /* Responsive Styles */
 @media (max-width: 768px) {
@@ -103,10 +87,9 @@
   .formRadio {
     font-size: small;
   }
+  
   .voteButton {
     width: 100%;
     font-size: small;
   }
-  
 }
-

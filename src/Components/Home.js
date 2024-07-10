@@ -10,9 +10,9 @@ function Home({ children, showTrending = true }) {
   return (
     <>
       <Row>
-        <Container fluid style={{ marginLeft: "0px" }}>
-          <Row className="fixed-top">
-            <Col xs={12}>
+        <Container fluid >
+          <Row >
+            <Col xs={12} md={12} lg={12} xl={12}>
               <Header />
             </Col>
           </Row>

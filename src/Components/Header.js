@@ -2,10 +2,11 @@ import React, { createContext, useState } from "react";
 import "./PollHeader.css";
 import { Col, Container, Form, Nav, Navbar, Row } from "react-bootstrap";
 
-export const SearchContext=createContext()
+export const SearchContext = createContext();
 
 function Header() {
-  const [searchData,setSearchData]=useState('')
+  const [searchData, setSearchData] = useState("");
+
   function capitalizeFirstLetter(string) {
     if (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -13,51 +14,53 @@ function Header() {
     return "";
   }
 
-  const user = sessionStorage.getItem("Users_Name");
-
+  const user = sessionStorage.getItem("Users_Name") || "Guest";
 
   console.log(searchData);
-  
 
   function handleClick() {}
   return (
-    <SearchContext.Provider value={{searchData}}>
-    <>
-      <Row  xs={12} md={12} lg={12} xl={12} className="fixed-top" id="searchBar">
-        <Col >
+    <SearchContext.Provider value={{ searchData }}>
+      <Row xs={12} md={12} lg={12} xl={12} className="fixed-top" id="searchBar">
+        <Col>
           <Navbar expand="lg" className="Header">
             <Container>
-              <Navbar.Brand className="Header-Title">GT POLL</Navbar.Brand>
-
+              <Navbar.Text
+                href="/polling"
+                className="Header-Title"
+                style={{color:"White"}}
+                
+              >
+                GT POLL
+              </Navbar.Text>
               <Form inline>
                 <Row>
-                  <Col xs="auto" >
+                  <Col xs="auto" md={12} lg={12} xl={12}>
                     <Form.Control
                       type="text"
                       placeholder="Search"
-                      className="search-Bar "
+                      className="search-Bar"
+                      aria-label="Search Bar"
                       value={searchData}
-                      onChange={(e)=>{
-                        setSearchData(e.target.value)
+                      onChange={(e) => {
+                        setSearchData(e.target.value);
                       }}
                     />
                   </Col>
                 </Row>
               </Form>
-              <Navbar.Text>
-                <Nav.Link
-                  onClick={() => handleClick("/home")}
-                  style={{ fontSize: 20 }}
-                >
-                  Hello !! {capitalizeFirstLetter(user)}
-                </Nav.Link>
+              <Navbar.Text
+                onClick={() => handleClick("/polling")}
+                style={{ fontSize: 20,color:"white" }}
+                className="Header-Title "
+                
+              >
+                Hello !! {capitalizeFirstLetter(user)}
               </Navbar.Text>
-              {/* </Navbar.Collapse> */}
             </Container>
           </Navbar>
         </Col>
       </Row>
-    </>
     </SearchContext.Provider>
   );
 }

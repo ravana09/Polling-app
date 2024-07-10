@@ -46,6 +46,11 @@
   padding: 10px;
 }
 
+.SignUp-text-center{
+  text-align: center;
+  margin-top: 5px;
+}
+
 /* Media Queries for Mobile Devices */
 @media (max-width: 768px) {
   .Body-container {
@@ -65,7 +70,16 @@
 
   .Google-Column {
     width: 90%;
+    padding: 20px;
+    font-size: small;
   }
+  .SignUp-text-center{
+    text-align: center;
+    margin-top: 5px;
+    font-size: small;
+  }
+  .Sign_Up{
+    font-size: medium;
+  }
+ 
 }
-
-  

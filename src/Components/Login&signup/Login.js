@@ -218,11 +218,12 @@ function Login() {
                           </center>
                         </div>
                         <div>
-                          <p className="text-center">
+                          <p className="SignUp-text-center">
                             Don't have an account?{" "}
                             <Link
                               to="/signup"
                               style={{ color: "Black", textDecoration: "none" }}
+                              className="Sign_Up"
                             >
                               Sign Up{" "}
                             </Link>{" "}

@@ -99,14 +99,14 @@ function SignUp() {
     // try {
     // let url = "http://49.204.232.254:84/api/createuser";
     // const response = await axios.post(url,
-    const userDetails=({
+    const userDetails = {
       user_name: values.Name,
       email: values.Email,
       password: values.Password,
       age: data.dateOfBirth,
       gender: data.gender,
-    });
-    console.log(userDetails)
+    };
+    console.log(userDetails);
     // );
     // console.log(response.data);
     // if (response.status === 201) {
@@ -119,7 +119,7 @@ function SignUp() {
     //   sessionStorage.setItem("signupEmail", data.Email);
 
     setTimeout(() => {
-      navigate("/MobileNumberVerify",{ state: { userDetails: userDetails } });
+      navigate("/MobileNumberVerify", { state: { userDetails: userDetails } });
     }, 2000);
     //   } else {
     //     Swal.fire({
@@ -148,18 +148,17 @@ function SignUp() {
   }
 
   return (
-    <div className="Body-container">
-      <Container>
+    <div className="Body-container sign_Body-container">
+      <Container >
         <Row className="justify-content-center align-items-center">
           <Col xs={12} md={6} className="d-flex justify-content-center mb-3">
             <img className="LoginImages" src={signUpimg} alt="signupImage" />
           </Col>
           <Col xs={12} md={6}>
             <Card
-              className="LoginCard mx-auto"
+              className="SignCard mx-auto"
               style={{
-                maxWidth: "95%",
-                height: "auto",
+              
                 backgroundColor: "cadetblue",
               }}
             >
@@ -173,7 +172,7 @@ function SignUp() {
                   {({ handleSubmit }) => (
                     <Form noValidate onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formName">
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label className="Label">Name</Form.Label>
                         <Form.Control
                           type="text"
                           placeholder="Enter Your Name"
@@ -189,7 +188,7 @@ function SignUp() {
                       </Form.Group>
 
                       <Form.Group className="mb-3" controlId="formEmail">
-                        <Form.Label>Email</Form.Label>
+                        <Form.Label className="Label">Email</Form.Label>
                         <Row>
                           <Col>
                             <Form.Control
@@ -208,16 +207,22 @@ function SignUp() {
                         </Row>
                       </Form.Group>
                       <Row>
-                        <Form.Label>Date Of Birth</Form.Label>
+                        <Col sm={6} md={6} lg={6} xl={6} >
+                        
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formDataOfBirth"
+                        >
+                          <Form.Label className="Label">Date Of Birth</Form.Label>
 
-                        <Form.Control
+                          <Form.Control
                             type="date"
                             placeholder="Large text"
                             name="dateOfBirth"
                             value={data.dateOfBirth}
                             onChange={handleChange}
                           />
-                        {/* <Form.Group controlId="formDateOfBirth">
+                          {/* <Form.Group controlId="formDateOfBirth">
                           <Col sm={4} md={4} lg={4} xl={4}>
                             <Form.Label>Month</Form.Label>
                             <Form.Control
@@ -276,18 +281,21 @@ function SignUp() {
                             </Form.Control>
                           </Col>
                         </Form.Group> */}
+                        </Form.Group>
 
                         <ErrorMessage
                           name="dateOfBirth"
                           className="text-danger"
                           component="div"
                         />
-                      </Row>
-                      <Row>
+                        </Col>
+                        <Col sm={6} md={6} lg={6} xl={6} >
+                     
+                      {/* <Row>
                         <Col sm={12} md={7} lg={7} xl={7}>
                           <Form.Label>Gender</Form.Label>
                           <Row>
-                            <Col md={4} lg={4} xl={4}>
+                            <Col sm={4} md={4} lg={4} xl={4}>
                               <Form.Check
                                 inline
                                 label="Male"
@@ -298,7 +306,7 @@ function SignUp() {
                                 onChange={handleChange}
                               />
                             </Col>
-                            <Col md={4} lg={4} xl={4}>
+                            <Col sm={4}  md={4} lg={4} xl={4}>
                               <Form.Check
                                 inline
                                 label="Female"
@@ -309,7 +317,7 @@ function SignUp() {
                                 onChange={handleChange}
                               />
                             </Col>
-                            <Col md={4} lg={4} xl={4}>
+                            <Col sm={4} md={4} lg={4} xl={4}>
                               <Form.Check
                                 inline
                                 label="Others"
@@ -322,10 +330,25 @@ function SignUp() {
                             </Col>
                           </Row>
                         </Col>
+                      </Row> */}
+                      <Form.Group controlId="genderSelect">
+                        <Form.Label className="Label">Gender</Form.Label>
+                        <Form.Control
+                          as="select"
+                          name="gender"
+                          value={data.gender}
+                          onChange={handleChange}
+                        >
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="others">Others</option>
+                        </Form.Control>
+                      </Form.Group>
+                      </Col>
                       </Row>
 
                       <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label className="Label">Password</Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Enter Your Password"
@@ -333,9 +356,9 @@ function SignUp() {
                           value={data.Password}
                           onChange={handleChange}
                         />
-                        <p style={{ color: "White" }}>
+                        <p style={{ color: "Black" }} className="pasword_imp">
                           {" "}
-                          Kindly fill only number & password must be 6 digits
+                          Password must be 6 digits
                         </p>
                         <ErrorMessage
                           name="Password"
@@ -345,7 +368,7 @@ function SignUp() {
                       </Form.Group>
 
                       <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Label className="Label">Confirm Password</Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Enter Your Password"
@@ -377,39 +400,37 @@ function SignUp() {
                     </Form>
                   )}
                 </Formik>
-
-                <div className="text-center mt-4">
-                  <p style={{ color: "black" }}>Or Sign Up with</p>
-                  <Button
-                    variant="outline-primary"
-                    className="GoogleButton"
-                    style={{
-                      backgroundColor: "white",
-                      color: "red",
-                      width: "100%",
-                    }}
-                    onClick={() => {
-                      handleGoogle();
-                    }}
-                  >
-                    <img
-                      src={GoogleImg}
-                      alt="Google"
-                      style={{
-                        width: "30px",
-                        marginRight: "8px",
-                      }}
-                    />
-                    Google
-                  </Button>
+                <div className="text-center_p">
+                <p style={{ color: "black" }}>Or Sign Up with</p>
                 </div>
+                <div className="OtherLogin">
+                          <center>
+                            <Button
+                              variant="light"
+                              className="  Google-Column"
+                              style={{ height: "40px", width: "100% " }}
+                              onClick={() => {
+                                handleGoogle();
+                              }}
+                            >
+                              <img
+                                src={GoogleImg}
+                                alt="Google img"
+                                className="GoogleImg "
+                              />
+                              CONTINUE WITH GOOGLE
+                            </Button>
+                          </center>
+                          </div>
+
+          
 
                 <div className="text-center mt-3">
-                  <p style={{ color: "black" }}>
+                  <p style={{ color: "White" }}>
                     Already have an account?{" "}
                     <Link
                       to="/"
-                      style={{ color: "blue", textDecoration: "none" }}
+                      style={{ color: "Black", textDecoration: "none" }}
                     >
                       {" "}
                       Log In

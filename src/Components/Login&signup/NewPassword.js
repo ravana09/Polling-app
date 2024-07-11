@@ -25,9 +25,10 @@ function NewPassword() {
     try {
       let identification = sessionStorage.getItem("MobileNUmber");
       const response = await axios.post(
-        "http://49.204.232.254:84/api/updateuser", {
+        "http://49.204.232.254:84/api/updateuser",
+        {
           identifier: identification,
-          password: values.newPassword
+          password: values.newPassword,
         }
       );
 
@@ -72,13 +73,13 @@ function NewPassword() {
   };
 
   return (
-    <div className="Body-container">
+    <div className="Login_outer">
       <Container>
         <Row className="justify-content-center align-items-center">
           <Col xs={12} md={6}>
             <Card
-              className="LoginCard mx-auto"
-              style={{ maxWidth: "95%", height: "auto" }}
+              className="ForgetPasswordCard"
+              
             >
               <Card.Body>
                 <Formik
@@ -89,17 +90,20 @@ function NewPassword() {
                   {({ handleChange, handleSubmit, values, isSubmitting }) => (
                     <Form noValidate onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label style={{ color: "black" }}>
+                        <Form.Label className="lOGIN_LABEL">
                           New Password
                         </Form.Label>
                         <Form.Control
-                           type="password"
+                          type="password"
                           placeholder="Enter Your Password"
                           name="newPassword"
+                          className="Login_input"
                           value={values.newPassword}
                           onChange={handleChange}
                           onInput={(e) => {
-                            e.target.value = e.target.value.replace(/\D/, '').slice(0, 6);
+                            e.target.value = e.target.value
+                              .replace(/\D/, "")
+                              .slice(0, 6);
                           }}
                           maxLength={6}
                           isInvalid={
@@ -115,17 +119,20 @@ function NewPassword() {
                       </Form.Group>
 
                       <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label style={{ color: "black" }}>
+                        <Form.Label className="lOGIN_LABEL">
                           Confirm Password
                         </Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Confirm Your Password"
                           name="confirmPassword"
+                          className="Login_input"
                           value={values.confirmPassword}
                           onChange={handleChange}
                           onInput={(e) => {
-                            e.target.value = e.target.value.replace(/\D/, '').slice(0, 6);
+                            e.target.value = e.target.value
+                              .replace(/\D/, "")
+                              .slice(0, 6);
                           }}
                           maxLength={6}
                           isInvalid={
@@ -142,9 +149,9 @@ function NewPassword() {
 
                       <center>
                         <Button
-                          variant="primary"
                           type="submit"
-                          className="w-50"
+                          variant="info"
+                          className="lOGIN_bUTTON"
                           disabled={isSubmitting}
                         >
                           Change Password

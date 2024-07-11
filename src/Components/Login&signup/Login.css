@@ -1,72 +1,94 @@
-.Body-container {
+.Login_outer {
+  width: 100%;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
   background-color: cadetblue;
-}
-.Body-container:hover{
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: cadetblue;
+  color: black;
 }
 
+.Login_Header {
+  margin: 0px 20px 0px 20px;
+  background-color: rgb(218, 241, 245);
+  position: relative;
+  top: 20px;
+  border-radius: 10px;
+}
+.Card_Header {
+  background: linear-gradient(to right, #7ca7b3, #77a0ab);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration-color: #777777;
+  margin-left: 10px;
+  font-size: xx-large;
+}
 
-.LoginImages {
-  max-width: 100%;
-  height: auto;
-  object-fit: inherit;
+.Login_input {
+  background-color: #f2f2f2;
+  height: 6vh;
+  width: 90%;
+  border: 2px solid rgb(224, 221, 221);
+  margin-bottom: 10px;
+}
+
+.Login_input::placeholder {
+  color: gray;
+  font-size: 14px;
+  font-style: italic;
+  opacity: 0.5;
 }
 
 .LoginCard {
-  background-color: cadetblue;
+  position: relative;
+  top: 50px;
+  background-color: white;
   color: rgb(242, 238, 238);
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+  width: 90%;
+  max-width: 400px;
+  padding: 40px 40px 40px 40px;
+  box-shadow: 0px 6px 40px 0px rgb(108, 105, 105);
 }
 
 .LoginCard:hover {
-  background-color: rgb(78, 137, 141);
-  color: rgb(240, 233, 233);
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+  border-radius: 0px;
+}
+.lOGIN_LABEL {
+  color: #777777;
+  font-size: 16px;
+  font-weight: bold;
 }
 
+.lOGIN_bUTTON {
+  border: none;
+}
+.lOGIN_bUTTON:hover {
+  background-color: #77a0ab;
+  border: none;
+}
 .GoogleImg {
   width: 30px;
   height: 40px;
   margin-right: 10px;
 }
 
-.Google-Column {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  width: 350px;
-  padding: 10px;
-}
-
-.SignUp-text-center{
+.SignUp-text-center {
   text-align: center;
   margin-top: 5px;
 }
 
+.ForgetPasswordCard {
+  position: absolute;
+  top:30%;
+  background-color: white;
+  color: rgb(242, 238, 238);
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 40px 40px 40px;
+  box-shadow: 0px 6px 40px 0px rgb(108, 105, 105);
+}
+
+
+
 /* Media Queries for Mobile Devices */
 @media (max-width: 768px) {
-  .Body-container {
-    flex-direction: column;
-    padding: 10px;
-  }
-
   .LoginCard {
     max-width: 90%;
     padding: 15px;
@@ -82,13 +104,20 @@
     padding: 20px;
     font-size: small;
   }
-  .SignUp-text-center{
+  .SignUp-text-center {
     text-align: center;
     margin-top: 5px;
     font-size: small;
   }
-  .Sign_Up{
+  .Sign_Up {
     font-size: medium;
   }
- 
+  .Card_Header {
+    color: #1dc3ed;
+    text-decoration-color: #777777;
+    margin-left: 12px;
+    font-size: smaller;
+    text-shadow: 0px 0px 1px rgba(72, 71, 71, 0.5); /* Adds a text shadow */
+    -webkit-text-stroke: 0.5px rgb(177, 170, 170); /* Adds a grey border to the text */
+  }
 }

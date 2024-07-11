@@ -53,7 +53,6 @@ function ForgetPassword() {
     if (setIsOtpSent) {
       navigate("/NewPassword");
     } else {
-      
     }
   }
 
@@ -63,10 +62,8 @@ function ForgetPassword() {
         "http://49.204.232.254:84/mobileauth/send-otp-sms",
         {
           number: formData.PhoneNumber,
-          appName:"POLL APP"
+          appName: "POLL APP",
         }
-        
-    
       );
 
       if (response.status === 200) {
@@ -169,14 +166,12 @@ function ForgetPassword() {
   };
 
   return (
-    <div className="Body-container">
+    <div className="Login_outer">
       <Container>
-        <Row className="justify-content-center align-items-center">
-          <Col xs={12} md={6}>
-            <Card
-              className="LoginCard mx-auto"
-              style={{ maxWidth: "100%", height: "auto" }}
-            >
+        <Row>
+          <Col xs={12} md={3} lg={3} xl={3}></Col>
+          <Col xs={12} md={6} lg={6} xl={6}>
+            <Card className="ForgetPasswordCard">
               <Card.Body>
                 <Formik
                   initialValues={formData}
@@ -186,14 +181,17 @@ function ForgetPassword() {
                 >
                   {({ handleSubmit, setFieldError }) => (
                     <Form onSubmit={handleSubmit} noValidate>
-                      <Form.Group className="mb-3" controlId="formMobileNumber">
-                        <Form.Label>Mobile Number</Form.Label>
+                      <Form.Group controlId="formMobileNumber">
+                        <Form.Label className="lOGIN_LABEL">
+                          Mobile Number
+                        </Form.Label>
                         <Row>
                           <Col sm={9}>
                             <Form.Control
                               type="text"
-                              placeholder="Enter Your Mobile Number"
+                              placeholder="+91-0987654123"
                               name="PhoneNumber"
+                              className="Login_input"
                               value={formData.PhoneNumber}
                               onChange={handleChange}
                             />
@@ -204,7 +202,12 @@ function ForgetPassword() {
                             />
                           </Col>
                           <Col sm={3}>
-                            <Button type="button" onClick={MobileSendOTP}>
+                            <Button
+                              type="button"
+                              variant="info"
+                              className="lOGIN_bUTTON"
+                              onClick={MobileSendOTP}
+                            >
                               Send OTP
                             </Button>
                           </Col>
@@ -213,12 +216,15 @@ function ForgetPassword() {
                       {showMobileOtpInput && (
                         <Form.Group className="mb-3" controlId="formOtp">
                           <Row>
-                            <Form.Label>Enter OTP</Form.Label>
+                            <Form.Label className="lOGIN_LABEL">
+                              Enter OTP
+                            </Form.Label>
                             <Col sm={6}>
                               <Form.Control
                                 type="text"
                                 placeholder="Enter OTP"
                                 name="MobileOtp"
+                                className="Login_input"
                                 value={formData.MobileOtp}
                                 onChange={handleChange}
                                 required
@@ -249,6 +255,7 @@ function ForgetPassword() {
               </Card.Body>
             </Card>
           </Col>
+          <Col xs={12} md={3} lg={3} xl={3}></Col>
         </Row>
       </Container>
     </div>

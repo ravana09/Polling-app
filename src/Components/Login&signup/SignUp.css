@@ -3,28 +3,71 @@
   height: 30px;
   margin-right: 10px;
 }
-.Body-container {
+
+.sign_Body-container{
+  width: 100%;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
   background-color: cadetblue;
-}
-.pasword_imp {
   color: black;
 }
 
-.SignCard {
-  width: 100%;
-  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
-  padding: 20px;
-  background-color: cadetblue;
+.pasword_imp {
+  color: black;
+}
+.Gender_input{
+  background-color: #F2F2F2;
+  height: 6vh;
+  width: 80%;
+  border: 2px solid rgb(224, 221, 221)
+
 }
 
-.Label {
-  color: white;
+.Gender_input {
+  height: 6vh;
+  width: 80%; /* Adjust width as needed */
+  border: 2px solid rgb(224, 221, 221);
+  padding: 0.5rem;
+  font-size: 14px;
+  background-color: #F2F2F2;
+  color: #555;
+  margin-bottom: 10px;
 }
+
+.Gender_input option:first-child {
+  color: gray;  
+  font-size: 10px;  
+  font-style: italic; 
+  opacity: 0.5; /* Italic font style for placeholder */
+}
+
+
+.SignCard {
+  width: 100%;
+  max-width: 550px;
+  position: relative;
+  top:30px;
+  left: 50px;
+  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+  padding: 40px 20px 0px 40px;
+  background-color: white;
+  border-radius: 20px;
+}
+.SignCard:hover {
+  width: 100%;
+  position: relative;
+  top:30px;
+  box-shadow: 0px 6px 20px 0px rgb(60, 59, 59);
+  padding: 40px 20px 0px 40px;
+  background-color: white;
+  border-radius: 20px;
+}
+.Login_input .option {
+  color: #aaa; /* Light grey to make it look like a placeholder */
+}
+
+
+
+
 
 .GoogleButton {
   width: 100%;

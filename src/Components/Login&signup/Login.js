@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Card, Col, Form, Row, Container } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Row,
+  Container,
+  Navbar,
+  Nav,
+} from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons";
 import "../Login&signup/Login.css";
 import * as yup from "yup";
@@ -50,7 +59,7 @@ function Login() {
   async function handleSubmit() {
     try {
       // Api Calling
-      let url="http://49.204.232.254:84/log/loginuser"
+      let url = "http://49.204.232.254:84/log/loginuser";
       const response = await axios.post(url, {
         phone_number: formData.PhoneNumber,
         password: formData.Password,
@@ -77,7 +86,7 @@ function Login() {
           title: "Signed in successfully",
         });
 
-        //local storage 
+        //local storage
         sessionStorage.setItem("Users_Name", response.data.user.user_name);
         sessionStorage.setItem(
           "Users_PhoneNumber",
@@ -109,7 +118,6 @@ function Login() {
         title: "User is not a register User",
       });
 
-
       setTimeout(() => {
         navigate("/signup");
       }, 1000);
@@ -117,126 +125,158 @@ function Login() {
     }
   }
 
+  const handleSignUP=()=>{
+    navigate("/signup");
+  }
+
   return (
     <>
-      <div className="Body-container">
-        <Container>
-          <Row className="justify-content-center align-items-center">
-            <Col xs={12} md={6} className="d-flex justify-content-center mb-3">
-              <img className="LoginImages" src={LoginImg} alt="loginImage" />
-            </Col>
+      <div className="Login_outer">
+       
+            <Navbar expand="lg" className="Login_Header">
+              <Container>
+                <Navbar.Brand href="#">POLLING BOOTH</Navbar.Brand>
+                <Navbar.Text>
+                <Button variant="info" onClick={handleSignUP}>Sign up</Button>{' '}
+                </Navbar.Text>
+              </Container>
+            </Navbar>
+     
+  
 
-            <Col xs={12} md={6}>
-              <Card
-                className="LoginCard mx-auto"
-                style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  backgroundColor: "cadetblue",
-                }}
-              >
-                <Card.Body>
-                  <Formik
-                    initialValues={formData}
-                    validationSchema={schema}
-                    enableReinitialize
-                    onSubmit={handleSubmit}
-                  >
-                    {({ handleSubmit }) => (
-                      <Form onSubmit={handleSubmit} noValidate>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                          <Form.Label>Mobile Number</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter Your Mobile Number "
-                            required
-                            name="PhoneNumber"
-                            value={formData.PhoneNumber}
-                            onChange={handleInputChanges}
-                          />
-                          <ErrorMessage
-                            name="PhoneNumber"
-                            className="text-danger"
-                            component="div"
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formBasicPassword"
-                        >
-                          <Form.Label>Password</Form.Label>
-                          <Form.Control
-                            type="password"
-                            placeholder="Enter Your Password"
-                            required
-                            name="Password"
-                            value={formData.Password}
-                            onChange={handleInputChanges}
-                          />
+        <div >
+          <Container>
+            <Row>
+              <Col xs={12} md={3} lg={3} xl={3}>
+                {/* <img className="LoginImages" src={LoginImg} alt="loginImage" /> */}
+              </Col>
 
-                          <ErrorMessage
-                            name="Password"
-                            className="text-danger"
-                            component="div"
-                          />
-                        </Form.Group>
-                        <center>
+              <Col xs={12} md={6} lg={6} xl={6}>
+                <Card
+                  className="LoginCard mx-auto"
+                  style={{
+                    maxWidth: "80%",
+                    // backgroundColor: "White",
+                  }}
+                >
+                  <h3 className="Card_Header">LOG INTO YOUR ACCOUNT</h3>
+
+                  <Card.Body>
+                    <Formik
+                      initialValues={formData}
+                      validationSchema={schema}
+                      enableReinitialize
+                      onSubmit={handleSubmit}
+                    >
+                      {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit} noValidate>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="formBasicEmail"
+                          >
+                            <Form.Label className="lOGIN_LABEL">
+                              Mobile Number
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="+91-0987654123"
+                              required
+                              name="PhoneNumber"
+                              value={formData.PhoneNumber}
+                              onChange={handleInputChanges}
+                              className="Login_input"
+                              style={{ backgroundColor: "#F2F2F2" }}
+                            />
+                            <ErrorMessage
+                              name="PhoneNumber"
+                              className="text-danger"
+                              component="div"
+                            />
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="formBasicPassword"
+                          >
+                            <Form.Label className="lOGIN_LABEL">
+                              Password
+                            </Form.Label>
+                            <Form.Control
+                              type="password"
+                              placeholder="*********"
+                              required
+                              name="Password"
+                              value={formData.Password}
+                              className="Login_input"
+                              onChange={handleInputChanges}
+                            />
+
+                            <ErrorMessage
+                              name="Password"
+                              className="text-danger"
+                              component="div"
+                            />
+                          </Form.Group>
+
                           <Button
-                            variant="primary"
+                           variant="info"
                             type="submit"
-                            className="w-75"
+                            className="lOGIN_bUTTON"
                           >
                             Login
                           </Button>
-                        </center>
-                        <hr />
-                        <center>
-                          {" "}
+
+                          <hr style={{ color: "black" }} />
+
                           <a
                             href="/ForgetPassword"
-                            style={{ color: "Black", textDecoration: "none" }}
+                            style={{
+                              color: "#777777",
+                              textDecoration: "none",
+                            }}
                           >
-                            Forget Password{" "}
+                            Forget Password
                           </a>
-                          <p>OR</p>
-                        </center>
-
-                        <div className="OtherLogin">
-                          <center>
-                            <Button
-                              variant="light"
-                              className="  Google-Column"
-                              style={{ height: "40px", width: "100% " }}
-                            >
-                              <img
-                                src={GoogleImg}
-                                alt="Google img"
-                                className="GoogleImg "
-                              />
-                              CONTINUE WITH GOOGLE
-                            </Button>
-                          </center>
-                        </div>
-                        <div>
-                          <p className="SignUp-text-center">
-                            Don't have an account?{" "}
-                            <Link
-                              to="/signup"
-                              style={{ color: "Black", textDecoration: "none" }}
-                              className="Sign_Up"
-                            >
-                              Sign Up{" "}
-                            </Link>{" "}
-                          </p>
-                        </div>
-                      </Form>
-                    )}
-                  </Formik>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                          {/* <div className="OtherLogin">
+                            <center>
+                              <Button
+                                variant="light"
+                                className="  Google-Column"
+                              >
+                                <img
+                                  src={GoogleImg}
+                                  alt="Google img"
+                                  className="GoogleImg "
+                                />
+                              </Button>
+                            </center>
+                          </div> */}
+                          {/* <div>
+                            <p className="SignUp-text-center">
+                              Don't have an account?{" "}
+                              <Link
+                                to="/signup"
+                                style={{
+                                  color: "Black",
+                                  textDecoration: "none",
+                                }}
+                                className="Sign_Up"
+                              >
+                                Sign Up{" "}
+                              </Link>{" "}
+                            </p>
+                          </div> */}
+                        </Form>
+                      )}
+                    </Formik>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col xs={12} md={3} lg={3} xl={3}>
+                {/* <img className="LoginImages" src={LoginImg} alt="loginImage" /> */}
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     </>
   );

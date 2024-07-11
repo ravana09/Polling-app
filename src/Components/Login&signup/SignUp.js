@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "../Login&signup/SignUp.css";
-import { Form, Button, Card, Col, Container, Row } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Card,
+  Col,
+  Container,
+  Row,
+  Navbar,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
@@ -107,37 +115,11 @@ function SignUp() {
       gender: data.gender,
     };
     console.log(userDetails);
-    // );
-    // console.log(response.data);
-    // if (response.status === 201) {
-    //   Swal.fire({
-    //     icon: "success",
-    //     title: "Signed up successfully",
-    //     showConfirmButton: false,
-    //     timer: 2000,
-    //   });
-    //   sessionStorage.setItem("signupEmail", data.Email);
 
     setTimeout(() => {
       navigate("/MobileNumberVerify", { state: { userDetails: userDetails } });
     }, 2000);
-    //   } else {
-    //     Swal.fire({
-    //       icon: "error",
-    //       title: "Error in sign up",
-    //       showConfirmButton: false,
-    //       timer: 3000,
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error("An error occurred during sign up:", error);
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "An error occurred during sign up",
-    //     text: error.message,
-    //     showConfirmButton: true,
-    //   });
-    // }
+
     actions.setSubmitting(false);
   };
 
@@ -147,207 +129,201 @@ function SignUp() {
     navigate("/GooogleForm");
   }
 
+  const handleSignUP = () => {
+    navigate("/");
+  };
   return (
-    <div className="Body-container sign_Body-container">
-      <Container>
-        <Row className="justify-content-center align-items-center">
-          <Col xs={12} md={6} className="d-flex justify-content-center mb-3">
-            <img className="LoginImages" src={signUpimg} alt="signupImage" />
-          </Col>
-          <Col xs={12} md={6}>
-            <Card
-              className="SignCard mx-auto"
-              style={{
-                backgroundColor: "cadetblue",
-              }}
-            >
-              <Card.Body>
-                <Formik
-                  initialValues={data}
-                  validationSchema={schema}
-                  enableReinitialize
-                  onSubmit={handleSubmit}
-                >
-                  {({ handleSubmit }) => (
-                    <Form noValidate onSubmit={handleSubmit}>
-                      <Form.Group className="mb-3" controlId="formName">
-                        <Form.Label className="Label">Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter Your Name"
-                          name="Name"
-                          value={data.Name}
-                          onChange={handleChange}
-                        />
-                        <ErrorMessage
-                          name="Name"
-                          className="text-danger"
-                          component="div"
-                        />
-                      </Form.Group>
+    <>
+      <div className="sign_Body-container">
+        <Navbar expand="lg" className="Login_Header">
+          <Container>
+            <Navbar.Brand href="#">POLLING BOOTH</Navbar.Brand>
+            <Navbar.Text>
+              <Button variant="info" onClick={handleSignUP}>
+                Login
+              </Button>{" "}
+            </Navbar.Text>
+          </Container>
+        </Navbar>
+        <Container>
+          <Row>
+            <Col xs={12} md={3} lg={3} xl={3}></Col>
+            <Col xs={12} md={6} lg={6} xl={6}>
+              <Card className="SignCard">
+                <h3 className="Card_Header">CREATE YOUR ACCOUNT!</h3>
+                <Card.Body>
+                  <Formik
+                    initialValues={data}
+                    validationSchema={schema}
+                    enableReinitialize
+                    onSubmit={handleSubmit}
+                  >
+                    {({ handleSubmit }) => (
+                      <Form noValidate onSubmit={handleSubmit}>
+                        <Form.Group controlId="formName">
+                          <Form.Label className="lOGIN_LABEL">Name</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder=""
+                            name="Name"
+                            value={data.Name}
+                            className="Login_input"
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="Name"
+                            className="text-danger"
+                            component="div"
+                          />
+                        </Form.Group>
 
-                      <Form.Group className="mb-3" controlId="formEmail">
-                        <Form.Label className="Label">Email</Form.Label>
+                        <Form.Group controlId="formEmail">
+                          <Form.Label className="lOGIN_LABEL">Email</Form.Label>
+                          <Row>
+                            <Col>
+                              <Form.Control
+                                type="text"
+                                placeholder="your@gmail.com"
+                                name="Email"
+                                value={data.Email}
+                                className="Login_input"
+                                onChange={handleChange}
+                              />
+                              <ErrorMessage
+                                name="Email"
+                                className="text-danger"
+                                component="div"
+                              />
+                            </Col>
+                          </Row>
+                        </Form.Group>
                         <Row>
-                          <Col>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter Your Email"
-                              name="Email"
-                              value={data.Email}
-                              onChange={handleChange}
-                            />
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Form.Group controlId="formDataOfBirth">
+                              <Form.Label className="lOGIN_LABEL">
+                                Date Of Birth
+                              </Form.Label>
+                              <Form.Control
+                                type="date"
+                                name="dateOfBirth"
+                                className="Gender_input"
+                                value={data.dateOfBirth}
+                                onChange={handleChange}
+                              />
+                            </Form.Group>
                             <ErrorMessage
-                              name="Email"
+                              name="dateOfBirth"
                               className="text-danger"
                               component="div"
                             />
                           </Col>
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Form.Group controlId="genderSelect">
+                              <Form.Label className="lOGIN_LABEL">
+                                Gender
+                              </Form.Label>
+                              <Form.Control
+                                as="select"
+                                name="gender"
+                                className="Gender_input"
+                                value={data.gender}
+                                onChange={handleChange}
+                              >
+                                <option value="" disabled hidden>
+                                  Select Gender
+                                </option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="others">Others</option>
+                              </Form.Control>
+                            </Form.Group>
+                          </Col>
                         </Row>
-                      </Form.Group>
-                      <Row>
-                        <Col sm={6} md={6} lg={6} xl={6}>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="formDataOfBirth"
-                          >
-                            <Form.Label className="Label">
-                              Date Of Birth
-                            </Form.Label>
 
-                            <Form.Control
-                              type="date"
-                              placeholder="Large text"
-                              name="dateOfBirth"
-                              value={data.dateOfBirth}
-                              onChange={handleChange}
-                            />
-                           
-                          </Form.Group>
-
+                        <Form.Group controlId="formPassword">
+                          <Form.Label className="lOGIN_LABEL">
+                            Password
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            placeholder="******"
+                            name="Password"
+                            className="Login_input"
+                            value={data.Password}
+                            onChange={handleChange}
+                          />
+                          <p style={{ color: "Grey" }} className="pasword_imp">
+                            {" "}
+                            Password must be 6 digits
+                          </p>
                           <ErrorMessage
-                            name="dateOfBirth"
+                            name="Password"
                             className="text-danger"
                             component="div"
                           />
-                        </Col>
-                        <Col sm={6} md={6} lg={6} xl={6}>
-                         
-                          <Form.Group controlId="genderSelect">
-                            <Form.Label className="Label">Gender</Form.Label>
-                            <Form.Control
-                              as="select"
-                              name="gender"
-                              value={data.gender}
-                              onChange={handleChange}
-                            >
-                              <option value="" disabled selected hidden>
-                                Select Gender
-                              </option>
-                              <option value="male">Male</option>
-                              <option value="female">Female</option>
-                              <option value="others">Others</option>
-                            </Form.Control>
-                          </Form.Group>
-                        </Col>
-                      </Row>
+                        </Form.Group>
 
-                      <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label className="Label">Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Enter Your Password"
-                          name="Password"
-                          value={data.Password}
-                          onChange={handleChange}
-                        />
-                        <p style={{ color: "Black" }} className="pasword_imp">
-                          {" "}
-                          Password must be 6 digits
-                        </p>
+                        <Form.Group controlId="formPassword">
+                          <Form.Label className="lOGIN_LABEL">
+                            Confirm Password
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            placeholder="******"
+                            name="ConfirmPassword"
+                            className="Login_input"
+                            value={data.ConfirmPassword}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="Password"
+                            className="text-danger"
+                            component="div"
+                          />
+                        </Form.Group>
                         <ErrorMessage
-                          name="Password"
-                          className="text-danger"
-                          component="div"
-                        />
-                      </Form.Group>
-
-                      <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label className="Label">
-                          Confirm Password
-                        </Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Enter Your Password"
                           name="ConfirmPassword"
-                          value={data.ConfirmPassword}
-                          onChange={handleChange}
-                        />
-                        <ErrorMessage
-                          name="Password"
                           className="text-danger"
                           component="div"
                         />
-                      </Form.Group>
-                      <ErrorMessage
-                        name="ConfirmPassword"
-                        className="text-danger"
-                        component="div"
-                      />
-
-                      <center>
-                        <Button
-                          variant="primary"
-                          type="submit"
-                          className="w-50"
-                        >
-                          Sign Up
-                        </Button>
-                      </center>
-                    </Form>
-                  )}
-                </Formik>
-                <div className="text-center_p">
-                  <p style={{ color: "black" }}>Or Sign Up with</p>
-                </div>
-                <div className="OtherLogin">
-                  <center>
-                    <Button
-                      variant="light"
-                      className="  Google-Column"
-                      style={{ height: "40px", width: "100% " }}
-                      onClick={() => {
-                        handleGoogle();
-                      }}
-                    >
-                      <img
-                        src={GoogleImg}
-                        alt="Google img"
-                        className="GoogleImg "
-                      />
-                      CONTINUE WITH GOOGLE
-                    </Button>
-                  </center>
-                </div>
-
-                <div className="text-center mt-3">
-                  <p style={{ color: "White" }}>
-                    Already have an account?{" "}
-                    <Link
-                      to="/"
-                      style={{ color: "Black", textDecoration: "none" }}
-                    >
-                      {" "}
-                      Log In
-                    </Link>
-                  </p>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+                        <Row>
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Button
+                              variant="info"
+                              type="submit"
+                              className="lOGIN_bUTTON"
+                            >
+                              Sign Up
+                            </Button>
+                          </Col>
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Button
+                              variant="light"
+                              className=" Google-Column"
+                              style={{ height: "40px", width: "100% " }}
+                              onClick={() => {
+                                handleGoogle();
+                              }}
+                            >
+                              <img
+                                src={GoogleImg}
+                                alt="Google img"
+                                className="GoogleImg "
+                              />
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Form>
+                    )}
+                  </Formik>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col xs={12} md={3} lg={3} xl={3}></Col>
+          </Row>
+        </Container>
+      </div>
+    </>
   );
 }
 

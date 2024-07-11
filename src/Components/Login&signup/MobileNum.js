@@ -189,13 +189,13 @@ function MobileNum() {
   };
 
   return (
-    <div className="Body-container">
+    <div className="Login_outer">
       <Container>
         <Row className="justify-content-center align-items-center">
           <Col xs={12} md={6}>
             <Card
-              className="LoginCard mx-auto"
-              style={{ maxWidth: "100%", height: "auto" }}
+              className="ForgetPasswordCard "
+   
             >
               <Card.Body>
                 <Formik
@@ -207,13 +207,14 @@ function MobileNum() {
                   {({ handleSubmit, setFieldError }) => (
                     <Form onSubmit={handleSubmit} noValidate>
                       <Form.Group className="mb-3" controlId="formMobileNumber">
-                        <Form.Label>Mobile Number</Form.Label>
+                        <Form.Label className="lOGIN_LABEL">Mobile Number</Form.Label>
                         <Row>
                           <Col sm={9}>
                             <Form.Control
                               type="text"
                               placeholder="Enter Your Mobile Number"
                               name="PhoneNumber"
+                               className="Login_input"
                               value={formData.PhoneNumber}
                               onChange={handleChange}
                             />
@@ -224,7 +225,7 @@ function MobileNum() {
                             />
                           </Col>
                           <Col sm={3}>
-                            <Button type="button" onClick={MobileSendOTP}>
+                            <Button type="button" variant="info"  className="lOGIN_bUTTON" onClick={MobileSendOTP}>
                               Send OTP
                             </Button>
                           </Col>
@@ -233,12 +234,13 @@ function MobileNum() {
                       {showMobileOtpInput && (
                         <Form.Group className="mb-3" controlId="formOtp">
                           <Row>
-                            <Form.Label>Enter OTP</Form.Label>
+                            <Form.Label className="lOGIN_LABEL">Enter OTP</Form.Label>
                             <Col sm={6}>
                               <Form.Control
                                 type="text"
                                 placeholder="Enter OTP"
                                 name="MobileOtp"
+                                 className="Login_input"
                                 value={formData.MobileOtp}
                                 onChange={handleChange}
                                 required
@@ -257,6 +259,7 @@ function MobileNum() {
                                 }
                                 variant="success"
                                 type="submit"
+                                
                               >
                                 Verify
                               </Button>

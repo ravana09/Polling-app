@@ -1,330 +1,302 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Card, Col, Form, Row, Container } from "react-bootstrap";
-import { Formik, ErrorMessage } from "formik";
-import * as yup from "yup";
+import React, { useEffect, useState } from "react";
+import "../Login&signup/SignUp.css";
+import {
+  Form,
+  Button,
+  Card,
+  Col,
+  Container,
+  Row,
+  Navbar,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { Formik, ErrorMessage } from "formik";
+import signUpimg from "../Images/signupCard.jpg";
+import GoogleImg from "../Images/googleImg.png";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../Login&signup/Login.css";
+import { PiGenderMale } from "react-icons/pi";
 
-function GoogleForm() {
-  const [showMobileOtpInput, setShowMobileOtpInput] = useState(false);
-  const [isOtpSent, setIsOtpSent] = useState(false);
+function GooogleForm() {
   const [data, setData] = useState({
-    MobileNumber: "",
+    Name: "",
+    Email: "",
     Password: "",
-    MobileOtp: "",
+    ConfirmPassword: "",
+    dateOfBirth: '',
+    gender: "",
   });
+
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const number = /^\d*$/;
 
-    if (name === "MobileNumber" && /^\d*$/.test(value) && value.length <= 10) {
-      setData({ ...data, [name]: value });
-    } else if (name === "MobileOtp" && /^\d*$/.test(value) && value.length <= 6) {
-      setData({ ...data, [name]: value });
-    } else if (name === "Password" && value.length <= 6) {
-      setData({ ...data, [name]: value });
+    switch (name) {
+      case "Name":
+        if (/^[A-Za-z\s]*$/.test(value)) {
+          setData({ ...data, [name]: value });
+        }
+        break;
+
+      case "Email":
+        setData({ ...data, [name]: value });
+        break;
+
+      case "dateOfBirth":
+        setData({ ...data, [name]: value });
+
+        break;
+
+      case "gender":
+        setData({ ...data, [name]: value });
+        break;
+
+      case "Password":
+        if (value.length <= 6 && (number.test(value) || value === " ")) {
+          setData({ ...data, [name]: value });
+        }
+        break;
+      case "ConfirmPassword":
+        if (value.length <= 6 && (number.test(value) || value === " ")) {
+          setData({ ...data, [name]: value });
+        }
+        break;
+      default:
+        break;
     }
   };
 
   const schema = yup.object().shape({
-    MobileNumber: yup
+    Name: yup.string().required("Name is required"),
+    dateOfBirth: yup.date().nullable().required("Date of Birth is required"),
+    Email: yup
       .string()
-      .matches(/^\d{10}$/, "Enter a valid 10 digit mobile number")
-      .required("Mobile Number is required"),
+      .email("Enter a valid email")
+      .required("Email is required"),
     Password: yup
       .string()
       .max(6, "Password must be at most 6 characters")
       .required("Password is required"),
-    MobileOtp: yup.string().when("showMobileOtpInput", {
-      is: true,
-      then: yup.string().required("OTP is required"),
-    }),
+    ConfirmPassword: yup
+      .string()
+      .oneOf([yup.ref("Password"), null], "Passwords must match"),
+      gender: yup.string().required("Gender is required"),
+      dateOfBirth: yup.string().required("Date of Birth is required"),
   });
 
+  console.log(data.dateOfBirth);
+  console.log(data.gender);
+
   const handleSubmit = async (values, actions) => {
-    try {
-      const response = await axios.post("http://localhost:5000/api/createuser", {
-        phone_number: values.MobileNumber,
-        password: values.Password,
-      });
+    console.log("submited");
+   
+    const userDetails = {
+      user_name: values.Name,
+      email: values.Email,
+      password: values.Password,
+      age: data.dateOfBirth,
+      gender: data.gender,
+    };
+    console.log(userDetails);
 
-      if (response.status === 201) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Signed in successfully",
-        });
-
-        setTimeout(() => {
-          navigate("/polling");
-        }, 2000);
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "Error in Signup",
-        });
-      }
-    } catch (error) {
-      console.error("An error occurred during sign up:", error);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "error",
-        title: "An error occurred during sign up",
-      });
-    }
+    setTimeout(() => {
+      navigate("/MobileNumberVerify", { state: { userDetails: userDetails } });
+    }, 2000);
 
     actions.setSubmitting(false);
   };
 
-  const MobileSendOTP = async () => {
-    try {
-      const response = await axios.post("http://localhost:5000/mobileauth/send-otp-sms", {
-        number: data.MobileNumber,
-      });
+  let navigate = useNavigate();
 
-      if (response.status === 200) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "OTP Sent successfully",
-        });
-        setShowMobileOtpInput(true);
-        setIsOtpSent(true);
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "Failed to send OTP",
-        });
-      }
-    } catch (err) {
-      console.log("Error occurred with Network: ", err);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "error",
-        title: "Error Occurred in sending OTP",
-      });
-    }
+
+
+  const handleSignUP = () => {
+    navigate("/");
   };
-
-  const MobileOTPVerification = async (setFieldError) => {
-    try {
-      const response = await axios.post("http://localhost:5000/mobileauth/verify-otp-sms", {
-        number: data.MobileNumber,
-        otp: data.MobileOtp,
-      });
-
-      if (response.status === 200) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "OTP Verified successfully",
-        });
-        setShowMobileOtpInput(false);
-        setData((prevData) => ({ ...prevData, MobileOtp: "" }));
-      } else {
-        setFieldError("MobileOtp", "Invalid OTP, please try again");
-      }
-    } catch (err) {
-      console.log("Error occurred: ", err);
-      setFieldError("MobileOtp", "Error occurred, please try again");
-    }
-  };
-
-  const navigate = useNavigate();
-
   return (
-    <div className="Body-container">
-      <Container>
-        <Row className="justify-content-center align-items-center">
-          <Col xs={12} md={6}>
-            <Card
-              className="LoginCard mx-auto"
-              style={{
-                maxWidth: "95%",
-                height: "auto",
-                backgroundColor: "cadetblue",
-              }}
-            >
-              <Card.Title>Kindly Fill the Form</Card.Title>
-              <Card.Body>
-                <Formik
-                  initialValues={data}
-                  validationSchema={schema}
-                  enableReinitialize
-                  onSubmit={handleSubmit}
-                >
-                  {({ handleSubmit, setFieldError }) => (
-                    <Form noValidate onSubmit={handleSubmit}>
-                      <Form.Group className="mb-3" controlId="formMobileNumber">
-                        <Form.Label>Mobile Number</Form.Label>
-                        <Row>
-                          <Col sm={9}>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter Your Mobile Number"
-                              name="MobileNumber"
-                              value={data.MobileNumber}
-                              onChange={handleChange}
-                            />
-                            <ErrorMessage
-                              name="MobileNumber"
-                              className="text-danger"
-                              component="div"
-                            />
-                          </Col>
-                          <Col sm={3}>
-                            <Button type="button" onClick={MobileSendOTP} disabled={isOtpSent}>
-                              {isOtpSent ? "OTP Sent" : "Send OTP"}
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Form.Group>
+    <>
+      <div className="Login_outer" style={{
+        minHeight:"100vh"
+      }} >
+        <Navbar expand="lg" className="Login_Header">
+          <Container>
+            <Navbar.Brand className="Login_nav_header">POLLING BOOTH</Navbar.Brand>
+            <Navbar.Text>
+              <Button  className="Login_nav_button" variant="info" onClick={handleSignUP}>
+                Login
+              </Button>{" "}
+            </Navbar.Text>
+          </Container>
+        </Navbar>
+        <Container>
+          <Row>
+            <Col  md={3} lg={3} xl={3}></Col>
+            <Col  md={6} lg={6} xl={6}>
+              <Card className="SignCard">
+                <h3 className="Card_Header">KINDLY FILL THE DETAILS</h3>
+                <Card.Body>
+                  <Formik
+                    initialValues={data}
+                    validationSchema={schema}
+                    enableReinitialize
+                    onSubmit={handleSubmit}
+                  >
+                    {({ handleSubmit }) => (
+                      <Form noValidate onSubmit={handleSubmit}>
+                        <Form.Group controlId="formName">
+                          <Form.Label className="lOGIN_LABEL">Name</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder=""
+                            name="Name"
+                            value={data.Name}
+                            className="Login_input"
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="Name"
+                            className="text-danger"
+                            component="div"
+                          />
+                        </Form.Group>
 
-                      {showMobileOtpInput && (
-                        <Form.Group className="mb-3" controlId="formMobileOtp">
+                        {/* <Form.Group controlId="formEmail">
+                          <Form.Label className="lOGIN_LABEL">Email</Form.Label>
                           <Row>
-                            <Form.Label>Enter Mobile OTP</Form.Label>
-                            <Col sm={6}>
+                            <Col>
                               <Form.Control
                                 type="text"
-                                placeholder="Enter Mobile OTP"
-                                name="MobileOtp"
-                                value={data.MobileOtp}
+                                placeholder="your@gmail.com"
+                                name="Email"
+                                value={data.Email}
+                                className="Login_input"
                                 onChange={handleChange}
                               />
                               <ErrorMessage
-                                name="MobileOtp"
+                                name="Email"
                                 className="text-danger"
                                 component="div"
                               />
                             </Col>
-                            <Col sm={6}>
-                              <Button
-                                onClick={() => MobileOTPVerification(setFieldError)}
-                                variant="success"
-                              >
-                                Verify
-                              </Button>
-                            </Col>
                           </Row>
-                        </Form.Group>
-                      )}
+                        </Form.Group> */}
+                        <Row>
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Form.Group controlId="formDataOfBirth">
+                              <Form.Label className="lOGIN_LABEL">
+                                Date Of Birth
+                              </Form.Label>
+                              <Form.Control
+                                type="date"
+                                name="dateOfBirth"
+                                className="Gender_input"
+                                value={data.dateOfBirth}
+                                onChange={handleChange}
+                              />
+                            </Form.Group>
+                            <ErrorMessage
+                              name="dateOfBirth"
+                              className="text-danger"
+                              component="div"
+                            />
+                          </Col>
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Form.Group controlId="genderSelect">
+                              <Form.Label className="lOGIN_LABEL">
+                                Gender
+                              </Form.Label>
+                              <Form.Control
+                                as="select"
+                                name="gender"
+                                className="Gender_input"
+                                value={data.gender}
+                                onChange={handleChange}
+                              >
+                                <option value="" disabled hidden>
+                                  Select Gender
+                                </option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="others">Others</option>
+                              </Form.Control>
+                            </Form.Group>
+                          </Col>
+                        </Row>
 
-                      <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Enter Your Password"
-                          name="Password"
-                          value={data.Password}
-                          onChange={handleChange}
-                        />
+                        <Form.Group controlId="formPassword">
+                          <Form.Label className="lOGIN_LABEL">
+                            Password
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            placeholder="******"
+                            name="Password"
+                            className="Login_input"
+                            value={data.Password}
+                            onChange={handleChange}
+                          />
+                          <p style={{ color: "Grey" }} className="pasword_imp">
+                            {" "}
+                            Password must be 6 digits
+                          </p>
+                          <ErrorMessage
+                            name="Password"
+                            className="text-danger"
+                            component="div"
+                          />
+                        </Form.Group>
+
+                        <Form.Group controlId="formPassword">
+                          <Form.Label className="lOGIN_LABEL">
+                            Confirm Password
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            placeholder="******"
+                            name="ConfirmPassword"
+                            className="Login_input"
+                            value={data.ConfirmPassword}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="Password"
+                            className="text-danger"
+                            component="div"
+                          />
+                        </Form.Group>
                         <ErrorMessage
-                          name="Password"
+                          name="ConfirmPassword"
                           className="text-danger"
                           component="div"
                         />
-                      </Form.Group>
-
-                      <center>
-                        <Button variant="primary" type="submit" className="w-50">
-                          Sign Up
-                        </Button>
-                      </center>
-                    </Form>
-                  )}
-                </Formik>
-
-                {/* <div className="text-center mt-3">
-                  <p style={{ color: "black" }}>
-                    Already have an account?{" "}
-                    <Link to="/" style={{ color: "blue", textDecoration: "none" }}>
-                      Log In
-                    </Link>
-                  </p>
-                </div> */}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+                       <Row>
+                        <Col sm={4} md={4} lg={4} xl={4}></Col>
+                        <Col sm={4} md={4} lg={4} xl={4}>
+                            <Button
+                              variant="info"
+                              type="submit"
+                              className="lOGIN_bUTTON"
+                            >
+                              Continue
+                            </Button>
+                          </Col>
+                          <Col sm={4} md={4} lg={4} xl={4}></Col>
+                        </Row>
+                      </Form>
+                    )}
+                  </Formik>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col  md={3} lg={3} xl={3}></Col>
+          </Row>
+        </Container>
+      </div>
+    </>
   );
 }
 
-export default GoogleForm;
+export default GooogleForm;

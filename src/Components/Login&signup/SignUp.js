@@ -24,24 +24,9 @@ function SignUp() {
     Email: "",
     Password: "",
     ConfirmPassword: "",
-    dateOfBirth: 25,
+    dateOfBirth: '',
     gender: "",
   });
-
-  // const [month, setMonth] = useState("01");
-  // const [date, setDate] = useState("01");
-  // const [year, setYear] = useState("");
-
-  // useEffect(() => {
-  //   if (date && year) {
-  //     const formattedDate = `${year}-${month}-${String(date).padStart(2, "0")}`;
-  //     setData((prevData) => ({
-  //       ...prevData,
-  //       dateOfBirth: formattedDate,
-  //     }));
-  //     console.log(formattedDate);
-  //   }
-  // }, [month, date, year]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,8 +80,10 @@ function SignUp() {
       .required("Password is required"),
     ConfirmPassword: yup
       .string()
-      .oneOf([yup.ref("Password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
+      .oneOf([yup.ref("Password"), null], "Passwords must match"),
+
+    gender: yup.string().required("Gender is required"),
+    dateOfBirth: yup.string().required("Date of Birth is required"),
   });
 
   console.log(data.dateOfBirth);
@@ -104,9 +91,7 @@ function SignUp() {
 
   const handleSubmit = async (values, actions) => {
     console.log("submited");
-    // try {
-    // let url = "http://49.204.232.254:84/api/createuser";
-    // const response = await axios.post(url,
+
     const userDetails = {
       user_name: values.Name,
       email: values.Email,
@@ -125,21 +110,24 @@ function SignUp() {
 
   let navigate = useNavigate();
 
-  function handleGoogle() {
-    navigate("/GooogleForm");
-  }
-
   const handleSignUP = () => {
     navigate("/");
   };
   return (
     <>
-      <div className="sign_Body-container">
+      <div
+        className="Login_outer"
+        style={{
+          minHeight: "100vh",
+        }}
+      >
         <Navbar expand="lg" className="Login_Header">
           <Container>
-            <Navbar.Brand href="#">POLLING BOOTH</Navbar.Brand>
+            <Navbar.Brand className="Login_nav_header">
+              POLLING BOOTH
+            </Navbar.Brand>
             <Navbar.Text>
-              <Button variant="info" onClick={handleSignUP}>
+              <Button className="Login_nav_button" variant="info" onClick={handleSignUP}>
                 Login
               </Button>{" "}
             </Navbar.Text>
@@ -147,8 +135,8 @@ function SignUp() {
         </Navbar>
         <Container>
           <Row>
-            <Col xs={12} md={3} lg={3} xl={3}></Col>
-            <Col xs={12} md={6} lg={6} xl={6}>
+            <Col md={3} lg={3} xl={3}></Col>
+            <Col md={6} lg={6} xl={6}>
               <Card className="SignCard">
                 <h3 className="Card_Header">CREATE YOUR ACCOUNT!</h3>
                 <Card.Body>
@@ -287,7 +275,8 @@ function SignUp() {
                           component="div"
                         />
                         <Row>
-                          <Col sm={6} md={6} lg={6} xl={6}>
+                          <Col sm={4} md={4} lg={4} xl={4}></Col>
+                          <Col sm={4} md={4} lg={4} xl={4}>
                             <Button
                               variant="info"
                               type="submit"
@@ -296,22 +285,7 @@ function SignUp() {
                               Sign Up
                             </Button>
                           </Col>
-                          <Col sm={6} md={6} lg={6} xl={6}>
-                            <Button
-                              variant="light"
-                              className=" Google-Column"
-                              style={{ height: "40px", width: "100% " }}
-                              onClick={() => {
-                                handleGoogle();
-                              }}
-                            >
-                              <img
-                                src={GoogleImg}
-                                alt="Google img"
-                                className="GoogleImg "
-                              />
-                            </Button>
-                          </Col>
+                          <Col sm={4} md={4} lg={4} xl={4}></Col>
                         </Row>
                       </Form>
                     )}
@@ -319,7 +293,7 @@ function SignUp() {
                 </Card.Body>
               </Card>
             </Col>
-            <Col xs={12} md={3} lg={3} xl={3}></Col>
+            <Col md={3} lg={3} xl={3}></Col>
           </Row>
         </Container>
       </div>

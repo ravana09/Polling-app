@@ -4,6 +4,38 @@
   background-color: cadetblue;
   color: black;
 }
+.Login_nav_header{
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.Login_nav_header:hover{
+  transform: scale(1.05);
+  color:rgb(33, 86, 88) ;
+}
+
+.Login_nav_button{
+  background-color:rgb(218, 241, 245) ;
+  border: 2px solid rgb(135, 130, 130);
+  padding: 10px;
+  color: black;
+  width: 150px;
+  font-size: larger;
+  border-radius: 40px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.Login_nav_button:hover{
+  background-color:#0DCAF0 ;
+  border: 2px solid rgb(243, 240, 240);
+  padding: 10px;
+  color: white;
+  width: 150px;
+  font-size: larger;
+  border-radius: 40px;
+  box-shadow:0px 6px 30px 0px rgb(245, 243, 243);
+  transform: scale(1.05);
+ 
+}
+
 
 .Login_Header {
   margin: 0px 20px 0px 20px;
@@ -11,7 +43,9 @@
   position: relative;
   top: 20px;
   border-radius: 10px;
+
 }
+
 .Card_Header {
   background: linear-gradient(to right, #7ca7b3, #77a0ab);
   -webkit-background-clip: text;
@@ -24,7 +58,7 @@
 .Login_input {
   background-color: #f2f2f2;
   height: 6vh;
-  width: 90%;
+  width: 100%;
   border: 2px solid rgb(224, 221, 221);
   margin-bottom: 10px;
 }
@@ -43,12 +77,21 @@
   color: rgb(242, 238, 238);
   width: 90%;
   max-width: 400px;
-  padding: 40px 40px 40px 40px;
-  box-shadow: 0px 6px 40px 0px rgb(108, 105, 105);
+  padding: 40px 45px 40px 45px;
+  box-shadow: px 6px 40px 0px rgb(108, 105, 105);
+  border-radius: 20px;
 }
 
 .LoginCard:hover {
-  border-radius: 0px;
+  border-radius: 20px;
+  position: relative;
+  top: 50px;
+  background-color: white;
+  color: rgb(242, 238, 238);
+  width: 90%;
+  max-width: 400px;
+  padding: 40px 45px 40px 45px;
+  box-shadow: 0px 6px 40px 0px rgb(108, 105, 105);
 }
 .lOGIN_LABEL {
   color: #777777;
@@ -58,6 +101,7 @@
 
 .lOGIN_bUTTON {
   border: none;
+  width: 100%;
 }
 .lOGIN_bUTTON:hover {
   background-color: #77a0ab;
@@ -80,17 +124,94 @@
   background-color: white;
   color: rgb(242, 238, 238);
   width: 100%;
-  max-width: 600px;
-  padding: 40px 40px 40px 40px;
+  max-width: 580px;
+  padding: 40px 30px 40px 30px;
   box-shadow: 0px 6px 40px 0px rgb(108, 105, 105);
+  border-radius: 20px;
 }
-
+.ForgetPasswordCard:hover { 
+  background-color: white;
+  border-radius: 20px;
+}
 
 
 /* Media Queries for Mobile Devices */
 @media (max-width: 768px) {
   .LoginCard {
-    max-width: 90%;
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+    box-shadow: 0px 4px 15px 0px rgb(60, 59, 59);
+  }
+  .Login_nav_header{
+    font-size: medium;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  .Login_nav_header:hover{
+    transform: scale(1.05);
+    color:rgb(33, 86, 88) ;
+  }
+  .Login_nav_button{
+    background-color:rgb(218, 241, 245) ;
+    border: 2px solid rgb(135, 130, 130);
+    padding: 10px;
+    color: black;
+    width: 100px;
+    font-size: medium;
+    border-radius: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .Login_nav_button:hover{
+    background-color:#0DCAF0 ;
+    border: 2px solid rgb(243, 240, 240);
+    padding: 10px;
+    color: white;
+    width: 100px;
+    font-size: medium;
+    border-radius: 40px;
+    box-shadow:0px 6px 30px 0px rgb(245, 243, 243);
+    transform: scale(1.05);
+   
+  }
+
+  .LoginCard:hover {
+    padding: 15px;
+  }
+
+  .Google-Column {
+    width: 90%;
+    padding: 20px;
+    font-size: small;
+  }
+  .SignUp-text-center {
+    text-align: center;
+    margin-top: 5px;
+    font-size: small;
+  }
+  .lOGIN_bUTTON {
+    border: none;
+    width: 100%;
+  }
+  .Sign_Up {
+    font-size: medium;
+  }
+  .Card_Header {
+    color: #1dc3ed;
+    text-decoration-color: #777777;
+    margin-left: 12px;
+    font-size: smaller;
+    text-shadow: 0px 0px 1px rgba(72, 71, 71, 0.5); /* Adds a text shadow */
+    -webkit-text-stroke: 0.5px rgb(177, 170, 170); /* Adds a grey border to the text */
+  }
+
+
+}
+
+@media (max-width: 590px){
+  .LoginCard {
+    width: 100%;
+    max-width: 600px;
     padding: 15px;
     box-shadow: 0px 4px 15px 0px rgb(60, 59, 59);
   }
@@ -109,6 +230,10 @@
     margin-top: 5px;
     font-size: small;
   }
+  .lOGIN_bUTTON {
+    border: none;
+    width: 100%;
+  }
   .Sign_Up {
     font-size: medium;
   }
@@ -120,4 +245,5 @@
     text-shadow: 0px 0px 1px rgba(72, 71, 71, 0.5); /* Adds a text shadow */
     -webkit-text-stroke: 0.5px rgb(177, 170, 170); /* Adds a grey border to the text */
   }
+
 }

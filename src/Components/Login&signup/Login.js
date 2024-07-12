@@ -16,7 +16,7 @@ import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 
 import LoginImg from "../Images/signUp.jpg";
-import GoogleImg from "../Images/googleImg.png";
+import GoogleImg from "../Images/GoogleBlueImg.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -31,7 +31,7 @@ function Login() {
     PhoneNumber: yup
       .string()
       .matches(/^\d{10}$/, "Enter only 10 digits")
-      .required(),
+      .required("Phone Number is required"),
     Password: yup
       .string()
       .matches(/^[\w\d\W]{6}$/, "Enter only 8 digits")
@@ -125,26 +125,38 @@ function Login() {
     }
   }
 
-  const handleSignUP=()=>{
+  const handleSignUP = () => {
     navigate("/signup");
+  };
+
+  function handleGoogle() {
+    navigate("/GooogleForm");
+  }
+
+  function handleForgetPassword(){
+    navigate("/ForgetPassword");
   }
 
   return (
     <>
       <div className="Login_outer">
-       
-            <Navbar expand="lg" className="Login_Header">
-              <Container>
-                <Navbar.Brand href="#">POLLING BOOTH</Navbar.Brand>
-                <Navbar.Text>
-                <Button variant="info" onClick={handleSignUP}>Sign up</Button>{' '}
-                </Navbar.Text>
-              </Container>
-            </Navbar>
-     
-  
+        <Navbar expand="lg" className="Login_Header">
+          <Container>
+            <Navbar.Brand className="Login_nav_header">POLLING BOOTH</Navbar.Brand>
+            <Navbar.Text>
+              <button
+               
+             
+                onClick={handleSignUP}
+                className="Login_nav_button"
+              >
+                Sign up
+              </button>{" "}
+            </Navbar.Text>
+          </Container>
+        </Navbar>
 
-        <div >
+        <div>
           <Container>
             <Row>
               <Col xs={12} md={3} lg={3} xl={3}>
@@ -216,64 +228,69 @@ function Login() {
                               component="div"
                             />
                           </Form.Group>
-
-                          <Button
-                           variant="info"
-                            type="submit"
-                            className="lOGIN_bUTTON"
-                          >
-                            Login
-                          </Button>
-
-                          <hr style={{ color: "black" }} />
-
-                          <a
-                            href="/ForgetPassword"
-                            style={{
-                              color: "#777777",
-                              textDecoration: "none",
-                            }}
-                          >
-                            Forget Password
-                          </a>
-                          {/* <div className="OtherLogin">
-                            <center>
+                          <Row>
+                            <Col sm={4} md={4} lg={4} xl={4}></Col>
+                            <Col sm={4} md={4} lg={4} xl={4}>
                               <Button
-                                variant="light"
-                                className="  Google-Column"
+                                variant="info"
+                                type="submit"
+                                className="lOGIN_bUTTON"
                               >
-                                <img
-                                  src={GoogleImg}
-                                  alt="Google img"
-                                  className="GoogleImg "
-                                />
+                                Login
                               </Button>
-                            </center>
-                          </div> */}
-                          {/* <div>
-                            <p className="SignUp-text-center">
-                              Don't have an account?{" "}
-                              <Link
-                                to="/signup"
+                            </Col>
+                            <Col sm={4} md={4} lg={4} xl={4}></Col>
+                            {/* <Col sm={6} md={6} lg={6} xl={6}>
+                            
+                            </Col> */}
+                            <hr
+                              style={{
+                                color: "black",
+                                marginTop: "10px",
+                                width: "100%",
+                              }}
+                            />
+                            <Button className="text-center"
+                              variant="light"
+                              // className=" Google-Column"
+                              style={{
+                                backgroundColor: "white",
+                                border: "none",
+                              }}
+                              onClick={() => {
+                                handleGoogle();
+                              }}
+                            >
+                              <img
+                                src={GoogleImg}
+                                alt="Google img"
+                                className="GoogleImg"
+                              />
+                            </Button>
+                            <center>
+                            <div>
+                            <a
+                                onClick={handleForgetPassword}
                                 style={{
-                                  color: "Black",
+                                  color: "#777777",
                                   textDecoration: "none",
+                                  marginTop:'10px'
+                                  
                                 }}
-                                className="Sign_Up"
+                                
                               >
-                                Sign Up{" "}
-                              </Link>{" "}
-                            </p>
-                          </div> */}
+                                Forget Password ?
+                              </a>
+                            </div>
+                            </center>
+                          </Row>
                         </Form>
                       )}
                     </Formik>
                   </Card.Body>
                 </Card>
               </Col>
-              <Col xs={12} md={3} lg={3} xl={3}>
-                {/* <img className="LoginImages" src={LoginImg} alt="loginImage" /> */}
-              </Col>
+              <Col xs={12} md={3} lg={3} xl={3}></Col>
             </Row>
           </Container>
         </div>

@@ -1,19 +1,26 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import "./polling.css";
 
-import { Card, Col, Form, Row, Button, Stack, Badge } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Form,
+  Row,
+  Button,
+  Stack,
+  Badge,
+  Image,
+} from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
 import RangeOutput from "./RangeOutput";
 import { useLocation, useNavigate } from "react-router-dom";
 import PollEndingTime from "./Timing/PollEndingTime";
 import PollStartingTime from "./Timing/PollStartingTime";
-// import { userDetailsContext } from "./User/UserDetails";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { SearchContext } from "./Header";
-import Like from "./Tools/Like ";
-// import Comments, { CommentContext } from "./Tools/Comments";
-// import { TrendingPollContext } from "./Trending/Trending";
-
+import profile from "../Components/Images/Profile.jpeg";
+import Nullprofile from "../Components/Images/NullProfileImg.jpg";
 export const TimerContext = createContext();
 export const likeContext = createContext();
 
@@ -38,6 +45,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   let [userDetails, setUserDetails] = useState(false);
 
   const [likepoll, setLikepoll] = useState(false);
+  const [likedPolls, setLikedPolls] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const [pollEndTime, setpollEndtime] = useState(true);
 
@@ -236,6 +246,31 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
     console.log(id);
   };
 
+  //like
+  const handleLikeButton = async (pollId) => {
+    console.log(pollId);
+    // if (isLoading) return;
+    // setIsLoading(true);
+    // console.log(pollId)
+
+    try {
+      const response = await axios.post(
+        "http://49.204.232.254:84/polls/likeonpoll",
+        {
+          poll_id: pollId,
+          user_id: UserId,
+        }
+      );
+      console.log(response.data);
+      setLikepoll(!likepoll);
+      if (response.status === 200) {
+        setLikedPolls((prevLiked) => !prevLiked);
+      }
+    } catch (err) {
+      console.error("Error in liking poll", err);
+    }
+  };
+
   return (
     <TimerContext.Provider value={{ timer, setTimer }}>
       <div>
@@ -251,32 +286,78 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                 fetchData.map((apiData) => (
                   <div key={apiData._id}>
                     <Card className="card">
-                      <div>
-                        <Card.Link
-                          onClick={() => handleUser(apiData.createdBy._id)}
-                          style={{ fontSize: 20 }}
-                        >
-                          {apiData.createdBy?.user_name}
-                        </Card.Link>
-                      </div>
-                      <h6>
-                        {apiData.title}{" "}
-                        <span>
-                          <PollStartingTime createdTime={apiData.createdAt} />
-                        </span>
-                      </h6>
+                      <Card.Header>
+                        <Row>
+                          <Col sm={6} md={6} lg={6} xl={6}>
+                            <Row>
+                              <Col sm={9} md={3} lg={3} xl={3}>
+                                <div className="ImageFrame">
+                                  <Image
+                                    // src={apiData.createdBy.user_profile}
+                                    src={profile}
+                                    roundedCircle
+                                    style={{ width: "60px", height: "60px" }}
+                                    alt={Nullprofile}
+                                  />
+                                </div>
+                              </Col>
+                              <Col sm={3} md={9} lg={9} xl={9}>
+                                <Card.Link
+                                  onClick={() =>
+                                    handleUser(apiData.createdBy._id)
+                                  }
+                                  style={{
+                                    fontSize: "100%",
+                                    textDecoration: "none",
+                                  }}
+                                >
+                                  {apiData.createdBy?.user_name}
+                                </Card.Link>
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col sm={0} md={2} lg={2} xl={2}></Col>
+                          <Col sm={6} md={4} lg={4} xl={4}>
+                            <ul>
+                              <li>
+                                <b>Title :</b> {apiData.title}{" "}
+                              </li>
+                              <li>
+                                <PollStartingTime
+                                  createdTime={apiData.createdAt}
+                                />
+                              </li>
+                            </ul>
+                          </Col>
+                        </Row>
+                      </Card.Header>
                       <Card.Body
                       // className={`polling
                       //   ${votedPollIds.includes(apiData._id) ? "polling-range" : ""}`}
                       >
-                        <Card.Title>{apiData.question}</Card.Title>
-                        <Stack direction="horizontal" gap={2}>
-                          <Button onClick={handleCatergory(apiData.category._id)}>
-                            
-                              {apiData.category[0]?.category_name}
-                           
-                          </Button>
-                        </Stack>
+                        <Row>
+                          <Col sm={9} md={9} lg={9} xl={9}>
+                            <Card.Title>{apiData.question}</Card.Title>
+                          </Col>
+                          <Col sm={3} md={3} lg={3} xl={3}>
+                            <div>
+                              <Button
+                                onClick={handleCatergory(apiData.category._id)}
+                                variant="info"
+                                className="Category_Name"
+                                style={{
+                                  fontSize: "75%",
+                                  textDecoration: "none",
+                                  color: "black",
+                                }}
+                              >
+                                {apiData.category[0]?.category_name}
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+
+                        <Stack direction="horizontal" gap={2}></Stack>
                         {votedPollIds.includes(apiData._id) ? (
                           <RangeOutput
                             pollId={apiData._id}
@@ -322,47 +403,66 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                                     />
                                   </Card.Title>
                                 ))}
-                                {apiData._id === pollId &&
-                                  timer &&
-                                  (
-                                    <Button
-                                      type="submit"
-                                      style={{
-                                        margin: 10,
-                                        backgroundColor: "grey",
-                                      }}
-                                    >
-                                      Vote
-                                    </Button>
-                                  )}
+                                {apiData._id === pollId && timer && (
+                                  <Button
+                                    type="submit"
+                                    style={{
+                                      margin: 10,
+                                      backgroundColor: "grey",
+                                    }}
+                                  >
+                                    Vote
+                                  </Button>
+                                )}
                               </Form>
                               {/* <hr /> */}
                             </Card.Body>
                           </Card>
                         )}
-                      </Card.Body>
-                      <Row>
-                        <Col sm={3}>
-                          <div>
-                            <Like
+                        <Row>
+                          <Col sm={3} md={3} lg={3} xl={3}>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  handleLikeButton(apiData._id);
+                                }}
+                                style={{
+                                  backgroundColor: "inherit",
+                                  border: "none",
+                                }}
+                              >
+                                {likedPolls && isError ? (
+                                  <FaHeart
+                                    style={{ color: "red", fontSize: "24px" }}
+                                  />
+                                ) : (
+                                  <FaRegHeart
+                                    style={{ color: "black", fontSize: "24px" }}
+                                  />
+                                )}
+                                Like
+                              </Button>
+                              {/* <Like
                               pollId={apiData._id}
                               setLikepoll={setLikepoll}
                               likepoll={likepoll}
-                            />
-                            {apiData.likers.length} Like
-                          </div>
-                        </Col>
-                        <Col sm={3}>
-                          <Button
-                            variant="primary"
-                            onClick={() => handlePoll(apiData._id)}
-                          >
-                            Comments
-                          </Button>
-                        </Col>
-                      </Row>
+                            /> */}
+                              {/* {apiData.likers.length} Like */}
+                            </div>
+                          </Col>
+                          <Col sm={3} md={3} lg={3} xl={3}>
+                            <Button
+                              variant="primary"
+                              onClick={() => handlePoll(apiData._id)}
+                            >
+                              Comments
+                            </Button>
+                          </Col>
+                          <Col sm={3} md={3} lg={3} xl={3}></Col>
+                        </Row>
+                      </Card.Body>
                     </Card>
-                    <hr/>
+                    <hr />
                   </div>
                 ))
               )}

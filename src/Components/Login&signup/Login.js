@@ -34,7 +34,7 @@ function Login() {
       .required("Phone Number is required"),
     Password: yup
       .string()
-      .matches(/^[\w\d\W]{6}$/, "Enter only 8 digits")
+      .matches(/^[\w\d\W]{6}$/, "Enter only 6 digits")
       .required("Password is required"),
   });
 
@@ -95,9 +95,9 @@ function Login() {
         sessionStorage.setItem("Id", response.data.user._id);
 
         console.log("Signed in successfully");
-        setTimeout(() => {
+        
           navigate("/polling");
-        }, 1000);
+        
       }
     } catch (err) {
       console.error("Error Occurred:", err);
@@ -191,7 +191,7 @@ function Login() {
                             </Form.Label>
                             <Form.Control
                               type="text"
-                              placeholder="+91-0987654123"
+                              placeholder="+91-9876543210"
                               required
                               name="PhoneNumber"
                               value={formData.PhoneNumber}
@@ -232,7 +232,7 @@ function Login() {
                             <Col sm={4} md={4} lg={4} xl={4}></Col>
                             <Col sm={4} md={4} lg={4} xl={4}>
                               <Button
-                                variant="info"
+                                
                                 type="submit"
                                 className="lOGIN_bUTTON"
                               >

@@ -22,8 +22,9 @@ function Header() {
   return (
     <SearchContext.Provider value={{ searchData }}>
       <Row xs={12} md={12} lg={12} xl={12} className="fixed-top" id="searchBar">
-        <Col>
-          <Navbar expand="lg" className="Header">
+        <Col className="Header"
+        >
+          <Navbar expand="lg" >
             <Container>
               <Navbar.Text
                 href="/polling"
@@ -31,7 +32,7 @@ function Header() {
                 style={{color:"White"}}
                 
               >
-                GT POLL
+                Polling Booth
               </Navbar.Text>
               <Form inline>
                 <Row>
@@ -51,12 +52,13 @@ function Header() {
               </Form>
               <Navbar.Text
                 onClick={() => handleClick("/polling")}
-                style={{ fontSize: 20,color:"white" }}
+                style={{ fontSize: 25,color:"white" }}
                 className="Header-Title "
                 
               >
                 Hello !! {capitalizeFirstLetter(user)}
               </Navbar.Text>
+              
             </Container>
           </Navbar>
         </Col>

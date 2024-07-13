@@ -12,23 +12,26 @@ function Home({ children, showTrending = true }) {
       <Row>
         <Container fluid >
           <Row >
-            <Col xs={12} md={12} lg={12} xl={12}>
+            <Col xs={12} md={12} lg={12} xl={12} className="Body_header">
               <Header />
+             
             </Col>
           </Row>
           <Row>
-            <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
+            <Col sm={12} md={3} lg={3} xl={3} className="Body_Navbar"  >
               <SideNavBar />
             </Col>
-            <Col xs={12} md={6} lg={6} xl={6} className="Home-Body">
+           
+            <Col sm={12} md={6} lg={6} xl={6} className="Home-Body">
               {children}
             </Col>
             {/* {showTrending && (
-              <Col xs={12} md={3} lg={3} xl={3} className="Home-SideNavbar">
+              <Col xs={12} md={2} lg={2} xl={2} className="Home-SideNavbar">
                 <Trending />
               </Col>
             )} */}
-             <Col xs={12} md={3} lg={3} xl={3} >
+          
+             <Col sm={12} md={3} lg={3} xl={3} >
                 <Trending />
               </Col>
           </Row>

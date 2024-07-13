@@ -212,7 +212,7 @@ function MobileNum() {
                           <Col sm={9}>
                             <Form.Control
                               type="text"
-                              placeholder="Enter Your Mobile Number"
+                              placeholder="+91-9876543210"
                               name="PhoneNumber"
                                className="Login_input"
                               value={formData.PhoneNumber}

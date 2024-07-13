@@ -1,51 +1,46 @@
-// Import necessary dependencies
 import React, { useState } from "react";
-import { Button, Col, Offcanvas, Row } from "react-bootstrap";
+import { Button, Col, Form, Nav, Navbar, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import "./SideNavBar.css";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import { Link, useNavigate } from "react-router-dom";
-
 import { BsArrowBarRight } from "react-icons/bs";
-// import RangeOutput from "./RangeOutput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faList,
+  faPlus,
+  faCheck,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
+import "./SideNavBar.css";
 
-// Define the NavBar component
 function NavBar() {
-  // State for showing/hiding the Offcanvas menu
   const [show, setShow] = useState(false);
+  const [searchData, setSearchData] = useState("");
+  const user = sessionStorage.getItem("Users_Name") || "Guest";
+  const userPhoneNUmber = sessionStorage.getItem("Users_PhoneNumber");
+  const userID = sessionStorage.getItem("Id");
+  const [showSearchBar, SetShowSearchBar] = useState(false);
+  const navigate = useNavigate();
 
-  // Function to close the Offcanvas menu
-  const handleClose = () => {
-    setShow(false);
+  const capitalizeFirstLetter = (string) => {
+    return string ? string.charAt(0).toUpperCase() + string.slice(1) : "";
   };
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  // Function to open the Offcanvas menu
-  const handleShow = () => {
-    setShow(true);
-  };
-
-
-  // React Router's navigate function
-  let navigate = useNavigate();
-
-
-  // Function to handle navigation and close menu
-  function handleClick(input) {
+  const handleClick = (input) => {
     navigate(input);
     handleClose();
-  }
+  };
 
+  const handleUser = () => {
+    navigate("/UserDetails", {
+      state: { userPhoneNUmber, userID },
+    });
+  };
 
-  const userPhoneNUmber = sessionStorage.getItem("Users_PhoneNumber");
-
-  const userID = sessionStorage.getItem("Id");
-  // console.log(userID)
-
-  // Function to handle sign-out
-  function handleSignOut() {
+  const handleSignOut = () => {
     sessionStorage.clear();
     sessionStorage.removeItem("MobileNUmber ");
     const Toast = Swal.mixin({
@@ -61,144 +56,252 @@ function NavBar() {
     });
     Toast.fire({
       icon: "error",
-      title: "Log out  successfully",
+      title: "Logged out successfully",
     });
     setTimeout(() => {
       navigate("/");
     }, 1000);
-  }
+  };
 
-  function handleUser() {
-    navigate("/UserDetails", {
-      state: { userPhoneNUmber: userPhoneNUmber, userID: userID },
-    });
-  }
+  const handleSearch = () => {
+    SetShowSearchBar(!showSearchBar);
+  };
 
   return (
     <>
+      {/* Desktop view */}
       <Row>
         <Col>
-          <div className="sidebar">
-            <Container className="Headers">
+          <div className="sidebar" id="desktop_view">
+            <Container>
               <Navbar expand="lg">
                 <Row>
-                  <Col md={12} sm={12} xl={12} lg={12} className="p-0">
-                    <Nav defaultActiveKey="/home" className="flex-column ">
-                      <div>
+                  <Col md={12} sm={12} xl={12} lg={12}>
+                    <Nav defaultActiveKey="/polling">
+                      <div className="Nav_Links-Bar">
                         <Nav.Link
-                          className="Nav-Links"
+                          className="Navbar-Links"
                           onClick={() => handleClick("/polling")}
                         >
+                          <FontAwesomeIcon
+                            icon={faList}
+                            className="Navbar_icon"
+                          />{" "}
                           Poll List
                         </Nav.Link>
-
                         <Nav.Link
-                          className="Nav-Links"
+                          className="Navbar-Links"
                           onClick={() => handleClick("/AddPoll")}
                         >
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            className="Navbar_icon"
+                          />{" "}
                           Add Poll
                         </Nav.Link>
                         <Nav.Link
-                          className="Nav-Links"
+                          className="Navbar-Links"
                           onClick={() => handleClick("/VotedLIst")}
                         >
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className="Navbar_icon"
+                          />{" "}
                           Voted Polls
                         </Nav.Link>
-                      </div>
-                    </Nav>
-                  </Col>
-                </Row>
-              </Navbar>
-              <hr style={{ color: "grey", width: "50vh" }} />
-              <Navbar id="desktop_view" expand="lg" className="p-0">
-                <Row className="w-100 m-0">
-                  <Col md={12} sm={12} className="p-0">
-                    <Nav defaultActiveKey="/home" className="flex-column ">
-                      <div>
-                        <Nav.Link onClick={handleUser} className="Nav-Links">
+                        <Nav.Link className="Navbar-Links" onClick={handleUser}>
+                          <FontAwesomeIcon
+                            icon={faUser}
+                            className="Navbar_icon"
+                          />{" "}
                           User Details
                         </Nav.Link>
                       </div>
-                      <b></b>
                     </Nav>
                   </Col>
                 </Row>
               </Navbar>
-
+              <hr style={{ color: "grey" }} />
+              <Navbar expand="lg">
+                <Row>
+                  <Col md={12} sm={12} xl={12} lg={12}>
+                    Categories
+                    <Nav defaultActiveKey="/polling">
+                      <div className="Nav_Links-Bar">
+                        <button className="frozen-button">Test</button>
+                        <Nav.Link
+                          className="Navbar-Links"
+                          onClick={() => handleClick("/polling")}
+                        >
+                          <FontAwesomeIcon
+                            icon={faList}
+                            className="Navbar_icon"
+                          />{" "}
+                          Poll List
+                        </Nav.Link>
+                        <Nav.Link
+                          className="Navbar-Links"
+                          onClick={() => handleClick("/AddPoll")}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            className="Navbar_icon"
+                          />{" "}
+                          Add Poll
+                        </Nav.Link>
+                        <Nav.Link
+                          className="Navbar-Links"
+                          onClick={() => handleClick("/VotedLIst")}
+                        >
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className="Navbar_icon"
+                          />{" "}
+                          Voted Polls
+                        </Nav.Link>
+                        <Nav.Link className="Navbar-Links" onClick={handleUser}>
+                          <FontAwesomeIcon
+                            icon={faUser}
+                            className="Navbar_icon"
+                          />{" "}
+                          User Details
+                        </Nav.Link>
+                      </div>
+                    </Nav>
+                  </Col>
+                </Row>
+              </Navbar>
               <Button
                 onClick={handleSignOut}
-                className="signOut "
-                style={{ backgroundColor: "#FF4500", border: "none" }}
+                className="signOut"
+                style={{ backgroundColor: "rgb(55, 115, 116)", border: "none" }}
               >
                 <Row>
                   <Col md={8}> Sign Out </Col>
                   <Col md={2}>
                     <BsArrowBarRight />
                   </Col>
-
                   <Col md={2}></Col>
                 </Row>
               </Button>
             </Container>
           </div>
-
-          <Navbar expand="lg" className="bg-body-tertiary " id="Mobile_view">
-            <Container>
-              <Navbar.Brand className="NavbarTitle" style={{ color: "#FF4500",fontSize:"200%" }}>GT Poll</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                  <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/polling")}
-                  >
-                    Poll List
-                  </Nav.Link>
-                  <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/AddPoll")}
-                  >
-                    Add Poll
-                  </Nav.Link>
-
-                  <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/VotedLIst")}
-                  >
-                    Voted Polls
-                  </Nav.Link>
-                  <Nav.Link
-                    className="Nav-Links"
-                    onClick={() => handleClick("/SearchingPoll")}
-                  >
-                    Search A poll
-                  </Nav.Link>
-                  <Nav.Link onClick={handleUser} className="Nav-Links">
-                    User Details
-                  </Nav.Link>
-                  {/* Sign-out button */}
-                  <Nav.Link
-                    onClick={handleSignOut}
-                    style={{
-                      paddingLeft: 20,
-                      backgroundColor: "#FF895D",
-                      width: 100,
-                      height: "auto",
-                    }}
-                    className="d-flex align-items-end "
-                  >
-                    Sign Out
-                  </Nav.Link>
-                </Nav>
-              </Navbar.Collapse>
-             
-            </Container>
-          </Navbar>
         </Col>
       </Row>
+
+      {/* Mobile view */}
+
+      <div className="Mobile_view_place_fixed">
+        <Row>
+          <Col>
+            <Navbar expand="xl" id="Mobile_view">
+              <Container className="Mobile_view_Navbar">
+                <Navbar.Brand
+                  href="/polling"
+                  style={{
+                    color: "#c5ebf2",
+                    fontSize: "30px",
+                    fontWeight: "250px",
+                  }}
+                >
+                  Polling Booth
+                </Navbar.Brand>
+                <Navbar.Toggle />
+
+                <Navbar.Collapse>
+                  <div className="Mobile_Nav_links">
+                    <Navbar.Text
+                      onClick={() => handleClick("/polling")}
+                      style={{ fontSize: 20, color: "white" }}
+                    >
+                      Hello, {capitalizeFirstLetter(user)}
+                    </Navbar.Text>
+
+                    <Nav className="me-auto">
+                      <Nav.Link
+                        className="Nav-Links"
+                        onClick={() => handleSearch()}
+                        style={{ color: "white", fontSize: "15px" }}
+                      >
+                        Search A poll
+                      </Nav.Link>
+                      {showSearchBar && (
+                        <Form.Control
+                          type="text"
+                          placeholder="Search"
+                          className="search-Bar"
+                          aria-label="Search Bar"
+                          value={searchData}
+                          onChange={(e) => setSearchData(e.target.value)}
+                        />
+                      )}
+                      <Nav.Link
+                        className="Mobile_Nav-Links"
+                        onClick={() => handleClick("/polling")}
+                        style={{ color: "white", fontSize: "15px" }}
+                      >
+                        Poll List{" "}
+                        <FontAwesomeIcon
+                          icon={faList}
+                          className="Navbar_icon"
+                        />
+                      </Nav.Link>
+                      <Nav.Link
+                        className="Nav-Links"
+                        onClick={() => handleClick("/AddPoll")}
+                        style={{ color: "white", fontSize: "15px" }}
+                      >
+                        Add Poll{" "}
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          className="Navbar_icon"
+                        />
+                      </Nav.Link>
+                      <Nav.Link
+                        className="Nav-Links"
+                        onClick={() => handleClick("/VotedLIst")}
+                        style={{ color: "white", fontSize: "15px" }}
+                      >
+                        Voted Polls{" "}
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          className="Navbar_icon"
+                        />{" "}
+                      </Nav.Link>
+
+                      <Nav.Link
+                        onClick={handleUser}
+                        style={{ color: "white", fontSize: "15px" }}
+                        className="Nav-Links"
+                      >
+                        User Details
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          className="Navbar_icon"
+                        />{" "}
+                      </Nav.Link>
+                      <Nav.Link
+                        onClick={handleSignOut}
+                        style={{
+                          paddingLeft: 20,
+                          backgroundColor: "white",
+                          width: 100,
+                          height: "auto",
+                          borderRadius: "20px",
+                        }}
+                      >
+                        Sign Out
+                      </Nav.Link>
+                    </Nav>
+                  </div>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 }
 
-// Export the NavBar component
 export default NavBar;

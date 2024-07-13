@@ -111,6 +111,10 @@ function NewPassword() {
                             values.newPassword.length !== 6
                           }
                         />
+                        <p style={{ color: "Grey" }} className="pasword_imp">
+                            {" "}
+                            Password must be 6 digits
+                          </p>
                         <ErrorMessage
                           name="newPassword"
                           component="div"
@@ -140,6 +144,10 @@ function NewPassword() {
                             values.confirmPassword !== values.newPassword
                           }
                         />
+                        <p style={{ color: "Grey" }} className="pasword_imp">
+                            {" "}
+                            Password must be 6 digits
+                          </p>
                         <ErrorMessage
                           name="confirmPassword"
                           component="div"

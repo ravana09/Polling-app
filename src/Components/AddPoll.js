@@ -303,7 +303,7 @@ function AddPoll() {
   return (
     <Container fluid>
       <Row className="AddPoll-Cointainer">
-        <Col className="AddPoll-Body">
+        {/* <Col className="AddPoll-Body">
           <Row>
             <Col>
               <Nav
@@ -313,7 +313,7 @@ function AddPoll() {
               >
                 <Nav.Item>
                   <Nav.Link eventKey="poll" className="AddPoll-Navbar">
-                    poll
+                   
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -338,10 +338,11 @@ function AddPoll() {
               </Nav>
             </Col>
           </Row>
-          <Row>
+          
+        </Col> */}
+        <Row>
             <Col>{renderContent()}</Col>
           </Row>
-        </Col>
         <Col xs={12} md={3}>
           {/* Add additional content or components here if needed */}
         </Col>

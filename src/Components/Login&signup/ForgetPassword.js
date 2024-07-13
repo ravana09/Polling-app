@@ -192,7 +192,7 @@ function ForgetPassword() {
                           <Col sm={12} md={9} lg={9} xl={9}>
                             <Form.Control
                               type="text"
-                              placeholder="+91-0987654123"
+                              placeholder="+91-9876543210"
                               name="PhoneNumber"
                               className="Login_input"
                               value={formData.PhoneNumber}

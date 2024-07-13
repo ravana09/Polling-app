@@ -2,8 +2,38 @@
   position: fixed;
   top: 80px;
   height: 100vh;
+  width: 100%;
+  max-width: 370px;
+  background-color: rgb(221, 231, 233);
   
 }
+
+.Trending_poll_nameBag{
+
+    font-size: 2rem; /* Adjust the font size */
+    color: #066b87; /* Dark gray color */
+    margin-bottom: 20px; /* Space below the heading */
+    font-weight: bold; /* Bold text */
+    letter-spacing: 0.5px; /* Space between letters */
+    border-bottom: 2px solid #343a40; /* Bottom border */
+    padding-bottom: 10px; /* Padding below the text */
+    position: relative;
+    right: 50;
+  
+}
+
+.Trending_Card{
+  
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.Trending_Card:hover{
+  border-radius: 20px;
+  transform: scale(1.10);
+  background-color:rgb(149, 208, 210);
+
+}
+
 
 @media (max-width: 768px) {
   .TrendingContainer {

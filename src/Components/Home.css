@@ -1,19 +1,27 @@
 .Home-Body{
     position: relative;
-    top: 70px;
-    background-color: #FAFAFB;
+    top: 90px;
 }
 @media (max-width: 768px) {
     .Home-Body{
         position: relative;
-       top: 0vh;
+        top: 80px;
     }
+    .Body_header{
+        display: none;
+    }
+    
+    
 }
     
     @media (max-width: 576px) {
         .Home-Body{
             position: relative;
+            top: 80px;
           
+        }
+        .Body_header{
+            display: none;
         }
     }
     

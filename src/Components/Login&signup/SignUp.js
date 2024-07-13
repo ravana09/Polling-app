@@ -13,7 +13,6 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, ErrorMessage } from "formik";
 import signUpimg from "../Images/signupCard.jpg";
-import GoogleImg from "../Images/googleImg.png";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { PiGenderMale } from "react-icons/pi";
@@ -76,7 +75,7 @@ function SignUp() {
       .required("Email is required"),
     Password: yup
       .string()
-      .max(6, "Password must be at most 6 characters")
+      .min(6, "Password must be at most 6 characters")
       .required("Password is required"),
     ConfirmPassword: yup
       .string()

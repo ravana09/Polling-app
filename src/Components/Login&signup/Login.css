@@ -100,6 +100,8 @@
 }
 
 .lOGIN_bUTTON {
+  background-color: cadetblue;
+  color: white;
   border: none;
   width: 100%;
 }

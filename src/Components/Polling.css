@@ -7,8 +7,9 @@
 
 .pollingBody {
   width: 100%;
-  max-width: 1000px;
+  max-width: 800px;
   border-radius: 20px;
+  
 
 }
 
@@ -54,6 +55,7 @@ ul li::before {
   background-color: #fafafb;
   border-radius:20px ;
   margin-bottom: 20px;
+  margin: 0px 20px 0px 80px;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
 }
 

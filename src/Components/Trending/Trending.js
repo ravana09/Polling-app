@@ -3,21 +3,20 @@ import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import axios from "axios";
 import "./Trending.css";
 import { useNavigate } from "react-router-dom";
-import { FaThumbsUp, FaVoteYea } from 'react-icons/fa';
+import { FaThumbsUp, FaVoteYea } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function Trending() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
- 
+
   let navigate = useNavigate();
 
   // Fetch top 3 trending polls
   useEffect(() => {
     handleTopThree();
-  },[]);
+  }, []);
 
   async function handleTopThree() {
     try {
@@ -45,16 +44,14 @@ function Trending() {
         className="TrendingContainer"
         id="trending_Bar"
       >
-      
-      <h1 className="Trending_poll_nameBag" >Trending Polls</h1>
-      {/* <Button variant="primary" onClick={handleTopThree}>
+        <h1 className="Trending_poll_nameBag">Trending Polls</h1>
+        {/* <Button variant="primary" onClick={handleTopThree}>
             {loading ? "Close the Card" : "Show Top 3 Trending Polls"}
           </Button> */}
         {data.map((apidata, index) => (
-       
           <Card
             key={index}
-            style={{ width: "20rem" }}
+            style={{ width: "20rem",margin:"0px" ,marginBottom:"20px"}}
             className="Trending_Card"
             onClick={() => handleNavigate(apidata)}
           >
@@ -63,12 +60,13 @@ function Trending() {
               <Card.Text>
                 {/*  */}
                 <ListGroup variant="flush">
-                <ListGroup.Item>
-        <FaVoteYea className="icon" /> Total Votes: {apidata.totalVotes}
-      </ListGroup.Item>
-      <ListGroup.Item>
-      <FcLike /> Total Likes: {apidata.totalLikes}
-      </ListGroup.Item>
+                  <ListGroup.Item>
+                    <FaVoteYea className="icon" /> Total Votes:{" "}
+                    {apidata.totalVotes}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <FcLike /> Total Likes: {apidata.totalLikes}
+                  </ListGroup.Item>
                 </ListGroup>
                 {/* <Button onClick={() => handleNavigate(apidata._id)}>
                   Get to the Poll
@@ -76,7 +74,6 @@ function Trending() {
               </Card.Text>
             </Card.Body>
           </Card>
-      
         ))}
       </Col>
     </Row>
@@ -84,4 +81,3 @@ function Trending() {
 }
 
 export default Trending;
-

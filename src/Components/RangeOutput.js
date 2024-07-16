@@ -50,7 +50,9 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
       <Row>
         <div>
           <Col md={12} sm={12}>
-            <Card className="rangeInnerCard">
+            <Card className="rangeInnerCard" style={{
+              width:"100%",maxWidth:"650px"
+            }}>
               <Card.Header className="cardHeader">
                 <Row>
                   <Col sm={4} md={4} lg={4} xl={4}>
@@ -82,11 +84,12 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
                           <div
                             className="Range-Colour"
                             style={{
-                              width: `${percentage}%`,
+                              width: `${percentage}%`,     
                               backgroundColor:
                                 option.count === maxVotes
-                                  ? "#FF895D"
+                                  ? "rgb(71, 153, 153)"
                                   : "#B7CAD4",
+                              
                             }}
                           ></div>
                           <div>

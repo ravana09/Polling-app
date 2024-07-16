@@ -51,7 +51,7 @@ function Trending() {
         {data.map((apidata, index) => (
           <Card
             key={index}
-            style={{ width: "20rem",margin:"0px" ,marginBottom:"20px"}}
+            style={{ width: "20rem",margin:"0px 0px 20px 10px" }}
             className="Trending_Card"
             onClick={() => handleNavigate(apidata)}
           >

@@ -10,6 +10,7 @@ import {
   Stack,
   Badge,
   Image,
+  ListGroup,
 } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -196,7 +197,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
         }
       );
       setFetchData([response.data]);
-      console.log(response.data);
+      // console.log(response.data);
       setLoading(false);
     } catch (err) {
       console.log("Error fetching poll details:", err);
@@ -261,7 +262,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
           user_id: UserId,
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setLikepoll(!likepoll);
       if (response.status === 200) {
         setLikedPolls((prevLiked) => !prevLiked);
@@ -269,6 +270,11 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
     } catch (err) {
       console.error("Error in liking poll", err);
     }
+  };
+
+  //follow user
+  const handleFollow = (Followid) => {
+    console.log(Followid, "follow user");
   };
 
   return (
@@ -285,7 +291,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
               ) : (
                 fetchData.map((apiData) => (
                   <div key={apiData._id}>
-                    <Card className="card">
+                    <Card className="poll_card">
                       <Card.Header>
                         <Row>
                           <Col sm={6} md={6} lg={6} xl={6}>
@@ -293,48 +299,62 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                               <Col sm={9} md={3} lg={3} xl={3}>
                                 <div className="ImageFrame">
                                   <Image
-                                    // src={apiData.createdBy.user_profile}
-                                    src={profile}
+                                    src={
+                                      apiData.createdBy.user_profile
+                                        ? `http://49.204.232.254:84/${apiData.createdBy.user_profile}`
+                                        : Nullprofile
+                                    }
+                                    // src={profile}
                                     roundedCircle
-                                    style={{ width: "60px", height: "60px" }}
-                                    alt={Nullprofile}
+                                    style={{ width: "80px", height: "80px" }}
+                                    alt="profile picture"
                                   />
                                 </div>
                               </Col>
                               <Col sm={3} md={9} lg={9} xl={9}>
-                                <Card.Link
-                                  onClick={() =>
-                                    handleUser(apiData.createdBy._id)
-                                  }
-                                  style={{
-                                    fontSize: "100%",
-                                    textDecoration: "none",
-                                  }}
-                                >
-                                  {apiData.createdBy?.user_name}
-                                </Card.Link>
+                                <div style={{ marginTop: "15px" }}>
+                                  <div>
+                                    <Card.Link
+                                      onClick={() =>
+                                        handleUser(apiData.createdBy._id)
+                                      }
+                                      className="POll_user_name"
+                                    >
+                                      {apiData.createdBy?.user_name}
+                                    </Card.Link>
+                                  </div>
+                                  <div>
+                                    <PollStartingTime
+                                      createdTime={apiData.createdAt}
+                                    />
+                                  </div>
+                                </div>
                               </Col>
                             </Row>
                           </Col>
                           <Col sm={0} md={2} lg={2} xl={2}></Col>
-                          <Col sm={6} md={4} lg={4} xl={4}>
-                            <ul>
-                              <li>
-                                <b>Title :</b> {apiData.title}{" "}
-                              </li>
-                              <li>
-                                <PollStartingTime
-                                  createdTime={apiData.createdAt}
-                                />
-                              </li>
-                            </ul>
+                          <Col sm={0} md={2} lg={2} xl={2}>
+                            <div style={{ marginTop: "15px" }}>
+                              <div>{`Title:   ${apiData.title}`}</div>
+                              <div>Status:{apiData.status}</div>
+                            </div>
+                          </Col>
+                          <Col sm={0} md={2} lg={2} xl={2}>
+                            <div style={{ marginTop: "15px" }}>
+                              <div>
+                                <Button
+                                  onClick={() => {
+                                    handleFollow(apiData.createdBy._id);
+                                  }}
+                                >
+                                  Follow
+                                </Button>
+                              </div>
+                            </div>
                           </Col>
                         </Row>
                       </Card.Header>
-                      <Card.Body
-                      // className={`polling
-                      //   ${votedPollIds.includes(apiData._id) ? "polling-range" : ""}`}
-                      >
+                      <Card.Body>
                         <Row>
                           <Col sm={9} md={9} lg={9} xl={9}>
                             <Card.Title>{apiData.question}</Card.Title>
@@ -376,7 +396,6 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                                   <PollEndingTime
                                     createdTime={apiData.created_date}
                                     endingTime={apiData.expirationTime}
-                                    // pollEndTime={pollEndTime}
                                     setpollEndtime={setpollEndtime}
                                   />
                                 </Col>
@@ -415,54 +434,64 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                                   </Button>
                                 )}
                               </Form>
-                              {/* <hr /> */}
                             </Card.Body>
+                           
                           </Card>
                         )}
-                        <Row>
-                          <Col sm={3} md={3} lg={3} xl={3}>
-                            <div>
-                              <Button
-                                onClick={() => {
-                                  handleLikeButton(apiData._id);
-                                }}
-                                style={{
-                                  backgroundColor: "inherit",
-                                  border: "none",
-                                }}
-                              >
-                                {likedPolls && isError ? (
-                                  <FaHeart
-                                    style={{ color: "red", fontSize: "24px" }}
-                                  />
-                                ) : (
-                                  <FaRegHeart
-                                    style={{ color: "black", fontSize: "24px" }}
-                                  />
-                                )}
-                                Like
-                              </Button>
-                              {/* <Like
+                         <div className="Tools-Bar" style={{borderTop:'2px solid red'}}>
+                              <Row>
+                                <Col sm={3} md={3} lg={3} xl={3}>
+                                  <div>
+                                    <Button
+                                      onClick={() => {
+                                        handleLikeButton(apiData._id);
+                                      }}
+                                      style={{
+                                        backgroundColor: "inherit",
+                                        border: "none",
+                                      }}
+                                    >
+                                      {likedPolls && isError ? (
+                                        <FaHeart
+                                          style={{
+                                            color: "red",
+                                            fontSize: "24px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <FaRegHeart
+                                          style={{
+                                            color: "black",
+                                            fontSize: "24px",
+                                          }}
+                                        />
+                                      )}
+                                      Like
+                                    </Button>
+                                    {/* <Like
                               pollId={apiData._id}
                               setLikepoll={setLikepoll}
                               likepoll={likepoll}
                             /> */}
-                              {/* {apiData.likers.length} Like */}
+                                    {/* {apiData.likers.length} Like */}
+                                  </div>
+                                </Col>
+                                <Col sm={3} md={3} lg={3} xl={3}>
+                                  <Button
+                                    variant="primary"
+                                    onClick={() => handlePoll(apiData._id)}
+                                  >
+                                    Comments
+                                  </Button>
+                                </Col>
+                                <Col sm={3} md={3} lg={3} xl={3}>
+                                  share
+                                </Col>
+                              </Row>
                             </div>
-                          </Col>
-                          <Col sm={3} md={3} lg={3} xl={3}>
-                            <Button
-                              variant="primary"
-                              onClick={() => handlePoll(apiData._id)}
-                            >
-                              Comments
-                            </Button>
-                          </Col>
-                          <Col sm={3} md={3} lg={3} xl={3}></Col>
-                        </Row>
                       </Card.Body>
                     </Card>
-                    <hr />
+                    <hr style={{ widows: "inherit" }} />
                   </div>
                 ))
               )}

@@ -285,7 +285,7 @@ function NavBar() {
 
                     <Nav className="me-auto">
                       <Nav.Link
-                        className="Nav-Links"
+                        className="Mobile_Nav-Links"
                         onClick={() => handleSearch()}
                         style={{ color: "white", fontSize: "15px" }}
                       >
@@ -313,7 +313,7 @@ function NavBar() {
                         /> */}
                       </Nav.Link>
                       <Nav.Link
-                        className="Nav-Links"
+                        className="Mobile_Nav-Links"
                         onClick={() => handleClick("/AddPoll")}
                         style={{ color: "white", fontSize: "15px" }}
                       >
@@ -324,7 +324,7 @@ function NavBar() {
                         /> */}
                       </Nav.Link>
                       <Nav.Link
-                        className="Nav-Links"
+                        className="Mobile_Nav-Links"
                         onClick={() => handleClick("/VotedLIst")}
                         style={{ color: "white", fontSize: "15px" }}
                       >
@@ -354,7 +354,7 @@ function NavBar() {
                         Categories
                       </Nav.Link>
                       <Card
-                        style={{ width: "15rem", borderRadius: "none",margin:"0px" ,marginBottom:'10px'}}
+                        style={{ width: "15rem", borderRadius: "none",margin:"0px" }}
                         className="Categrory_Card_Mobile"
                       >
                         {isVisible && (

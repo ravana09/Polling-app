@@ -104,7 +104,6 @@ box-shadow: 2px solid skyblue;
 }
 
 
-
 .Category_Name_Card{
   background-color: #DDE7E9;
 
@@ -158,17 +157,17 @@ box-shadow: 2px solid skyblue;
     top: 0;
     bottom: 0;
     width: 100%;
-    min-width: 100px;
+    /* max-width: 320px; */
     z-index: 1000;
   }
 
   .Mobile_view_Navbar {
     background-color: rgb(71, 153, 153);
-    padding: 10% 5% 2% 3%;
+    padding: 0% 5% 2% 5%;
   }
  
  .Mobile_Nav_links{
-  padding: 10px;
+  padding: 5px;
  }
 
   .Mobile_container {

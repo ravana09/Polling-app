@@ -438,7 +438,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                            
                           </Card>
                         )}
-                         <div className="Tools-Bar" style={{borderTop:'2px solid red'}}>
+                         <div className="Tools-Bar" >
                               <Row>
                                 <Col sm={3} md={3} lg={3} xl={3}>
                                   <div>

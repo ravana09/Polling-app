@@ -171,7 +171,7 @@ function AddPoll() {
       ))}
       <Row>
         <Col sm={6} md={5}>
-          <Button variant="secondary" className="AddButton" onClick={addOption}>
+          <Button variant="secondary" className="AddButton" onClick={addOption}  style={{ marginTop: "40px",backgroundColor:"cadetblue" }}>
             Add Option
           </Button>
         </Col>
@@ -195,11 +195,12 @@ function AddPoll() {
 
   const renderPollForm = () => (
     <Card className="AddPoll-PollsCard">
+      <Card.Body className="Addpoll_card_body">
       <Form onSubmit={createPoll}>
         <Form.Group className="mb-3" controlId="pollTitle">
           <Form.Control
             type="text"
-            placeholder="Enter Your Title"
+            placeholder="Title"
             name="title"
             value={data.title}
             onChange={handleChanges}
@@ -209,7 +210,7 @@ function AddPoll() {
         <Form.Group className="mb-3" controlId="pollQuestion">
           <Form.Control
             as="textarea"
-            placeholder="Enter poll question"
+            placeholder="Question"
             className="AddPoll-textArea"
             name="question"
             value={data.question}
@@ -272,6 +273,7 @@ function AddPoll() {
           </Col>
         </Row>
       </Form>
+      </Card.Body>
     </Card>
   );
 
@@ -303,48 +305,12 @@ function AddPoll() {
   return (
     <Container fluid>
       <Row className="AddPoll-Cointainer">
-        {/* <Col className="AddPoll-Body">
-          <Row>
-            <Col>
-              <Nav
-                variant="tabs"
-                defaultActiveKey="poll"
-                onSelect={(selectedKey) => setActiveTab(selectedKey)}
-              >
-                <Nav.Item>
-                  <Nav.Link eventKey="poll" className="AddPoll-Navbar">
-                   
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="link" disabled className="AddPoll-Navbar">
-   
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="post" disabled className="AddPoll-Navbar">
-          
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link
-                    eventKey="Image"
-                    disabled
-                    className="AddPoll-Navbar"
-                  >
-            
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            </Col>
-          </Row>
-          
-        </Col> */}
+       
         <Row>
             <Col>{renderContent()}</Col>
           </Row>
         <Col xs={12} md={3}>
-          {/* Add additional content or components here if needed */}
+         
         </Col>
       </Row>
     </Container>

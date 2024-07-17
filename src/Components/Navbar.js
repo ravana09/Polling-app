@@ -55,7 +55,7 @@ function NavBar() {
       console.log(err);
     }
   };
-  console.log(Pollcategories, "Categories from state");
+  // console.log(Pollcategories, "Categories from state");
   const handleClick = (input) => {
     navigate(input);
     // console.log(input, "category id");

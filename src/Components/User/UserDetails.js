@@ -7,6 +7,7 @@ import {
   Alert,
   Row,
   Col,
+  Button,
 } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -24,11 +25,16 @@ function UserDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showUserDetails, setShowUserDetails] = useState(false);
+  const [sendCommented, setSendCommented] = useState(false);
 
   let date = userDetails.joined_date;
   let date1 = new Date(date).toLocaleDateString();
 
-  console.log(date1);
+  let [sendPolls, setSendPolls] = useState(false);
+  let [sendLiked, setSendLiked] = useState(false);
+
+  //user ID
+  const loginUserID = sessionStorage.getItem("Id");
 
   const location = useLocation();
   const { userPhoneNUmber, userID } = location.state || {};
@@ -66,7 +72,7 @@ function UserDetails() {
   }, [userPhoneNUmber, userID]);
 
   useEffect(() => {
-    console.log("polldata changed:", polldata);
+    // console.log("polldata changed:", polldata);
   }, [polldata]);
 
   let userpolls;
@@ -82,12 +88,24 @@ function UserDetails() {
     setShowUserDetails(!showUserDetails);
   };
 
+  //UserDetailsCreatedPoll
+
+  const UserDetailsCreatedPoll = () => {
+    setSendPolls(!sendPolls);
+  };
+  const UserDetailsLikedPoll = () => {
+    setSendLiked(!sendLiked);
+    console.log("clikced like", sendLiked);
+  };
+  const UserDetailsCommentedPoll = () => {
+    setSendCommented(!sendCommented);
+  };
+
   return (
     <userDetailsContext.Provider
-      value={{ OtherUserID, userDeatilsPoll: true, userpolls }}
+    // value={{ OtherUserID, userDeatilsPoll: true, userpolls }}
     >
       <>
-        {/* <Container > */}
         {loading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -116,27 +134,36 @@ function UserDetails() {
                           <div className="userDetails_Details_Names">
                             <Row>
                               <Col sm={4} md={4} lg={4} xl={4}>
-                                <div>{userDetails.created_polls.length}</div>
-                                <div>post</div>
+                                <center>
+                                  <div>{userDetails.created_polls.length}</div>
+                                  <div>post</div>
+                                </center>
                               </Col>
                               <Col sm={4} md={4} lg={4} xl={4}>
-                                <div>{userDetails.user_followers.length}</div>
-                                <div>Followers</div>
+                                <center>
+                                  <div>{userDetails.user_followers.length}</div>
+                                  <div>Followers</div>
+                                </center>
                               </Col>
                               <Col sm={4} md={4} lg={4} xl={4}>
-                                <div>{userDetails.user_following.length}</div>
-                                <div>Following</div>
+                                <center>
+                                  {" "}
+                                  <div>{userDetails.user_following.length}</div>
+                                  <div>Following</div>
+                                </center>
                               </Col>
                             </Row>
                           </div>
                           <hr />
-                          <a href="#" onClick={handleUserInfo} style={{color:"white"}}>
-                            {showUserDetails
-                              ? "Hide  Details"
-                              : "User Details"}
+                          <a
+                            href="#"
+                            onClick={handleUserInfo}
+                            style={{ color: "white", textDecoration: "none" }}
+                          >
+                            {showUserDetails ? "Hide  Details" : "User Details"}
                           </a>
                           {showUserDetails && (
-                            <div >
+                            <div>
                               <div className="userDetails_Details_Names">
                                 <span className="label">Email:</span>{" "}
                                 {userDetails.email}
@@ -162,9 +189,7 @@ function UserDetails() {
                                   ? `http://49.204.232.254:84/${userDetails.user_profile}`
                                   : Nullprofile
                               }
-                              // src={`http://49.204.232.254:84/${userDetails.user_profile}`}
                               className="UserDetails_profile"
-                              // style={{height:"210px",width:"100%",objectFit:'cover'}}
                             />
                           </div>
                         </div>
@@ -224,9 +249,68 @@ function UserDetails() {
                 </Card>
               </Col>
             </Row>
-          </div>
-        )}
-        {/* </Container> */}
+          
+       
+        <div>
+        <div className="d-grid gap-2">
+          <Button
+            variant="info"
+            style={{ width: "90%", marginLeft: "55px" }}
+            onClick={UserDetailsCreatedPoll}
+          >
+            Created POlls
+          </Button>
+
+          {sendPolls ? (
+            <Polling
+              UserCrestedPolls={userDetails.created_polls}
+              UserID={userDetails.id}
+            />
+          ) : (
+            " "
+          )}
+        </div>
+        <div className="d-grid gap-2 mt-2">
+          {loginUserID === userID && (
+            <Button
+              variant="info"
+              style={{ width: "90%", marginLeft: "55px" }}
+              onClick={UserDetailsLikedPoll}
+            >
+              Liked Polls
+            </Button>
+          )}
+
+          {sendLiked ? (
+            <Polling
+              UserLikedPolls={userDetails.liked_polls}
+              UserID={userDetails.id}
+            />
+          ) : (
+            " "
+          )}
+        </div>
+        <div className="d-grid gap-2 mt-2">
+         {loginUserID === userID && <Button
+            variant="info"
+            style={{ width: "90%", marginLeft: "55px" }}
+            onClick={UserDetailsCommentedPoll}
+          >
+            Commented Polls
+          </Button>}
+
+          {sendCommented ? (
+            <Polling
+              UserCommendedPolls={userDetails.created_polls}
+              UserID={userDetails.id}
+            />
+          ) : (
+            " "
+          )}
+        </div>
+        </div>\
+        </div>
+         )}
       </>
     </userDetailsContext.Provider>
   );

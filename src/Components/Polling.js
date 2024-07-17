@@ -22,10 +22,16 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { SearchContext } from "./Header";
 import profile from "../Components/Images/Profile.jpeg";
 import Nullprofile from "../Components/Images/NullProfileImg.jpg";
+import { userDetailsContext } from "./User/UserDetails";
 export const TimerContext = createContext();
 export const likeContext = createContext();
 
-function Polling({ pollingState, userDeatilsPoll, UserID }) {
+function Polling({
+  UserCrestedPolls,
+  UserID,
+  UserLikedPolls,
+  UserCommendedPolls
+}) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [votedPollIds, setVotedPollIds] = useState(() => {
@@ -34,8 +40,9 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
   });
   const [pollId, setPollId] = useState("");
 
+
+
   const [searchingPoll, setSearchingPoll] = useState();
-  // const [searchResults, setSearchResults] = useState(null);
 
   const [voteCount, setVoteCount] = useState(0);
 
@@ -117,10 +124,20 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //fetching data
   useEffect(() => {
-    if (userDeatilsPoll) {
+    if (UserCrestedPolls && UserCrestedPolls.length > 0) {
       setLoading(false);
-      setFetchData(pollingState);
-      // console.log(pollingState,"pollid from user")
+      setFetchData(UserCrestedPolls);
+      console.log(UserCrestedPolls, "pollid from user");
+      UserVotedPolls();
+    } else if (UserLikedPolls && UserLikedPolls.length > 0) {
+      setLoading(false);
+      setFetchData(UserLikedPolls);
+      console.log(UserLikedPolls, "pollid from liked");
+      UserVotedPolls();
+    }else if (UserCommendedPolls && UserCommendedPolls.length > 0) {
+      setLoading(false);
+      setFetchData(UserCommendedPolls);
+      console.log(UserCommendedPolls, "pollid from Commanded");
       UserVotedPolls();
     } else if (data) {
       // console.log(data)
@@ -230,7 +247,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //Comments
   const handlePoll = (poll) => {
-    console.log(poll);
+    // console.log(poll);
 
     navigate("/Comments", { state: { pollID: poll } });
   };
@@ -244,12 +261,12 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //category
   const handleCatergory = (id) => {
-    console.log(id);
+    // console.log(id);
   };
 
   //like
   const handleLikeButton = async (pollId) => {
-    console.log(pollId);
+    // console.log(pollId);
     // if (isLoading) return;
     // setIsLoading(true);
     // console.log(pollId)
@@ -274,7 +291,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
 
   //follow user
   const handleFollow = (Followid) => {
-    console.log(Followid, "follow user");
+    // console.log(Followid, "follow user");
   };
 
   return (
@@ -355,7 +372,7 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                         </Row>
                       </Card.Header>
                       <Card.Body>
-                        <Row>
+                        <Row className="poll_Card_body">
                           <Col sm={9} md={9} lg={9} xl={9}>
                             <Card.Title>{apiData.question}</Card.Title>
                           </Col>
@@ -435,60 +452,59 @@ function Polling({ pollingState, userDeatilsPoll, UserID }) {
                                 )}
                               </Form>
                             </Card.Body>
-                           
                           </Card>
                         )}
-                         <div className="Tools-Bar" >
-                              <Row>
-                                <Col sm={3} md={3} lg={3} xl={3}>
-                                  <div>
-                                    <Button
-                                      onClick={() => {
-                                        handleLikeButton(apiData._id);
-                                      }}
+                        <div className="Tools-Bar">
+                          <Row className="poll_Card_body">
+                            <Col sm={3} md={3} lg={3} xl={3}>
+                              <div>
+                                <Button
+                                  onClick={() => {
+                                    handleLikeButton(apiData._id);
+                                  }}
+                                  style={{
+                                    backgroundColor: "inherit",
+                                    border: "none",
+                                  }}
+                                >
+                                  {likedPolls && isError ? (
+                                    <FaHeart
                                       style={{
-                                        backgroundColor: "inherit",
-                                        border: "none",
+                                        color: "red",
+                                        fontSize: "24px",
                                       }}
-                                    >
-                                      {likedPolls && isError ? (
-                                        <FaHeart
-                                          style={{
-                                            color: "red",
-                                            fontSize: "24px",
-                                          }}
-                                        />
-                                      ) : (
-                                        <FaRegHeart
-                                          style={{
-                                            color: "black",
-                                            fontSize: "24px",
-                                          }}
-                                        />
-                                      )}
-                                      Like
-                                    </Button>
-                                    {/* <Like
+                                    />
+                                  ) : (
+                                    <FaRegHeart
+                                      style={{
+                                        color: "black",
+                                        fontSize: "24px",
+                                      }}
+                                    />
+                                  )}
+                                  Like
+                                </Button>
+                                {/* <Like
                               pollId={apiData._id}
                               setLikepoll={setLikepoll}
                               likepoll={likepoll}
                             /> */}
-                                    {/* {apiData.likers.length} Like */}
-                                  </div>
-                                </Col>
-                                <Col sm={3} md={3} lg={3} xl={3}>
-                                  <Button
-                                    variant="primary"
-                                    onClick={() => handlePoll(apiData._id)}
-                                  >
-                                    Comments
-                                  </Button>
-                                </Col>
-                                <Col sm={3} md={3} lg={3} xl={3}>
-                                  share
-                                </Col>
-                              </Row>
-                            </div>
+                                {/* {apiData.likers.length} Like */}
+                              </div>
+                            </Col>
+                            <Col sm={3} md={3} lg={3} xl={3}>
+                              <Button
+                                variant="primary"
+                                onClick={() => handlePoll(apiData._id)}
+                              >
+                                Comments
+                              </Button>
+                            </Col>
+                            <Col sm={3} md={3} lg={3} xl={3}>
+                              share
+                            </Col>
+                          </Row>
+                        </div>
                       </Card.Body>
                     </Card>
                     <hr style={{ widows: "inherit" }} />

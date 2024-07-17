@@ -11,6 +11,11 @@
   padding: 20px;
   margin: auto;
 }
+.poll_Card_body{
+  width: 100%;
+  max-width: 1000px;
+  margin: 10px 20px 0px 20px ;
+}
 
 .Badge {
   margin: 10px;
@@ -69,7 +74,7 @@ ul li::before {
 
 .innerCard {
   width: 100%;
-  max-width: 650px;
+  max-width: 750px;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   margin: 20px auto;
@@ -109,7 +114,13 @@ ul li::before {
 @media (max-width: 1024px) {
   .pollingBody {
     /* margin: 0px 10px 10px 10px; */
-    max-width: 700px;
+    max-width: 650px;
+  }
+  
+  .poll_Card_body{
+    width: 100%;
+    max-width: 1000px;
+    margin: 0px 0px 0px 0px ;
   }
 
   .poll_card, .innerCard {
@@ -125,7 +136,7 @@ ul li::before {
 
   .poll_card, .innerCard {
     width: 100%;
-    /* margin: 10px; */
+    margin: 10px;
   }
 }
 
@@ -139,7 +150,7 @@ ul li::before {
   }
 
   .pollingRow {
-    margin-top: 120px;
+    margin-top: 80px;
   }
 
   .pollingBody {

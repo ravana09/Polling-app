@@ -51,7 +51,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
         <div>
           <Col md={12} sm={12}>
             <Card className="rangeInnerCard" style={{
-              width:"100%",maxWidth:"650px"
+              width:"100%",maxWidth:"750px"
             }}>
               <Card.Header className="cardHeader">
                 <Row>

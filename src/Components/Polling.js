@@ -23,6 +23,7 @@ import { SearchContext } from "./Header";
 import profile from "../Components/Images/Profile.jpeg";
 import Nullprofile from "../Components/Images/NullProfileImg.jpg";
 import { userDetailsContext } from "./User/UserDetails";
+import loadingImage  from '../Components/Images/Loading .gif'
 export const TimerContext = createContext();
 export const likeContext = createContext();
 
@@ -302,9 +303,10 @@ function Polling({
           <div className="pollingBody">
             <Col md={12} sm={12}>
               {loading ? (
-                <div className="loading">
-                  <h1>Loading......</h1>
-                </div>
+               <div className="loading">
+               <img src={loadingImage} alt="Loading image" />
+               <h1>Loading</h1>
+             </div>
               ) : (
                 fetchData.map((apiData) => (
                   <div key={apiData._id}>

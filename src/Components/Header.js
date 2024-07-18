@@ -1,11 +1,15 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import "./PollHeader.css";
 import { Col, Container, Form, Nav, Navbar, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const SearchContext = createContext();
 
 function Header() {
   const [searchData, setSearchData] = useState("");
+
+  let navigate=useNavigate()
 
   function capitalizeFirstLetter(string) {
     if (string) {
@@ -18,7 +22,27 @@ function Header() {
 
   console.log(searchData);
 
-  function handleClick() {}
+  function handleClick(prop) {
+    navigate(prop)
+  }
+
+  //serach 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (searchData && searchData > 0) {
+        try {
+          const response = await axios.post("http://49.204.232.254:84/polls/search", {
+            query: searchData,
+          });
+          console.log(response.data); 
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [searchData]);
   return (
     <SearchContext.Provider value={{ searchData }}>
       <Row xs={12} md={12} lg={12} xl={12} className="fixed-top" id="searchBar">
@@ -30,6 +54,7 @@ function Header() {
                 href="/polling"
                 className="Header-Title"
                 style={{color:"White"}}
+                onClick={() => handleClick("/polling")}
                 
               >
                 Polling Booth

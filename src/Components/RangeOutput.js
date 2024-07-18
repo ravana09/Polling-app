@@ -84,11 +84,12 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
                           <div
                             className="Range-Colour"
                             style={{
-                              width: `${percentage}%`,     
+                              width: `${percentage>0?percentage:10}%`,
                               backgroundColor:
                                 option.count === maxVotes
                                   ? "rgb(71, 153, 153)"
                                   : "#B7CAD4",
+                                  
                               
                             }}
                           ></div>

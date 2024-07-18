@@ -1,3 +1,14 @@
+.loading{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 80vh; /* Full viewport height */
+  width: 50vw;
+
+}
+
 .pollingRow {
   margin-top: 100px;
   background-color: #fafafb;
@@ -138,6 +149,10 @@ ul li::before {
     width: 100%;
     margin: 10px;
   }
+  .loading {
+    height: 80vh;
+    width: 90vw; /* Adjust width for mobile */
+  }
 }
 
 @media (max-width: 576px) {
@@ -163,4 +178,9 @@ ul li::before {
     /* max-width: 500px; */
     margin: 0px 0px 10px 0px;
   }
+  .loading {
+    height: 80vh;
+    width: 95vw; /* Adjust width for smaller mobile */
+  }
+
 }

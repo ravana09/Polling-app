@@ -6,10 +6,13 @@
   margin: 10px 0px 0px 30px;
 }
 
+.userDetails_Card{
+  background-image: linear-gradient(to right, #2a6e70, #438c8f, #5bacaf, #75ccd0, #8feef3);
+}
+
 .userDetails_Details_UserName {
   font-size: 40px;
   color: white;
-
 }
 
 .userDetails_Details_Names {
@@ -24,31 +27,47 @@
 }
 
 .image_card {
-  border: 2px solid #5F9EA0;
+  border: 2px solid #5f9ea0;
   border-radius: 20px;
   width: 100%;
-  height: 28vh; 
+  height: 25.5vh;
   background-color: white;
-  overflow: hidden; 
+  overflow: hidden;
+  object-fit: cover;
+  position: relative;
 }
 
 .image_card img {
   width: 100%;
-  height: 100%;
-  object-fit: contain; 
-  object-position: center; 
+  height: 25vh;
+  object-fit: cover;
+  object-position: center;
 }
 
 .UserDetails_profile {
   width: 100%;
-  max-height: 210px; /* Sets the maximum height */
-  object-fit:cover; 
- 
+  max-height: 300px; /* Sets the maximum height */
+  object-fit: cover;
   border-radius: 20px;
+  border: 2px solid white;
+}
+
+.UserDetails_polls_data {
+  width: 90%;
+  margin-left: 55px;
+  font-size: larger;
+  color: white;
+  background-image: linear-gradient(to right top, #5f9ea0, #6bb1b4, #77c5c9, #83d9de, #8feef3);
+}
+.Upload_profile_button {
+  border-radius: 50px;
+  position: relative;
+  top: 50;
 }
 
 
-@media (max-width: 400px) {
+
+@media (max-width: 700px) {
   #desktop-View {
     display: none;
   }
@@ -75,21 +94,37 @@
 
   .label {
     font-weight: bold;
-    margin-right: 5px;
+    /* margin-right: 5px; */
     font-size: 15px;
   }
 
   .image_card {
-    border: 2px solid #5F9EA0;
+    border: 2px solid #5f9ea0;
     border-radius: 20px;
+    width: 100%;
+    height: auto;
     background-color: white;
-    
+    overflow: hidden;
+  }
+
+  .image_card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
   }
 
   .UserDetails_profile {
     width: 100%;
     height: 150px; /* Sets the maximum height */
-    object-fit:cover; 
+    object-fit: cover;
     border-radius: 20px;
+  }
+  .UserDetails_polls_data {
+    width: 90%;
+    margin-left: 15px;
+    font-size: larger;
+    color: white;
+    background-color: #5f9ea0;
   }
 }

@@ -31,7 +31,8 @@ function Polling({
   UserCrestedPolls,
   UserID,
   UserLikedPolls,
-  UserCommendedPolls
+  UserCommendedPolls,
+  pollUserVoted,
 }) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
@@ -41,7 +42,7 @@ function Polling({
   });
   const [pollId, setPollId] = useState("");
 
-
+console.log(pollUserVoted,"polls voted from voted polls ")
 
   const [searchingPoll, setSearchingPoll] = useState();
 
@@ -129,22 +130,34 @@ function Polling({
       setLoading(false);
       setFetchData(UserCrestedPolls);
       console.log(UserCrestedPolls, "pollid from user");
-      UserVotedPolls();
-    } else if (UserLikedPolls && UserLikedPolls.length > 0) {
+      fetchVotedPolls();
+    } 
+    else if (UserLikedPolls && UserLikedPolls.length > 0) {
       setLoading(false);
       setFetchData(UserLikedPolls);
       console.log(UserLikedPolls, "pollid from liked");
-      UserVotedPolls();
-    }else if (UserCommendedPolls && UserCommendedPolls.length > 0) {
+      fetchVotedPolls();
+    }
+    else if (UserCommendedPolls && UserCommendedPolls.length > 0) {
       setLoading(false);
       setFetchData(UserCommendedPolls);
       console.log(UserCommendedPolls, "pollid from Commanded");
-      UserVotedPolls();
-    } else if (data) {
+      fetchVotedPolls();
+    }
+    else if ( pollUserVoted && pollUserVoted.length > 0) {
+      setLoading(false);
+      setFetchData(pollUserVoted);
+      console.log(pollUserVoted, "pollid from Commanded");
+      // UserVotedPolls();
+      fetchVotedPolls();
+      
+    }
+    else if (data) {
       // console.log(data)
       fetchPollDetails(data);
       fetchVotedPolls();
-    } else {
+    }
+   else {
       fetchPollData();
       fetchVotedPolls();
       // console.log("polling");

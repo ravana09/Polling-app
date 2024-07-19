@@ -12,6 +12,7 @@ function Comments() {
   let navigate = useNavigate();
   const location = useLocation();
   const { pollID } = location.state || { pollID: null };
+  console.log(pollID)
 
   const userId = sessionStorage.getItem("Id");
   const userName = sessionStorage.getItem("Users_Name");
@@ -238,7 +239,7 @@ function Comments() {
 
   return (
     <div className="comments-section">
-      <Card className="card">
+      <Card className="poll_card">
         <div>
           <Card.Link
             onClick={() =>

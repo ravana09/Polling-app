@@ -326,9 +326,9 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                     <Card className="poll_card">
                       <Card.Header>
                         <Row>
-                          <Col sm={6} md={6} lg={6} xl={6}>
+                          <Col sm={12} md={6} lg={6} xl={6}>
                             <Row>
-                              <Col sm={9} md={3} lg={3} xl={3}>
+                              <Col xs={5} sm={6} md={3} lg={3} xl={3}>
                                 <div className="ImageFrame">
                                   <Image
                                     src={
@@ -336,14 +336,14 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                                         ? `http://49.204.232.254:84/${apiData.createdBy.user_profile}`
                                         : Nullprofile
                                     }
-                                    // src={profile}
+                                 
                                     roundedCircle
                                     style={{ width: "80px", height: "80px" }}
                                     alt="profile picture"
                                   />
                                 </div>
                               </Col>
-                              <Col sm={3} md={9} lg={9} xl={9}>
+                              <Col xs={7} sm={6} md={9} lg={9} xl={9}>
                                 <div style={{ marginTop: "15px" }}>
                                   <div>
                                     <Card.Link
@@ -365,16 +365,17 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                             </Row>
                           </Col>
                           <Col sm={0} md={2} lg={2} xl={2}></Col>
-                          <Col sm={0} md={2} lg={2} xl={2}>
-                            <div style={{ marginTop: "15px" }}>
-                              <div>{`Title:   ${apiData.title}`}</div>
+                          <Col sm={6} md={2} lg={2} xl={2}>
+                            <div className="POll_header_status">
+                              <div>{`Title: ${apiData.title}`}</div>
                               <div>Status:{apiData.status}</div>
                             </div>
                           </Col>
-                          <Col sm={0} md={2} lg={2} xl={2}>
-                            <div style={{ marginTop: "15px" }}>
+                          <Col sm={6} md={2} lg={2} xl={2}>
+                            <div  className="poll_follow_button">
                               <div>
                                 <Button
+                                className="Follow_button"
                                   onClick={() => {
                                     handleFollow(apiData.createdBy._id);
                                   }}
@@ -396,11 +397,10 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                               <Button
                                 onClick={handleCatergory(apiData.category._id)}
                                 variant="info"
-                                className="Category_Name"
+                                className="Poll_Category_Name"
                                 style={{
-                                  fontSize: "75%",
-                                  textDecoration: "none",
-                                  color: "black",
+                                  
+                                  color: "white",
                                 }}
                               >
                                 {apiData.category[0]?.category_name}
@@ -499,12 +499,9 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                                   )}
                                   Like
                                 </Button>
-                                {/* <Like
-                              pollId={apiData._id}
-                              setLikepoll={setLikepoll}
-                              likepoll={likepoll}
-                            /> */}
-                                {/* {apiData.likers.length} Like */}
+                           
+                       
+                               
                               </div>
                             </Col>
                             <Col sm={3} md={3} lg={3} xl={3}>
@@ -522,7 +519,7 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                         </div>
                       </Card.Body>
                     </Card>
-                    <hr style={{ widows: "inherit" }} />
+                    <hr className="POll_card_Hr"/>
                   </div>
                 ))
               )}

@@ -16,6 +16,7 @@ import ForgetPassword from './Components/Login&signup/ForgetPassword';
 import NewPassword from './Components/Login&signup/NewPassword';
 import GoogleForm from './Components/Login&signup/GooogleForm';
 import MobileNum from './Components/Login&signup/MobileNum';
+import Search from './Components/Search/Search';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/PollEndingTime" element={<WithHomeLayout component={<PollEndingTime />} showTrending={true} />} />
         <Route path="/PollStartingTime" element={<WithHomeLayout component={<PollStartingTime />} showTrending={true} />} />
         <Route path="/UserDetails" element={<WithHomeLayout component={<UserDetails />} showTrending={false} />} />
+        <Route path="/Search" element={<WithHomeLayout component={<Search />} showTrending={false} />} />
       </Routes>
     </BrowserRouter>
   );

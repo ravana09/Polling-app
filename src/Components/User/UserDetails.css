@@ -146,7 +146,7 @@
 
   .UserDetails_profile {
     width: 100%;
-    height: 150px; /* Sets the maximum height */
+    max-height: 160px; /* Sets the maximum height */
     object-fit: cover;
     border-radius: 20px;
   }
@@ -156,5 +156,26 @@
     font-size: larger;
     color: white;
     background-color: #5f9ea0;
+  }
+  .Upload_profile_button {
+    border-radius: 50px;
+    position: relative;
+    top: 50;
+  }
+  .UserDetails_Comments_buttons_card{
+    margin-left: 0px;
+  }
+  .UserDetails_polls_data {
+   
+    width: 100%;
+    margin: 10px 10px 10px 5px;
+    font-size: medium;
+    color: rgb(8, 7, 7);
+    background-image: linear-gradient(to right top, #5f9ea0, #6bb1b4, #77c5c9, #83d9de, #8feef3);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  .UserDetails_polls_data:hover{
+    transform: scale(1.2);
+    color: white;
   }
 }

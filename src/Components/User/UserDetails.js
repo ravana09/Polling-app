@@ -306,13 +306,15 @@ function UserDetails() {
                         </div>
                         <div>
                           <center>
-                            <Button
-                              variant="light"
-                              onClick={UpdateProfile}
-                              className="Upload_profile_button"
-                            >
-                              <FaCamera />
-                            </Button>
+                            { loginUserID === userID &&(
+                              <Button
+                                variant="light"
+                                onClick={UpdateProfile}
+                                className="Upload_profile_button"
+                              >
+                                <FaCamera />
+                              </Button>
+                            )}
                           </center>
                         </div>
                       </Col>
@@ -343,6 +345,19 @@ function UserDetails() {
                               className="UserDetails_profile"
                             />
                           </div>
+                        </div>
+                        <div>
+                          <center>
+                            {loginUserID === userID && (
+                              <Button
+                                variant="light"
+                                onClick={UpdateProfile}
+                                className="Upload_profile_button"
+                              >
+                                <FaCamera />
+                              </Button>
+                            )}
+                          </center>
                         </div>
                       </Col>
                       <Col sm={6}>
@@ -388,32 +403,37 @@ function UserDetails() {
               </Col>
             </Row>
             <div>
-              <div className="UserDetails_Comments_buttons_card">
+             {loginUserID === userID && 
+ (<div className="UserDetails_Comments_buttons_card">
                 <Row>
                   <Col sm={3} md={3} lg={3} xl={3}>
-                    <Button
-                      style={{ backgroundColor: "#5f9ea0" }}
-                      className="UserDetails_polls_data"
-                      onClick={() => {
-                        UserDetailsCreatedPoll(userDetails.created_polls);
-                      }}
-                    >
-                      Created POlls
-                    </Button>
+                    
+                      <Button
+                        style={{ backgroundColor: "#5f9ea0" }}
+                        className="UserDetails_polls_data"
+                        onClick={() => {
+                          UserDetailsCreatedPoll(userDetails.created_polls);
+                        }}
+                      >
+                        Created POlls
+                      </Button>
+                    
                   </Col>
                   <Col sm={3} md={3} lg={3} xl={3}>
-                    <Button
-                      style={{ backgroundColor: "#5f9ea0" }}
-                      className="UserDetails_polls_data"
-                      onClick={() => {
-                        UserDetailsVotedPoll(userDetails.voted_polls);
-                      }}
-                    >
-                      Voted POlls
-                    </Button>
+                    
+                      <Button
+                        style={{ backgroundColor: "#5f9ea0" }}
+                        className="UserDetails_polls_data"
+                        onClick={() => {
+                          UserDetailsVotedPoll(userDetails.voted_polls);
+                        }}
+                      >
+                        Voted POlls
+                      </Button>
+                   
                   </Col>
                   <Col sm={3} md={3} lg={3} xl={3}>
-                    {loginUserID === userID && (
+                   
                       <Button
                         variant="info"
                         className="UserDetails_polls_data"
@@ -423,10 +443,10 @@ function UserDetails() {
                       >
                         Liked Polls
                       </Button>
-                    )}
+                   
                   </Col>
                   <Col sm={3} md={3} lg={3} xl={3}>
-                    {loginUserID === userID && (
+                  
                       <div>
                         <Button
                           variant="info"
@@ -438,10 +458,10 @@ function UserDetails() {
                           Commented Polls
                         </Button>
                       </div>
-                    )}
+                   
                   </Col>
                 </Row>
-              </div>
+              </div>)}
               <div>
                 {/* from polling */}
                 <div className="d-grid ">
@@ -462,6 +482,7 @@ function UserDetails() {
                     </div>
                   )}
                 </div>
+                { loginUserID === userID &&( <div>
 
                 <div className="d-grid ">
                   {sendVotedPOlls && multiplePolls.length > 0 && (
@@ -519,6 +540,7 @@ function UserDetails() {
                     </div>
                   )}
                 </div>
+                </div>)}
               </div>
             </div>
           </div>

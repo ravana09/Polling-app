@@ -9,7 +9,7 @@ export const SearchContext = createContext();
 function Header() {
   const [searchData, setSearchData] = useState("");
 
-  let navigate=useNavigate()
+  let navigate = useNavigate();
 
   function capitalizeFirstLetter(string) {
     if (string) {
@@ -20,21 +20,20 @@ function Header() {
 
   const user = sessionStorage.getItem("Users_Name") || "Guest";
 
-  console.log(searchData);
-
   function handleClick(prop) {
-    navigate(prop)
+    navigate(prop);
   }
 
-  //serach 
   useEffect(() => {
     const fetchData = async () => {
-      if (searchData && searchData > 0) {
+      if (searchData && searchData.length > 0) {
         try {
           const response = await axios.post("http://49.204.232.254:84/polls/search", {
             query: searchData,
           });
-          console.log(response.data); 
+          console.log(response.data, "searched data");
+        
+
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -43,25 +42,23 @@ function Header() {
 
     fetchData();
   }, [searchData]);
+
   return (
     <SearchContext.Provider value={{ searchData }}>
-      <Row xs={12} md={12} lg={12} xl={12} className="fixed-top" id="searchBar">
-        <Col className="Header"
-        >
-          <Navbar expand="lg" >
+      <Row className="fixed-top" id="searchBar">
+        <Col className="Header">
+          <Navbar expand="lg">
             <Container>
               <Navbar.Text
-                href="/polling"
                 className="Header-Title"
-                style={{color:"White"}}
+                style={{ color: "white", cursor: "pointer" }}
                 onClick={() => handleClick("/polling")}
-                
               >
                 Polling Booth
               </Navbar.Text>
-              <Form inline>
+              <Form>
                 <Row>
-                  <Col xs="auto" md={12} lg={12} xl={12}>
+                  <Col>
                     <Form.Control
                       type="text"
                       placeholder="Search"
@@ -77,13 +74,11 @@ function Header() {
               </Form>
               <Navbar.Text
                 onClick={() => handleClick("/polling")}
-                style={{ fontSize: 25,color:"white" }}
-                className="Header-Title "
-                
+                style={{ fontSize: 25, color: "white", cursor: "pointer" }}
+                className="Header-Title"
               >
                 Hello !! {capitalizeFirstLetter(user)}
               </Navbar.Text>
-              
             </Container>
           </Navbar>
         </Col>

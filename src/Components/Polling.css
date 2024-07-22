@@ -1,4 +1,4 @@
-.loading{
+.loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,13 +6,13 @@
   flex-direction: column;
   height: 80vh; /* Full viewport height */
   width: 50vw;
-
 }
 
 .pollingRow {
-  margin-top: 100px;
+  margin-top: 50px;
   background-color: #fafafb;
   width: 100%;
+  min-width: 850px;
 }
 
 .pollingBody {
@@ -22,10 +22,10 @@
   padding: 20px;
   margin: auto;
 }
-.poll_Card_body{
+.poll_Card_body {
   width: 100%;
   max-width: 1000px;
-  margin: 10px 20px 0px 20px ;
+  margin: 10px 20px 0px 20px;
 }
 
 .Badge {
@@ -45,7 +45,7 @@ ul li {
 }
 
 ul li::before {
-  content: '\2022';
+  content: "\2022";
   position: absolute;
   left: 0;
   color: #000;
@@ -59,9 +59,10 @@ ul li::before {
 .poll_card {
   width: 100%;
   max-width: 800px;
+  min-width: auto;
   background-color: #fafafb;
   border-radius: 20px;
-  margin: 10px 10px 20px 50px ;
+  margin: 10px 10px 20px 50px;
   border: 0.1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -75,13 +76,11 @@ ul li::before {
   border-radius: 20px;
 }
 
-.POll_user_name{
+.POll_user_name {
   text-decoration: none;
   font-size: 20px;
   color: rgb(87, 183, 183);
-  
 }
-
 
 .innerCard {
   width: 100%;
@@ -121,20 +120,56 @@ ul li::before {
   background-color: #edeff1;
 }
 
+.POll_card_Hr {
+  width: 90%;
+  margin-left: 50px;
+}
+.POll_header_status {
+  margin-top: 15px;
+}
+.poll_follow_button {
+  margin-top: 20px;
+}
+
+.Follow_button {
+  background-color: rgba(6, 119, 128, 0.596);
+  border: none;
+  width: 100%;
+  transition: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.Follow_button:hover {
+  /* background-color: rgba(6, 119, 128, 0.596); */
+  background-image: radial-gradient(circle, #10888c, #39a1a5, #57babe, #73d4d8, #8feef3);
+  transform: scale(1.2);
+  /* box-shadow: 2px 2px 20px rgb(14, 176, 197); */
+  border: 1px solid white;
+}
+
+.Poll_Category_Name{
+  font-size: 15px;
+  width: 70%;
+  background-color: #39a1a5;
+}
+
+.Poll_Category_Name:hover{
+  font-size: 15px;
+}
 /* Responsive Styles */
 @media (max-width: 1024px) {
   .pollingBody {
     /* margin: 0px 10px 10px 10px; */
     max-width: 650px;
   }
-  
-  .poll_Card_body{
+
+  .poll_Card_body {
     width: 100%;
     max-width: 1000px;
-    margin: 0px 0px 0px 0px ;
+    margin: 0px 0px 0px 0px;
   }
 
-  .poll_card, .innerCard {
+  .poll_card,
+  .innerCard {
     max-width: 550px;
   }
 }
@@ -145,7 +180,8 @@ ul li::before {
     width: 100%;
   }
 
-  .poll_card, .innerCard {
+  .poll_card,
+  .innerCard {
     width: 100%;
     margin: 10px;
   }
@@ -170,10 +206,15 @@ ul li::before {
 
   .pollingBody {
     max-width: 100%;
-    /* padding: 5px; */
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 20px;
+    padding: 0px;
+    margin: 0px;
   }
 
-  .poll_card, .innerCard {
+  .poll_card,
+  .innerCard {
     width: 100%;
     /* max-width: 500px; */
     margin: 0px 0px 10px 0px;
@@ -182,5 +223,41 @@ ul li::before {
     height: 80vh;
     width: 95vw; /* Adjust width for smaller mobile */
   }
-
+  .POll_card_Hr {
+    width: 100%;
+    margin-left: 0px;
+  }
+  .POll_header_status {
+    display: flex;
+    /* justify-content:flex-end; */
+    align-items: self-end;
+    flex-direction: column;
+    padding-right: 50px;
+  }
+  .poll_follow_button {
+    margin-top: -40px;
+    margin-bottom: 10px;
+  }
+  .Follow_button {
+    background-color: rgba(6, 119, 128, 0.596);
+    border: none;
+    width: 30%;
+    transition: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .Follow_button:hover {
+    background-color: rgba(6, 119, 128, 0.596);
+    transform: scale(1.2);
+    box-shadow: 2px 2px 20px rgb(14, 176, 197);
+    border: 1px solid white;
+  }
+  .Poll_Category_Name{
+    font-size: 10px;
+    width: 30%;
+    background-color: #39a1a5;
+  }
+  
+  .Poll_Category_Name:hover{
+    font-size: 10px;
+  }
 }

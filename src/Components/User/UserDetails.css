@@ -51,19 +51,49 @@
   border-radius: 20px;
   border: 2px solid white;
 }
+.UserDetails_Comments_buttons_card{
+  margin-left: 55px;
+}
 
 .UserDetails_polls_data {
-  width: 90%;
-  margin-left: 55px;
-  font-size: larger;
-  color: white;
+  width: 80%;
+  margin: 10px 10px 10px 5px;
+  font-size: medium;
+  color: rgb(8, 7, 7);
   background-image: linear-gradient(to right top, #5f9ea0, #6bb1b4, #77c5c9, #83d9de, #8feef3);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
+.UserDetails_polls_data:hover{
+  transform: scale(1.2);
+  color: white;
+}
+
 .Upload_profile_button {
   border-radius: 50px;
   position: relative;
   top: 50;
 }
+.Polls_Name_badge{
+  width: 90%;
+  background-image: radial-gradient(circle, #2a6e70, #438c8f, #5bacaf, #75ccd0, #8feef3);
+  color: "white";
+  text-decoration: underline;
+  margin-left: 20px;
+  padding: 10px;
+  
+}
+.Polls_Name_badge:hover{
+  width: 90%;
+  background-image: radial-gradient(circle, #2a6e70, #438c8f, #5bacaf, #75ccd0, #8feef3);
+  color: "white";
+  text-decoration: underline;
+  margin-left: 20px;
+  padding: 10px;
+ 
+}
+
+
+
 
 
 

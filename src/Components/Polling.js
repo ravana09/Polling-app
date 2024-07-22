@@ -312,7 +312,7 @@ console.log(pollUserVoted,"polls voted from voted polls ")
     <TimerContext.Provider value={{ timer, setTimer }}>
       <div>
         <Row className="polling_row">
-          <Form>{/* Search functionality can be added here */}</Form>
+          
           <div className="pollingBody">
             <Col md={12} sm={12}>
               {loading ? (

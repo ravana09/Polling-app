@@ -6,7 +6,7 @@
 }
 
 .Header {
-  background-color: #5F9EA0;
+  background-image: radial-gradient(circle, #13837d, #35979a, #54acb6, #73c0d2, #93d5ec);
   color: white;
   height: 50%;
   border-bottom: 5px solid #ebeef0;

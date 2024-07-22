@@ -19,7 +19,7 @@ import Polling from "../Polling";
 import Nullprofile from "../Images/NullProfileImg.jpg";
 import { FaCamera } from "react-icons/fa";
 import Swal from "sweetalert2";
-import loadingImage  from '../Images/Loading .gif'
+import loadingImage from "../Images/Loading .gif";
 
 export const userDetailsContext = createContext();
 
@@ -28,12 +28,15 @@ function UserDetails() {
   const [polldata, setPollData] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  //multiple polls
+  const [multiplePolls, setMultiplePolls] = useState([]);
   //userdatils
   const [showUserDetails, setShowUserDetails] = useState(false);
   //polls
-  const [sendPolls, setSendPolls] = useState(false);
+  const [sendPolls, setSendPolls] = useState(true);
   const [sendLiked, setSendLiked] = useState(false);
   const [sendCommented, setSendCommented] = useState(false);
+  const [sendVotedPOlls, setSendVottedPolls] = useState(false);
   //profile
   const [profileUploaded, setProfileUploaded] = useState(false);
 
@@ -68,6 +71,7 @@ function UserDetails() {
         console.log(response.data.user);
         if (response.status === 200) {
           setPollData(true);
+          fetchMultiplePolls(response.data.user.created_polls);
         }
       } catch (err) {
         setError(err.message);
@@ -80,10 +84,6 @@ function UserDetails() {
       fetchUserDetails();
     }
   }, [userPhoneNUmber, profileUploaded]);
-
-  useEffect(() => {
-    // console.log("polldata changed:", polldata);
-  }, [polldata]);
 
   let userpolls;
   let OtherUserID;
@@ -98,19 +98,47 @@ function UserDetails() {
     setShowUserDetails(!showUserDetails);
   };
 
+  const fetchMultiplePolls = async (polls) => {
+    const res = await axios.post("http://49.204.232.254:84/polls/multipoll", {
+      poll_ids: polls,
+    });
+    console.log(res.data, "MUltiplePOlls UserDetails");
+    setMultiplePolls([]);
+    setMultiplePolls(res.data);
+  };
+
   //UserDetailsCreatedPoll
 
-  const UserDetailsCreatedPoll = () => {
+  const UserDetailsCreatedPoll = (polls) => {
     setSendPolls(!sendPolls);
+    setSendCommented(false);
+    setSendLiked(false);
+    setSendVottedPolls(false);
+    fetchMultiplePolls(polls);
   };
-  const UserDetailsLikedPoll = () => {
+  const UserDetailsLikedPoll = (polls) => {
     setSendLiked(!sendLiked);
     console.log("clikced like", sendLiked);
+    setSendPolls(false);
+    setSendCommented(false);
+    setSendVottedPolls(false);
+    fetchMultiplePolls(polls);
   };
-  const UserDetailsCommentedPoll = () => {
+  const UserDetailsCommentedPoll = (polls) => {
     setSendCommented(!sendCommented);
+    setSendPolls(false);
+    setSendLiked(false);
+    setSendVottedPolls(false);
+    fetchMultiplePolls(polls);
   };
 
+  const UserDetailsVotedPoll = (polls) => {
+    setSendVottedPolls(!sendVotedPOlls);
+    setSendPolls(false);
+    setSendLiked(false);
+    setSendCommented(false);
+    fetchMultiplePolls(polls);
+  };
   //profile
   const UpdateProfile = async () => {
     const { value: file } = await Swal.fire({
@@ -185,9 +213,9 @@ function UserDetails() {
       <>
         {loading ? (
           <div className="loading">
-          <img src={loadingImage} alt="Loading image" />
-          <h1>Loading</h1>
-        </div>
+            <img src={loadingImage} alt="Loading image" />
+            <h1>Loading</h1>
+          </div>
         ) : error ? (
           <Alert variant="danger">{error}</Alert>
         ) : (
@@ -196,11 +224,10 @@ function UserDetails() {
               <Col sm={12} md={12} lg={12} xl={12}>
                 <Card className="poll_card" style={{ boder: "none" }}>
                   <Card.Header
-                  className="userDetails_Card"
+                    className="userDetails_Card"
                     style={{
                       border: "2px solid white",
                       backgroundColor: "#5F9EA0",
-
                     }}
                   >
                     <Row>
@@ -361,98 +388,137 @@ function UserDetails() {
               </Col>
             </Row>
             <div>
-              <Row>
-                <Col sm={4} md={4} lg={4} xl={4}><Button
-                 style={{backgroundColor:"#5f9ea0"}}
-                  className="UserDetails_polls_data"
-                  onClick={UserDetailsCreatedPoll}
-                >
-                  Created POlls
-                </Button></Col>
-                <Col sm={4} md={4} lg={4} xl={4}>
-                {loginUserID === userID && (
-                  <Button
-                    variant="info"
-                    className="UserDetails_polls_data"
-                    onClick={UserDetailsLikedPoll}
-                  >
-                    Liked Polls
-                  </Button>
-                )}</Col>
-                <Col sm={4} md={4} lg={4} xl={4}>
-                {loginUserID === userID && (
-                  <div>
+              <div className="UserDetails_Comments_buttons_card">
+                <Row>
+                  <Col sm={3} md={3} lg={3} xl={3}>
                     <Button
-                      variant="info"
+                      style={{ backgroundColor: "#5f9ea0" }}
                       className="UserDetails_polls_data"
-                      onClick={UserDetailsCommentedPoll}
+                      onClick={() => {
+                        UserDetailsCreatedPoll(userDetails.created_polls);
+                      }}
                     >
-                      Commented Polls
+                      Created POlls
                     </Button>
-                  </div>
-                )}</Col>
-              </Row>
-              <div className="d-grid gap-2">
-                <Button
-                 style={{backgroundColor:"#5f9ea0"}}
-                  className="UserDetails_polls_data"
-                  onClick={UserDetailsCreatedPoll}
-                >
-                  Created POlls
-                </Button>
-
-                {sendPolls ? (
-                  <Polling
-                    UserCrestedPolls={userDetails.created_polls}
-                    UserID={userDetails.id}
-                  />
-                ) : (
-                  " "
-                )}
-              </div>
-
-              <div className="d-grid gap-2 mt-2">
-                {loginUserID === userID && (
-                  <Button
-                    variant="info"
-                    className="UserDetails_polls_data"
-                    onClick={UserDetailsLikedPoll}
-                  >
-                    Liked Polls
-                  </Button>
-                )}
-
-                {sendLiked ? (
-                  <Polling
-                    UserLikedPolls={userDetails.liked_polls}
-                    UserID={userDetails.id}
-                  />
-                ) : (
-                  " "
-                )}
-              </div>
-
-              <div className="d-grid gap-2 mt-2">
-                {loginUserID === userID && (
-                  <div>
+                  </Col>
+                  <Col sm={3} md={3} lg={3} xl={3}>
                     <Button
-                      variant="info"
+                      style={{ backgroundColor: "#5f9ea0" }}
                       className="UserDetails_polls_data"
-                      onClick={UserDetailsCommentedPoll}
+                      onClick={() => {
+                        UserDetailsVotedPoll(userDetails.voted_polls);
+                      }}
                     >
-                      Commented Polls
+                      Voted POlls
                     </Button>
-                  </div>
-                )}
+                  </Col>
+                  <Col sm={3} md={3} lg={3} xl={3}>
+                    {loginUserID === userID && (
+                      <Button
+                        variant="info"
+                        className="UserDetails_polls_data"
+                        onClick={() => {
+                          UserDetailsLikedPoll(userDetails.liked_polls);
+                        }}
+                      >
+                        Liked Polls
+                      </Button>
+                    )}
+                  </Col>
+                  <Col sm={3} md={3} lg={3} xl={3}>
+                    {loginUserID === userID && (
+                      <div>
+                        <Button
+                          variant="info"
+                          className="UserDetails_polls_data"
+                          onClick={() => {
+                            UserDetailsCommentedPoll(userDetails.created_polls);
+                          }}
+                        >
+                          Commented Polls
+                        </Button>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
+              </div>
+              <div>
+                {/* from polling */}
+                <div className="d-grid ">
+                  {sendPolls && multiplePolls.length > 0 && (
+                    <div>
+                      <center>
+                        <div
+                          className="Polls_Name_badge"
+                          style={{ color: "white" }}
+                        >
+                          <h3> Created Polls</h3>
+                        </div>
+                      </center>
+                      <Polling
+                        UserCrestedPolls={multiplePolls}
+                        UserID={userDetails.id}
+                      />
+                    </div>
+                  )}
+                </div>
 
-                {sendCommented ? (
-                  <Polling
-                    UserCommendedPolls={userDetails.created_polls}
-                    UserID={userDetails.id}
-                  />
-                ) : (
-                  " "
-                )}
+                <div className="d-grid ">
+                  {sendVotedPOlls && multiplePolls.length > 0 && (
+                    <div>
+                      <center>
+                        <div
+                          className="Polls_Name_badge"
+                          style={{ color: "white" }}
+                        >
+                          <h3>Voted Polls</h3>
+                        </div>
+                      </center>
+                      <Polling
+                        UserLikedPolls={multiplePolls}
+                        UserID={userDetails.id}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="d-grid ">
+                  {sendLiked && multiplePolls.length > 0 && (
+                    <div>
+                      <center>
+                        <div
+                          className="Polls_Name_badge"
+                          style={{ color: "white" }}
+                        >
+                          <h3>Liked Polls</h3>
+                        </div>
+                      </center>
+                      <Polling
+                        UserLikedPolls={multiplePolls}
+                        UserID={userDetails.id}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="d-grid">
+                  {sendCommented && multiplePolls.length > 0 && (
+                    <div>
+                      <center>
+                        <div
+                          className="Polls_Name_badge"
+                          style={{ color: "white" }}
+                        >
+                          <h3>Commented Polls</h3>
+                        </div>
+                      </center>
+                      <Polling
+                        UserCommendedPolls={multiplePolls}
+                        UserID={userDetails.id}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -23,7 +23,7 @@ import { SearchContext } from "./Header";
 import profile from "../Components/Images/Profile.jpeg";
 import Nullprofile from "../Components/Images/NullProfileImg.jpg";
 import { userDetailsContext } from "./User/UserDetails";
-import loadingImage  from '../Components/Images/Loading .gif'
+import loadingImage from "../Components/Images/Loading .gif";
 export const TimerContext = createContext();
 export const likeContext = createContext();
 
@@ -33,6 +33,8 @@ function Polling({
   UserLikedPolls,
   UserCommendedPolls,
   pollUserVoted,
+  searchPoll,
+  categoryPolls,
 }) {
   const [fetchData, setFetchData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
@@ -42,7 +44,7 @@ function Polling({
   });
   const [pollId, setPollId] = useState("");
 
-console.log(pollUserVoted,"polls voted from voted polls ")
+  // console.log(searchPoll, "poll searched  polls ");
 
   const [searchingPoll, setSearchingPoll] = useState();
 
@@ -54,10 +56,9 @@ console.log(pollUserVoted,"polls voted from voted polls ")
   const [loading, setLoading] = useState(true);
   let [userDetails, setUserDetails] = useState(false);
 
-  const [likepoll, setLikepoll] = useState(false);
-  const [likedPolls, setLikedPolls] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [likedPolls, setLikedPolls] = useState([]); // State to store liked poll IDs
+  const [likepoll, setLikepoll] = useState({}); // State to manage like status
+
 
   const [pollEndTime, setpollEndtime] = useState(true);
 
@@ -131,33 +132,37 @@ console.log(pollUserVoted,"polls voted from voted polls ")
       setFetchData(UserCrestedPolls);
       console.log(UserCrestedPolls, "pollid from user");
       fetchVotedPolls();
-    } 
-    else if (UserLikedPolls && UserLikedPolls.length > 0) {
+    } else if (UserLikedPolls && UserLikedPolls.length > 0) {
       setLoading(false);
       setFetchData(UserLikedPolls);
       console.log(UserLikedPolls, "pollid from liked");
       fetchVotedPolls();
-    }
-    else if (UserCommendedPolls && UserCommendedPolls.length > 0) {
+    } else if (UserCommendedPolls && UserCommendedPolls.length > 0) {
       setLoading(false);
       setFetchData(UserCommendedPolls);
       console.log(UserCommendedPolls, "pollid from Commanded");
       fetchVotedPolls();
-    }
-    else if ( pollUserVoted && pollUserVoted.length > 0) {
+    } else if (pollUserVoted && pollUserVoted.length > 0) {
       setLoading(false);
       setFetchData(pollUserVoted);
       console.log(pollUserVoted, "pollid from Commanded");
       // UserVotedPolls();
       fetchVotedPolls();
-      
-    }
-    else if (data) {
+    } else if (searchPoll && searchPoll.length > 0) {
+      setLoading(false);
+      setFetchData(searchPoll);
+      console.log(searchPoll, "serached polls from search");
+      fetchVotedPolls();
+    } else if (categoryPolls && categoryPolls.length > 0) {
+      setLoading(false);
+      setFetchData(categoryPolls);
+      console.log(categoryPolls, "serached polls from search");
+      fetchVotedPolls();
+    } else if (data) {
       // console.log(data)
       fetchPollDetails(data);
       fetchVotedPolls();
-    }
-   else {
+    } else {
       fetchPollData();
       fetchVotedPolls();
       // console.log("polling");
@@ -275,16 +280,12 @@ console.log(pollUserVoted,"polls voted from voted polls ")
 
   //category
   const handleCatergory = (id) => {
-    // console.log(id);
+    navigate("/Categrory", { state: { pollId: id } });
+    console.log(id, "category id");
   };
 
   //like
   const handleLikeButton = async (pollId) => {
-    // console.log(pollId);
-    // if (isLoading) return;
-    // setIsLoading(true);
-    // console.log(pollId)
-
     try {
       const response = await axios.post(
         "http://49.204.232.254:84/polls/likeonpoll",
@@ -293,15 +294,47 @@ console.log(pollUserVoted,"polls voted from voted polls ")
           user_id: UserId,
         }
       );
-      // console.log(response.data);
-      setLikepoll(!likepoll);
-      if (response.status === 200) {
-        setLikedPolls((prevLiked) => !prevLiked);
+      console.log(response.data, "Poll liked");
+
+      if (response.data.message === "Like recorded successfully") {
+        setLikepoll({ [pollId]: true });
+        setLikedPolls([...likedPolls, pollId]);
+        Swal.fire({
+          icon: "success",
+          title: "Poll liked successfully!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+      } else if (response.data.message === "Like removed successfully") {
+        setLikepoll({ [pollId]: false });
+        setLikedPolls(likedPolls.filter(id => id !== pollId));
+        Swal.fire({
+          icon: "success",
+          title: "Like removed!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
       }
     } catch (err) {
       console.error("Error in liking poll", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "An error occurred while liking the poll.",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
     }
-  };
+  }
 
   //follow user
   const handleFollow = (Followid) => {
@@ -312,14 +345,13 @@ console.log(pollUserVoted,"polls voted from voted polls ")
     <TimerContext.Provider value={{ timer, setTimer }}>
       <div>
         <Row className="polling_row">
-          
           <div className="pollingBody">
             <Col md={12} sm={12}>
               {loading ? (
-               <div className="loading">
-               <img src={loadingImage} alt="Loading image" />
-               <h1>Loading</h1>
-             </div>
+                <div className="loading">
+                  <img src={loadingImage} alt="Loading image" />
+                  <h1>Loading</h1>
+                </div>
               ) : (
                 fetchData.map((apiData) => (
                   <div key={apiData._id}>
@@ -336,7 +368,6 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                                         ? `http://49.204.232.254:84/${apiData.createdBy.user_profile}`
                                         : Nullprofile
                                     }
-                                 
                                     roundedCircle
                                     style={{ width: "80px", height: "80px" }}
                                     alt="profile picture"
@@ -371,20 +402,22 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                               <div>Status:{apiData.status}</div>
                             </div>
                           </Col>
-                          <Col sm={6} md={2} lg={2} xl={2}>
-                            <div  className="poll_follow_button">
-                              <div>
-                                <Button
-                                className="Follow_button"
-                                  onClick={() => {
-                                    handleFollow(apiData.createdBy._id);
-                                  }}
-                                >
-                                  Follow
-                                </Button>
+                          {UserId !== apiData.createdBy._id && (
+                            <Col sm={6} md={2} lg={2} xl={2}>
+                              <div className="poll_follow_button">
+                                <div>
+                                  <Button
+                                    className="Follow_button"
+                                    onClick={() => {
+                                      handleFollow(apiData.createdBy._id);
+                                    }}
+                                  >
+                                    Follow
+                                  </Button>
+                                </div>
                               </div>
-                            </div>
-                          </Col>
+                            </Col>
+                          )}
                         </Row>
                       </Card.Header>
                       <Card.Body>
@@ -395,11 +428,12 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                           <Col sm={3} md={3} lg={3} xl={3}>
                             <div>
                               <Button
-                                onClick={handleCatergory(apiData.category._id)}
+                                onClick={() => {
+                                  handleCatergory(apiData.category[0]._id);
+                                }}
                                 variant="info"
                                 className="Poll_Category_Name"
                                 style={{
-                                  
                                   color: "white",
                                 }}
                               >
@@ -473,35 +507,30 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                           <Row className="poll_Card_body">
                             <Col sm={3} md={3} lg={3} xl={3}>
                               <div>
-                                <Button
-                                  onClick={() => {
-                                    handleLikeButton(apiData._id);
-                                  }}
-                                  style={{
-                                    backgroundColor: "inherit",
-                                    border: "none",
-                                  }}
-                                >
-                                  {likedPolls && isError ? (
-                                    <FaHeart
-                                      style={{
-                                        color: "red",
-                                        fontSize: "24px",
-                                      }}
-                                    />
-                                  ) : (
-                                    <FaRegHeart
-                                      style={{
-                                        color: "black",
-                                        fontSize: "24px",
-                                      }}
-                                    />
-                                  )}
-                                  Like
-                                </Button>
-                           
-                       
-                               
+                              <Button
+                        onClick={() => handleLikeButton(apiData._id)}
+                        style={{
+                          backgroundColor: "inherit",
+                          border: "none",
+                        }}
+                      >
+                        {likepoll[apiData._id] ? (
+                          <FaHeart
+                            style={{
+                              color: "red",
+                              fontSize: "24px",
+                            }}
+                          />
+                        ) : (
+                          <FaRegHeart
+                            style={{
+                              color: "black",
+                              fontSize: "24px",
+                            }}
+                          />
+                        )}
+                        Like
+                      </Button>
                               </div>
                             </Col>
                             <Col sm={3} md={3} lg={3} xl={3}>
@@ -519,7 +548,7 @@ console.log(pollUserVoted,"polls voted from voted polls ")
                         </div>
                       </Card.Body>
                     </Card>
-                    <hr className="POll_card_Hr"/>
+                    <hr className="POll_card_Hr" />
                   </div>
                 ))
               )}

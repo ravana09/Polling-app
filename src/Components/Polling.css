@@ -6,6 +6,7 @@
   flex-direction: column;
   height: 80vh; /* Full viewport height */
   width: 50vw;
+  margin-left: 70px;
 }
 
 .pollingRow {

@@ -58,9 +58,14 @@ function NavBar() {
   // console.log(Pollcategories, "Categories from state");
   const handleClick = (input) => {
     navigate(input);
-    // console.log(input, "category id");
-    handleClose();
   };
+
+  const handleCategory=(input)=>{
+    navigate("/Categrory",{state:{pollId:input}});
+    console.log(input, "category id");
+
+    handleClose();
+  }
 
   const handleUser = () => {
     navigate("/UserDetails", {
@@ -150,44 +155,7 @@ function NavBar() {
                 </Row>
               </Navbar>
               <hr style={{ color: "grey" }} />
-              {/* <Navbar expand="lg">
-                <Row className="Category_Card">
-                  <Col md={12} sm={12} xl={12} lg={12}>
-                    <Card
-                      style={{
-                        width: "15rem",
-                        backgroundColor: "#6dbecd",
-                        color: "White",
-                        borderRadius: "20px",
-                      }}
-                      
-                    >
-                      <Card.Header onClick={toggleVisibility}>
-                        Categories
-                      </Card.Header>
-                      {isVisible && (
-                        <Card.Body style={{ backgroundColor: "White" }}>
-                          <div className="scrollable-content">
-                            {showPollCategories &&
-                              Pollcategories.map((category, index) => (
-                                <Nav defaultActiveKey="/polling" key={index}>
-                                  <div>
-                                    <Nav.Link
-                                      className="Category_Name"
-                                      onClick={() => handleClick(category._id)}
-                                    >
-                                      {category.category_name}
-                                    </Nav.Link>
-                                  </div>
-                                </Nav>
-                              ))}
-                          </div>
-                        </Card.Body>
-                      )}
-                    </Card>
-                  </Col>
-                </Row>
-              </Navbar> */}
+       
               <Navbar expand="lg">
                 <Row>
                   <Col md={12} sm={12} xl={12} lg={12}>
@@ -218,7 +186,7 @@ function NavBar() {
                                   <div>
                                     <Nav.Link
                                       className="Category_Name"
-                                      onClick={() => handleClick(category._id)}
+                                      onClick={() => handleCategory(category._id)}
                                     >
                                       {category.category_name}
                                     </Nav.Link>

@@ -33,7 +33,6 @@ function Trending() {
     console.log(trendingPollData);
     navigate("/polling", { state: { data: trendingPollData } });
   }
-
   return (
     <Row>
       <Col
@@ -45,9 +44,8 @@ function Trending() {
         id="trending_Bar"
       >
         <h1 className="Trending_poll_nameBag">Trending Polls</h1>
-        {/* <Button variant="primary" onClick={handleTopThree}>
-            {loading ? "Close the Card" : "Show Top 3 Trending Polls"}
-          </Button> */}
+     
+       
         {data.map((apidata, index) => (
           <Card
             key={index}
@@ -68,9 +66,7 @@ function Trending() {
                     <FcLike /> Total Likes: {apidata.totalLikes}
                   </ListGroup.Item>
                 </ListGroup>
-                {/* <Button onClick={() => handleNavigate(apidata._id)}>
-                  Get to the Poll
-                </Button> */}
+            
               </Card.Text>
             </Card.Body>
           </Card>

@@ -8,7 +8,7 @@ export const SearchContext = createContext();
 
 function Header() {
   const [searchData, setSearchData] = useState("");
-
+  const [searchResult, setSearchResult] = useState([]);
   let navigate = useNavigate();
 
   function capitalizeFirstLetter(string) {
@@ -24,27 +24,39 @@ function Header() {
     navigate(prop);
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (searchData && searchData.length > 0) {
-        try {
-          const response = await axios.post("http://49.204.232.254:84/polls/search", {
+  const fetchData = async () => {
+    if (searchData && searchData.length > 0) {
+      try {
+        const response = await axios.post(
+          "http://49.204.232.254:84/polls/search",
+          {
             query: searchData,
-          });
-          console.log(response.data, "searched data");
-        
-
-        } catch (error) {
-          console.error("Error fetching data:", error);
+          }
+        );
+        console.log(response.data, "searched data");
+        setSearchResult(response.data);
+        if (response.status === 200) {
+          navigate("/search", { state: { searchResult: response.data } });
         }
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
-    };
+    }
+  };
 
-    fetchData();
-  }, [searchData]);
+  // useEffect(() => {
+  //
+  // }, [searchResult, navigate]);
+
+  const handleKeyPress = async (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default form submission
+      await fetchData();
+    }
+  };
 
   return (
-    <SearchContext.Provider value={{ searchData }}>
+    <SearchContext.Provider value={{ searchData, setSearchData }}>
       <Row className="fixed-top" id="searchBar">
         <Col className="Header">
           <Navbar expand="lg">
@@ -65,9 +77,8 @@ function Header() {
                       className="search-Bar"
                       aria-label="Search Bar"
                       value={searchData}
-                      onChange={(e) => {
-                        setSearchData(e.target.value);
-                      }}
+                      onChange={(e) => setSearchData(e.target.value)}
+                      onKeyDown={handleKeyPress}
                     />
                   </Col>
                 </Row>

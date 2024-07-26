@@ -99,12 +99,14 @@ function UserDetails() {
   };
 
   const fetchMultiplePolls = async (polls) => {
+    if(polls.length >0){
     const res = await axios.post("http://49.204.232.254:84/polls/multipoll", {
       poll_ids: polls,
     });
     console.log(res.data, "MUltiplePOlls UserDetails");
     setMultiplePolls([]);
     setMultiplePolls(res.data);
+  }
   };
 
   //UserDetailsCreatedPoll

@@ -35,10 +35,7 @@ function RangeOutput({ pollId, selectOption, createdTime, endingTime }) {
 
   
 
-  // const totalVotes = pollResults.reduce(
-  //   (total, option) => total + option.voters.length,
-  //   0
-  // );
+ 
 
   const maxVotes = Math.max(
     ...pollResults.map((option) => option.count)

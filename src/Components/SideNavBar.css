@@ -6,15 +6,17 @@
 
 .sidebar {
   position: fixed;
-  margin-top: 70px;
+  margin-top: 10vh;
   background-color: #ff4500;
-  width: 280px;
+  width: 100%;
+  max-width: 18%;
+  min-width: auto;
+  margin-right: 0px;
   background-color: #ffffff;
   color: rgb(1, 14, 15);
   height: 100vh;
-  position: fixed;
   font-size: 1.2rem;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-right: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 .signOut {
@@ -40,11 +42,11 @@ box-shadow: 2px solid skyblue;
   display: flex;
   flex-direction: column;
   position: relative;
-  left: 40px;
+  
 }
 .Nav_Links-Bar:hover {
   position: relative;
-  left: 40px;
+
 }
 
 .Navbar_icon {
@@ -121,10 +123,12 @@ box-shadow: 2px solid skyblue;
 }
 
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1200px) {
   .sidebar {
-   margin-top: auto;
+   margin-top: 10vh;
     height: 100vh;
+    width: 100%;
+    max-width: 18%;
   }
 
   .main-content {
@@ -134,11 +138,11 @@ box-shadow: 2px solid skyblue;
 
   .Mobile_container {
     position: fixed;
-    margin-top: 150px;
+    margin-top: 20vh;
   }
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 990px) {
   .sidebar {
     display: none;
   }
@@ -149,6 +153,7 @@ box-shadow: 2px solid skyblue;
 
   #Mobile_view {
     display: contents;
+    
    
   }
   
@@ -157,13 +162,17 @@ box-shadow: 2px solid skyblue;
     top: 0;
     bottom: 0;
     width: 100%;
-    /* max-width: 320px; */
+    max-width: 1200px;
     z-index: 1000;
+    margin-left: -12px;
+  
   }
 
   .Mobile_view_Navbar {
     background-color: rgb(71, 153, 153);
-    padding: 0% 5% 2% 5%;
+    padding: 0% 20% 2% 5%;
+    width: 100%;
+    max-width: 1000px;
   }
  
  .Mobile_Nav_links{

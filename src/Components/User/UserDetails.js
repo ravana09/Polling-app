@@ -50,7 +50,7 @@ function UserDetails() {
 
   const location = useLocation();
   const { userPhoneNUmber, userID } = location.state || {};
-  const pollsUserid = userID;
+
 
   function capitalizeFirstLetter(string) {
     if (string) {

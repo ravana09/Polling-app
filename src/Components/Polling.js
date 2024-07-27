@@ -56,9 +56,8 @@ function Polling({
   const [loading, setLoading] = useState(true);
   let [userDetails, setUserDetails] = useState(false);
 
-  const [likedPolls, setLikedPolls] = useState([]); // State to store liked poll IDs
-  const [likepoll, setLikepoll] = useState({}); // State to manage like status
-
+  const [likedPolls, setLikedPolls] = useState([]);
+  const [likepoll, setLikepoll] = useState({});
 
   const [pollEndTime, setpollEndtime] = useState(true);
 
@@ -67,7 +66,7 @@ function Polling({
 
   let { data } = location.state || {};
 
-  // console.log(data);
+  console.log(data);
 
   const otherUserID = UserID;
   let UserId = sessionStorage.getItem("Id");
@@ -203,23 +202,23 @@ function Polling({
   };
 
   //uservoted polls
-  const UserVotedPolls = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://49.204.232.254:84/polls/getvoted",
-        {
-          user_id: otherUserID,
-        }
-      );
-      const { pollIds } = response.data;
-      // console.log(response.data)
-      setVotedPollIds(pollIds);
-    } catch (error) {
-      console.error("Error fetching voted polls:", error);
-    }
-    setLoading(false);
-  };
+  // const UserVotedPolls = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.post(
+  //       "http://49.204.232.254:84/polls/getvoted",
+  //       {
+  //         user_id: otherUserID,
+  //       }
+  //     );
+  //     const { pollIds } = response.data;
+  //     // console.log(response.data)
+  //     setVotedPollIds(pollIds);
+  //   } catch (error) {
+  //     console.error("Error fetching voted polls:", error);
+  //   }
+  //   setLoading(false);
+  // };
 
   //trendinPoll
   async function fetchPollDetails(pollId) {
@@ -230,10 +229,12 @@ function Polling({
         "http://49.204.232.254:84/polls/getone",
         {
           poll_id: pollId,
+          user_id: UserId,
+
         }
       );
       setFetchData([response.data]);
-      // console.log(response.data);
+      console.log(response.data,"polling trending ");
       setLoading(false);
     } catch (err) {
       console.log("Error fetching poll details:", err);
@@ -310,7 +311,7 @@ function Polling({
         });
       } else if (response.data.message === "Like removed successfully") {
         setLikepoll({ [pollId]: false });
-        setLikedPolls(likedPolls.filter(id => id !== pollId));
+        setLikedPolls(likedPolls.filter((id) => id !== pollId));
         Swal.fire({
           icon: "success",
           title: "Like removed!",
@@ -334,11 +335,26 @@ function Polling({
         timerProgressBar: true,
       });
     }
-  }
+  };
 
   //follow user
-  const handleFollow = (Followid) => {
-    // console.log(Followid, "follow user");
+  const handleFollow = async (Followid) => {
+  console.log(Followid,"followers id ")
+    try {
+      const res = await axios.post("http://49.204.232.254:84/api/follow", {
+        follow_user_id:Followid,
+        user_id: UserId,
+      }
+  )
+  if(res.status===200){
+      alert("follwed")
+  }else{
+    alert("not foLLOWING ")
+  }
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -412,7 +428,10 @@ function Polling({
                                       handleFollow(apiData.createdBy._id);
                                     }}
                                   >
-                                    Follow
+                                    {apiData.createdBy?.isFollowing === true
+                                      ? "UnFollow"
+                                      : "Follow"}
+                                    {/* Follow */}
                                   </Button>
                                 </div>
                               </div>
@@ -507,30 +526,32 @@ function Polling({
                           <Row className="poll_Card_body">
                             <Col sm={3} md={3} lg={3} xl={3}>
                               <div>
-                              <Button
-                        onClick={() => handleLikeButton(apiData._id)}
-                        style={{
-                          backgroundColor: "inherit",
-                          border: "none",
-                        }}
-                      >
-                        {likepoll[apiData._id] ? (
-                          <FaHeart
-                            style={{
-                              color: "red",
-                              fontSize: "24px",
-                            }}
-                          />
-                        ) : (
-                          <FaRegHeart
-                            style={{
-                              color: "black",
-                              fontSize: "24px",
-                            }}
-                          />
-                        )}
-                        Like
-                      </Button>
+                                <Button
+                                  onClick={() => handleLikeButton(apiData._id)}
+                                  style={{
+                                    backgroundColor: "inherit",
+                                    border: "none",
+                                  }}
+                                >
+                                  {apiData.likers.some(
+                                    (liker) => liker._id === UserId
+                                  ) ? (
+                                    <FaHeart
+                                      style={{
+                                        color: "red",
+                                        fontSize: "24px",
+                                      }}
+                                    />
+                                  ) : (
+                                    <FaRegHeart
+                                      style={{
+                                        color: "black",
+                                        fontSize: "24px",
+                                      }}
+                                    />
+                                  )}
+                                </Button>
+                                Like
                               </div>
                             </Col>
                             <Col sm={3} md={3} lg={3} xl={3}>

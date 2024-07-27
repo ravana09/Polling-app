@@ -9,7 +9,7 @@ import Trending from "./Trending/Trending";
 function Home({ children, showTrending = true }) {
   return (
     <>
-      <Row>
+
         <Container fluid >
           <Row >
             <Col xs={12} md={12} lg={12} xl={12} className="Body_header">
@@ -17,12 +17,13 @@ function Home({ children, showTrending = true }) {
              
             </Col>
           </Row>
+
           <Row>
-            <Col sm={12} md={2} lg={2} xl={2} className="Body_Navbar"  >
+            <Col sm={12} md={12} lg={2} xl={2} className="Body_Navbar"  >
               <SideNavBar />
             </Col>
            
-            <Col sm={12} md={7} lg={7} xl={7} className="Home-Body">
+            <Col sm={12} md={9} lg={7} xl={7} className="Home-Body">
               {children}
             </Col>
             {/* {showTrending && (
@@ -36,7 +37,7 @@ function Home({ children, showTrending = true }) {
               </Col>
           </Row>
         </Container>
-      </Row>
+     
     </>
   );
 }

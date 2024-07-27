@@ -22,8 +22,7 @@ function Trending() {
     try {
       const response = await axios.get("http://49.204.232.254:84/polls/top3");
       setData(response.data);
-      // setTrend(response.data)
-      // console.log(response.data);
+      
     } catch (err) {
       console.log("Error: ", err);
     }

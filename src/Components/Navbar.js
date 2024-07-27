@@ -166,7 +166,7 @@ function NavBar() {
                         >
                           <Card
                       style={{
-                        width: "15rem",
+                        width: "150%",
                         backgroundColor: "#6dbecd",
                         color: "White",
                         borderRadius: "20px",
@@ -226,9 +226,8 @@ function NavBar() {
       {/* Mobile view */}
 
       <div className="Mobile_view_place_fixed">
-        <Row>
-          <Col>
-            <Navbar expand="xl" id="Mobile_view">
+        
+            <Navbar expand="lg" id="Mobile_view">
               <Container className="Mobile_view_Navbar">
                 <Navbar.Brand
                   href="/polling"
@@ -364,8 +363,7 @@ function NavBar() {
                 </Navbar.Collapse>
               </Container>
             </Navbar>
-          </Col>
-        </Row>
+         
       </div>
     </>
   );

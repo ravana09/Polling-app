@@ -55,9 +55,14 @@ function Polling({
 
   const [loading, setLoading] = useState(true);
   let [userDetails, setUserDetails] = useState(false);
+  
 
   const [likedPolls, setLikedPolls] = useState([]);
   const [likepoll, setLikepoll] = useState({});
+  const[pollLikersCount,setPollLikersCount]=useState([])
+
+  const[userFollwer,setUserFollowers]=useState([])
+  const[userFollwers,setUserFollowerss]=useState({})
 
   const [pollEndTime, setpollEndtime] = useState(true);
 
@@ -177,6 +182,9 @@ function Polling({
       });
       setFetchData(res.data);
       console.log(res.data);
+      if (res.status === 200) {
+        userLikeddPoll(res.data);
+      }
     } catch (err) {
       console.error("Error fetching poll data:", err);
     }
@@ -201,24 +209,33 @@ function Polling({
     setLoading(false);
   };
 
-  //uservoted polls
-  // const UserVotedPolls = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.post(
-  //       "http://49.204.232.254:84/polls/getvoted",
-  //       {
-  //         user_id: otherUserID,
-  //       }
-  //     );
-  //     const { pollIds } = response.data;
-  //     // console.log(response.data)
-  //     setVotedPollIds(pollIds);
-  //   } catch (error) {
-  //     console.error("Error fetching voted polls:", error);
-  //   }
-  //   setLoading(false);
-  // };
+  //like polls data
+  const userLikeddPoll = (pollids) => {
+    if (pollids && pollids.length > 0) {
+      let pollsArray = [];
+      let LikersCount = [];
+      let followArray=[]
+
+      for (let i = 0; i < pollids.length; i++) {
+        LikersCount.push(pollids[i].likers.length);
+        if (pollids[i].createdBy.isLiked === true) {
+          pollsArray.push(pollids[i]._id);
+         
+        }
+
+        if(pollids[i].createdBy.isFollowing === true){
+          followArray.push(pollids[i].createdBy._id);
+        }
+      }
+      setLikedPolls(pollsArray);
+     
+      setPollLikersCount(LikersCount)
+      setUserFollowers(followArray)
+      
+    }
+  };
+  console.log(userFollwer, "from user followwers ");
+
 
   //trendinPoll
   async function fetchPollDetails(pollId) {
@@ -230,11 +247,10 @@ function Polling({
         {
           poll_id: pollId,
           user_id: UserId,
-
         }
       );
       setFetchData([response.data]);
-      console.log(response.data,"polling trending ");
+      console.log(response.data, "polling trending ");
       setLoading(false);
     } catch (err) {
       console.log("Error fetching poll details:", err);
@@ -263,8 +279,6 @@ function Polling({
     fetchPollById();
   }, [searchingPoll]);
 
-  // const displayedData = searchResults ? [searchResults] : fetchData;
-
   //Comments
   const handlePoll = (poll) => {
     // console.log(poll);
@@ -286,7 +300,7 @@ function Polling({
   };
 
   //like
-  const handleLikeButton = async (pollId) => {
+  const handleLikeButton = async (pollId, index) => {
     try {
       const response = await axios.post(
         "http://49.204.232.254:84/polls/likeonpoll",
@@ -295,67 +309,58 @@ function Polling({
           user_id: UserId,
         }
       );
-      console.log(response.data, "Poll liked");
+
+      console.log(index, "Poll liked index");
 
       if (response.data.message === "Like recorded successfully") {
-        setLikepoll({ [pollId]: true });
+        setLikepoll({ ...likepoll, [pollId]: true });
         setLikedPolls([...likedPolls, pollId]);
-        Swal.fire({
-          icon: "success",
-          title: "Poll liked successfully!",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
+        setPollLikersCount(prevState => {
+          const newCount = [...prevState];
+          newCount[index] += 1;
+          return newCount;
         });
+
       } else if (response.data.message === "Like removed successfully") {
-        setLikepoll({ [pollId]: false });
+        setLikepoll({ ...likepoll, [pollId]: false });
         setLikedPolls(likedPolls.filter((id) => id !== pollId));
-        Swal.fire({
-          icon: "success",
-          title: "Like removed!",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
+        setPollLikersCount(prevState => {
+          const newCount = [...prevState];
+          newCount[index] -= 1;
+          return newCount;
         });
+
+       
       }
     } catch (err) {
       console.error("Error in liking poll", err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "An error occurred while liking the poll.",
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+    
     }
   };
 
   //follow user
   const handleFollow = async (Followid) => {
-  console.log(Followid,"followers id ")
+    console.log(Followid, "followers id ");
     try {
       const res = await axios.post("http://49.204.232.254:84/api/follow", {
-        follow_user_id:Followid,
+        follow_user_id: Followid,
         user_id: UserId,
-      }
-  )
-  if(res.status===200){
-      alert("follwed")
-  }else{
-    alert("not foLLOWING ")
-  }
+      });
 
+      if (res.data.message === "Follower added successfully") {
+        setUserFollowerss({ ...userFollwers, [Followid]: true })
+        setUserFollowers([...userFollwer, Followid]);
+       
+
+      } else if(res.data.message === "Follower removed successfully") {
+        setUserFollowerss({ ...userFollwers, [Followid]: false })
+        setUserFollowers(userFollwer.filter((id) => id !== Followid));
+      }
     } catch (err) {
       console.log(err);
     }
   };
+  console.log(userFollwer,"userFollowers")
 
   return (
     <TimerContext.Provider value={{ timer, setTimer }}>
@@ -369,7 +374,7 @@ function Polling({
                   <h1>Loading</h1>
                 </div>
               ) : (
-                fetchData.map((apiData) => (
+                fetchData.map((apiData, index) => (
                   <div key={apiData._id}>
                     <Card className="poll_card">
                       <Card.Header>
@@ -428,10 +433,10 @@ function Polling({
                                       handleFollow(apiData.createdBy._id);
                                     }}
                                   >
-                                    {apiData.createdBy?.isFollowing === true
+                                    {userFollwer.includes(apiData.createdBy._id)
                                       ? "UnFollow"
                                       : "Follow"}
-                                    {/* Follow */}
+                                   
                                   </Button>
                                 </div>
                               </div>
@@ -527,15 +532,15 @@ function Polling({
                             <Col sm={3} md={3} lg={3} xl={3}>
                               <div>
                                 <Button
-                                  onClick={() => handleLikeButton(apiData._id)}
+                                  onClick={() =>
+                                    handleLikeButton(apiData._id, index)
+                                  }
                                   style={{
                                     backgroundColor: "inherit",
                                     border: "none",
                                   }}
                                 >
-                                  {apiData.likers.some(
-                                    (liker) => liker._id === UserId
-                                  ) ? (
+                                  {likedPolls.includes(apiData._id) ? (
                                     <FaHeart
                                       style={{
                                         color: "red",
@@ -551,19 +556,20 @@ function Polling({
                                     />
                                   )}
                                 </Button>
-                                Like
+                                {/* {apiData.likers.length} */}
+                                {pollLikersCount&&pollLikersCount[index]}Likes
                               </div>
                             </Col>
                             <Col sm={3} md={3} lg={3} xl={3}>
-                              <Button
+                              {/* <Button
                                 variant="primary"
                                 onClick={() => handlePoll(apiData._id)}
                               >
                                 Comments
-                              </Button>
+                              </Button> */}
                             </Col>
                             <Col sm={3} md={3} lg={3} xl={3}>
-                              share
+                              {/* share */}
                             </Col>
                           </Row>
                         </div>

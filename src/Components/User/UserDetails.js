@@ -65,7 +65,10 @@ function UserDetails() {
       try {
         const response = await axios.post(
           "http://49.204.232.254:84/api/getProfile",
-          { user_id: userID }
+          { user_id: userID,
+            current_user:loginUserID,
+
+           }
         );
         setUserDetails(response.data.user);
         console.log(response.data.user);

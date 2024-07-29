@@ -17,10 +17,7 @@ function Comments() {
   const userId = sessionStorage.getItem("Id");
   const userName = sessionStorage.getItem("Users_Name");
 
-  const [fetchData, setFetchData] = useState({});
-  const [selectedOption, setSelectedOption] = useState("");
-  const [votedPollIds, setVotedPollIds] = useState([]);
-  const [pollId, setPollId] = useState("");
+  
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState([]);
   const [replyComment, setReplyComment] = useState("");
@@ -30,42 +27,17 @@ function Comments() {
   const [showReplyForReplyId, setShowReplyForReplyId] = useState("");
   const [ReplyForReplyComment, setReplyForReplyComment] = useState("");
 
-  useEffect(() => {
-    fetchPollData();
-    fetchVotedPolls();
-    fetchComments();
-  }, [newComment,ReplyForReplyComment,replyComment]);
+ 
+  //fetch single poll
 
-  //fetch poll data
+  useEffect(()=>{
+    const fetchPoll = async () => {
 
-  const fetchPollData = async () => {
-    try {
-      const response = await axios.post(
-        "http://49.204.232.254:84/polls/getone",
-        {
-          poll_id: pollID,
-        }
-      );
-      setFetchData(response.data);
-    } catch (error) {
-      console.error("Error fetching poll data:", error);
+const response=await axios.post
+
     }
-  };
-  //fetch voted poll
-  const fetchVotedPolls = async () => {
-    try {
-      const response = await axios.post(
-        "http://49.204.232.254:84/polls/getvoted",
-        {
-          user_id: userId,
-        }
-      );
-      const { pollIds } = response.data;
-      setVotedPollIds(pollIds);
-    } catch (error) {
-      console.error("Error fetching voted polls:", error);
-    }
-  };
+
+  })
 
   //fetch comment s
   const fetchComments = async () => {
@@ -83,57 +55,7 @@ function Comments() {
     }
   };
 
-  const handleData = (e, pollId) => {
-    setSelectedOption(e.target.value);
-    setPollId(pollId);
-  };
 
-  //submit
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (selectedOption && pollId) {
-      try {
-        const response = await axios.post(
-          "http://49.204.232.254:84/polls/voteonpoll",
-          {
-            poll_id: pollId,
-            user_id: userId,
-            option: selectedOption,
-          }
-        );
-        if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "Your Poll has Been Saved",
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          });
-          const updatedVotedPollIds = [...votedPollIds, pollId];
-          setVotedPollIds(updatedVotedPollIds);
-          sessionStorage.setItem(
-            "votedPollIds",
-            JSON.stringify(updatedVotedPollIds)
-          );
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: `Error voting: ${
-            error.response ? error.response.data.error : error.message
-          }`,
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
-      }
-    }
-  };
 
   //comment submit
   const handleCommentSubmit = async (e) => {
@@ -240,65 +162,7 @@ function Comments() {
   return (
     <div className="comments-section">
       <Card className="poll_card">
-        <div>
-          <Card.Link
-            onClick={() =>
-              navigate("/UserDetails", {
-                state: { userID: fetchData.createdBy?._id },
-              })
-            }
-          >
-            {fetchData.createdBy?.user_name}
-          </Card.Link>
-        </div>
-        <h6>
-          {fetchData.title}{" "}
-          <span>
-            <PollStartingTime createdTime={fetchData.created_date} />
-          </span>
-        </h6>
-        <Card.Body>
-          <Card.Title>{fetchData.question}</Card.Title>
-          {votedPollIds.includes(fetchData._id) ? (
-            <RangeOutput
-              pollId={fetchData._id}
-              selectOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              createdTime={fetchData.created_date}
-              endingTime={fetchData.expirationTime}
-            />
-          ) : (
-            <Card className="innerCard">
-              <Card.Body>
-                <Form onSubmit={handleSubmit}>
-                  {fetchData.options &&
-                    fetchData.options.map((option, index) => (
-                      <Card.Title key={index} style={{ margin: 10 }}>
-                        <Form.Check
-                          type="radio"
-                          label={option.option}
-                          value={option.option}
-                          onChange={(e) => handleData(e, fetchData._id)}
-                          checked={selectedOption === option.option}
-                          className="formRadio custom-radio"
-                          style={{ margin: 10 }}
-                        />
-                      </Card.Title>
-                    ))}
-                  {fetchData._id === pollId && (
-                    <Button
-                      type="submit"
-                      style={{ margin: 10, backgroundColor: "grey" }}
-                    >
-                      Vote
-                    </Button>
-                  )}
-                </Form>
-                {/* <hr /> */}
-              </Card.Body>
-            </Card>
-          )}
-        </Card.Body>
+      
         <Row>
           <Col>
             <Card className="Comments_Card">

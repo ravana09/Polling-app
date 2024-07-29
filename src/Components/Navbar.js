@@ -161,6 +161,7 @@ function NavBar() {
                   <Col md={12} sm={12} xl={12} lg={12}>
                     <Nav defaultActiveKey="/polling">
                       <div >
+                        <h3>Categories</h3>
                         <Nav.Link
                           
                         >
@@ -274,10 +275,7 @@ function NavBar() {
                         style={{ color: "white", fontSize: "15px" }}
                       >
                         Poll List{" "}
-                        {/* <FontAwesomeIcon
-                          icon={faList}
-                          className="Navbar_icon"
-                        /> */}
+                        
                       </Nav.Link>
                       <Nav.Link
                         className="Mobile_Nav-Links"

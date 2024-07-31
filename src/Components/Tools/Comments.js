@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Badge, Button, Card, Col, Form, Row } from "react-bootstrap";
-import Swal from "sweetalert2";
-import { MdNavigateBefore } from "react-icons/md";
-import PollStartingTime from "../Timing/PollStartingTime";
-import PollEndingTime from "../Timing/PollEndingTime";
-import RangeOutput from "../RangeOutput";
+import {  Button, Card, Col, Form, Row } from "react-bootstrap";
+import Polling from "../Polling";
 
 function Comments() {
   let navigate = useNavigate();
   const location = useLocation();
   const { pollID } = location.state || { pollID: null };
-  console.log(pollID)
+  console.log(pollID);
 
   const userId = sessionStorage.getItem("Id");
   const userName = sessionStorage.getItem("Users_Name");
-
+  const [commentsPoll, setCommentsPoll] = useState([]);
   
+const [sendCommentsPoll,setSendCommentsPoll]=useState(false)
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState([]);
   const [replyComment, setReplyComment] = useState("");
@@ -27,19 +24,30 @@ function Comments() {
   const [showReplyForReplyId, setShowReplyForReplyId] = useState("");
   const [ReplyForReplyComment, setReplyForReplyComment] = useState("");
 
- 
   //fetch single poll
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchPoll = async () => {
+      try {
+        const response = await axios.post(
+          "http://49.204.232.254:84/polls/getone",
+          {
+            poll_id: pollID,
+            user_id: userId,
+          }
+        );
+        console.log(response.data,"comments poll")
+        setCommentsPoll([response.data])
+        setSendCommentsPoll(!sendCommentsPoll)
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPoll() 
+  },[]
+);
 
-const response=await axios.post
-
-    }
-
-  })
-
-  //fetch comment s
+  //fetch comments
   const fetchComments = async () => {
     try {
       const response = await axios.post(
@@ -54,8 +62,6 @@ const response=await axios.post
       console.error("Error fetching comments:", error);
     }
   };
-
-
 
   //comment submit
   const handleCommentSubmit = async (e) => {
@@ -121,14 +127,13 @@ const response=await axios.post
 
   //reply for reply  comment
   const replyForReplyPost = async () => {
-    
     console.log(showReplyForReplyId, "Reply comments");
     console.log(ReplyForReplyComment, "reply for reply comment ");
-    if (ReplyForReplyComment !== "") {  
+    if (ReplyForReplyComment !== "") {
       try {
         const response = await axios.post(
           "http://49.204.232.254:84/comment/replycomment",
- {
+          {
             poll_id: pollID,
             user_id: userId,
             reply_msg: ReplyForReplyComment,
@@ -148,24 +153,24 @@ const response=await axios.post
     }
   };
 
-  
-
   //reply for reply
   const handleReplyReply = (commentId) => {
     console.log(commentId, "Reply for reply ");
     setShowReplyForReplyId(commentId);
     setShowReplyForReply(!showReplyForReply);
-    
   };
   console.log(showReplyForReplyId);
 
   return (
     <div className="comments-section">
-      <Card className="poll_card">
-      
+     {sendCommentsPoll&&
+     <div><Polling 
+      commentsPoll={commentsPoll}
+      />
+      <Card >
         <Row>
           <Col>
-            <Card className="Comments_Card">
+            <Card className="Poll_Card">
               <Card.Body>
                 <Form onSubmit={handleCommentSubmit}>
                   <Row>
@@ -253,8 +258,9 @@ const response=await axios.post
                                   className="mb-3 mt-2"
                                   onClick={replyPost}
                                 >
-                                 {showReplies[comment._id] === comment.replies? "Close Reply" : "Reply"}
-
+                                  {showReplies[comment._id] === comment.replies
+                                    ? "Close Reply"
+                                    : "Reply"}
                                 </Button>
                               </Col>
                             </Row>
@@ -280,12 +286,10 @@ const response=await axios.post
                               >
                                 <p style={{ marginBottom: "5px" }}>
                                   <strong>{reply.user_id.user_name}:</strong>{" "}
-                                  
-                                    <a href={"/"}>
-                                      @{comment.user_id.user_name}:
-                                    </a>
-                                    <span>{reply.reply_msg}</span>{" "}
-                                  
+                                  <a href={"/"}>
+                                    @{comment.user_id.user_name}:
+                                  </a>
+                                  <span>{reply.reply_msg}</span>{" "}
                                   <Button
                                     onClick={() => handleReplyReply(reply._id)}
                                     style={{ marginLeft: "10px" }}
@@ -357,7 +361,9 @@ const response=await axios.post
           </Col>
         </Row>
       </Card>
-      {/* <hr /> */}
+      </div>
+      }
+   
     </div>
   );
 }

@@ -20,7 +20,9 @@ function NavBar() {
   const [searchData, setSearchData] = useState("");
   const user = sessionStorage.getItem("Users_Name") || "Guest";
   const userPhoneNUmber = sessionStorage.getItem("Users_PhoneNumber");
+
   const userID = sessionStorage.getItem("Id");
+  console.log(userID, "navbar user id");
   const [Pollcategories, setPollcategories] = useState([]);
   const [showPollCategories, setshowPollCategories] = useState(false);
   const [showSearchBar, SetShowSearchBar] = useState(false);
@@ -60,12 +62,12 @@ function NavBar() {
     navigate(input);
   };
 
-  const handleCategory=(input)=>{
-    navigate("/Categrory",{state:{pollId:input}});
+  const handleCategory = (input) => {
+    navigate("/Categrory", { state: { pollId: input } });
     console.log(input, "category id");
 
     handleClose();
-  }
+  };
 
   const handleUser = () => {
     navigate("/UserDetails", {
@@ -155,52 +157,54 @@ function NavBar() {
                 </Row>
               </Navbar>
               <hr style={{ color: "grey" }} />
-       
+
               <Navbar expand="lg">
                 <Row>
                   <Col md={12} sm={12} xl={12} lg={12}>
                     <Nav defaultActiveKey="/polling">
-                      <div >
+                      <div>
                         <h3>Categories</h3>
-                        <Nav.Link
-                          
+                        <div
+                          style={{
+                            color: "white",
+                            borderRadius: "20px",
+                            margin: "0px",
+                            width: "180%",
+                            cursor: "pointer",
+                          }}
+                          onClick={toggleVisibility}
                         >
-                          <Card
-                      style={{
-                        width: "150%",
-                        backgroundColor: "#6dbecd",
-                        color: "White",
-                        borderRadius: "20px",
-                        margin:"0px"
-                      }}
-                      
-                    >
-                      <Card.Header onClick={toggleVisibility}>
-                        Categories
-                      </Card.Header>
-                      {isVisible && (
-                        <Card.Body style={{ backgroundColor: "White" }}>
-                          <div className="scrollable-content">
-                            {showPollCategories &&
-                              Pollcategories.map((category, index) => (
-                                <Nav defaultActiveKey="/polling" key={index}>
-                                  <div>
-                                    <Nav.Link
-                                      className="Category_Name"
-                                      onClick={() => handleCategory(category._id)}
-                                    >
-                                      {category.category_name}
-                                    </Nav.Link>
-                                  </div>
-                                </Nav>
-                              ))}
-                          </div>
-                        </Card.Body>
-                      )}
-                    </Card>
-                         
-                        </Nav.Link>
-                      
+                          {isVisible && (
+                            <div
+                              style={{
+                                maxHeight: "250px",
+                                overflowY: "auto",
+                              }}
+                            >
+                              {showPollCategories &&
+                                Pollcategories.map((category, index) => (
+                                  <Nav className="Category_Box" key={index}>
+                                    <div>
+                                      <Nav.Link
+                                        className="Category_Name"
+                                        onClick={() =>
+                                          handleCategory(category._id)
+                                        }
+                                        style={{
+                                          padding: "5px",
+                                          cursor: "pointer",
+                                          margin: "0 auto",
+                                          color:'white'
+                                        }}
+                                      >
+                                        {category.category_name}
+                                      </Nav.Link>
+                                    </div>
+                                  </Nav>
+                                ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </Nav>
                   </Col>
@@ -227,141 +231,140 @@ function NavBar() {
       {/* Mobile view */}
 
       <div className="Mobile_view_place_fixed">
-        
-            <Navbar expand="lg" id="Mobile_view">
-              <Container className="Mobile_view_Navbar">
-                <Navbar.Brand
-                  href="/polling"
-                  style={{
-                    color: "#c5ebf2",
-                    fontSize: "30px",
-                    fontWeight: "250px",
-                  }}
+        <Navbar expand="lg" id="Mobile_view">
+          <Container className="Mobile_view_Navbar">
+            <Navbar.Brand
+              href="/polling"
+              style={{
+                color: "#c5ebf2",
+                fontSize: "30px",
+                fontWeight: "250px",
+              }}
+            >
+              Polling Booth
+            </Navbar.Brand>
+            <Navbar.Toggle />
+
+            <Navbar.Collapse>
+              <div className="Mobile_Nav_links">
+                <Navbar.Text
+                  onClick={() => handleClick("/polling")}
+                  style={{ fontSize: 20, color: "white" }}
                 >
-                  Polling Booth
-                </Navbar.Brand>
-                <Navbar.Toggle />
+                  Hello, {capitalizeFirstLetter(user)}
+                </Navbar.Text>
 
-                <Navbar.Collapse>
-                  <div className="Mobile_Nav_links">
-                    <Navbar.Text
-                      onClick={() => handleClick("/polling")}
-                      style={{ fontSize: 20, color: "white" }}
-                    >
-                      Hello, {capitalizeFirstLetter(user)}
-                    </Navbar.Text>
-
-                    <Nav className="me-auto">
-                      <Nav.Link
-                        className="Mobile_Nav-Links"
-                        onClick={() => handleSearch()}
-                        style={{ color: "white", fontSize: "15px" }}
-                      >
-                        Search A poll
-                      </Nav.Link>
-                      {showSearchBar && (
-                        <Form.Control
-                          type="text"
-                          placeholder="Search"
-                          className="search-Bar"
-                          aria-label="Search Bar"
-                          value={searchData}
-                          onChange={(e) => setSearchData(e.target.value)}
-                        />
-                      )}
-                      <Nav.Link
-                        className="Mobile_Nav-Links"
-                        onClick={() => handleClick("/polling")}
-                        style={{ color: "white", fontSize: "15px" }}
-                      >
-                        Poll List{" "}
-                        
-                      </Nav.Link>
-                      <Nav.Link
-                        className="Mobile_Nav-Links"
-                        onClick={() => handleClick("/AddPoll")}
-                        style={{ color: "white", fontSize: "15px" }}
-                      >
-                        Add Poll{" "}
-                        {/* <FontAwesomeIcon
+                <Nav className="me-auto">
+                  <Nav.Link
+                    className="Mobile_Nav-Links"
+                    onClick={() => handleSearch()}
+                    style={{ color: "white", fontSize: "15px" }}
+                  >
+                    Search A poll
+                  </Nav.Link>
+                  {showSearchBar && (
+                    <Form.Control
+                      type="text"
+                      placeholder="Search"
+                      className="search-Bar"
+                      aria-label="Search Bar"
+                      value={searchData}
+                      onChange={(e) => setSearchData(e.target.value)}
+                    />
+                  )}
+                  <Nav.Link
+                    className="Mobile_Nav-Links"
+                    onClick={() => handleClick("/polling")}
+                    style={{ color: "white", fontSize: "15px" }}
+                  >
+                    Poll List{" "}
+                  </Nav.Link>
+                  <Nav.Link
+                    className="Mobile_Nav-Links"
+                    onClick={() => handleClick("/AddPoll")}
+                    style={{ color: "white", fontSize: "15px" }}
+                  >
+                    Add Poll{" "}
+                    {/* <FontAwesomeIcon
                           icon={faPlus}
                           className="Navbar_icon"
                         /> */}
-                      </Nav.Link>
-                      <Nav.Link
-                        className="Mobile_Nav-Links"
-                        onClick={() => handleClick("/VotedLIst")}
-                        style={{ color: "white", fontSize: "15px" }}
-                      >
-                        Voted Polls{" "}
-                        {/* <FontAwesomeIcon
+                  </Nav.Link>
+                  <Nav.Link
+                    className="Mobile_Nav-Links"
+                    onClick={() => handleClick("/VotedLIst")}
+                    style={{ color: "white", fontSize: "15px" }}
+                  >
+                    Voted Polls{" "}
+                    {/* <FontAwesomeIcon
                           icon={faCheck}
                           className="Navbar_icon"
                         />{" "} */}
-                      </Nav.Link>
+                  </Nav.Link>
 
-                      <Nav.Link
-                        onClick={handleUser}
-                        style={{ color: "white", fontSize: "15px" }}
-                        className="Nav-Links"
-                      >
-                        User Details
-                        {/* <FontAwesomeIcon
+                  <Nav.Link
+                    onClick={handleUser}
+                    style={{ color: "white", fontSize: "15px" }}
+                    className="Nav-Links"
+                  >
+                    User Details
+                    {/* <FontAwesomeIcon
                           icon={faUser}
                           className="Navbar_icon"
                         />{" "} */}
-                      </Nav.Link>
-                      <Nav.Link
-                        onClick={toggleVisibility}
-                        style={{ color: "white", fontSize: "15px" }}
-                        className="Nav-Links"
-                      >
-                        Categories
-                      </Nav.Link>
-                      <Card
-                        style={{ width: "15rem", borderRadius: "none",margin:"0px" }}
-                        className="Categrory_Card_Mobile"
-                      >
-                        {isVisible && (
-                          <Card.Body>
-                            <div className="scrollable-content">
-                              {showPollCategories &&
-                                Pollcategories.map((category, index) => (
-                                  <Nav defaultActiveKey="/polling" key={index}>
-                                    <div className="Nav_Links-Bar">
-                                      <Nav.Link
-                                        className="Category_Name"
-                                        onClick={() =>
-                                          handleClick(category._id)
-                                        }
-                                      >
-                                        {category.category_name}
-                                      </Nav.Link>
-                                    </div>
-                                  </Nav>
-                                ))}
-                            </div>
-                          </Card.Body>
-                        )}
-                      </Card>
-                      <Nav.Link
-                        onClick={handleSignOut}
-                        style={{
-                          paddingLeft: 20,
-                          backgroundColor: "white",
-                          width: 100,
-                          height: "auto",
-                          borderRadius: "20px",
-                        }}
-                      >
-                        Sign Out
-                      </Nav.Link>
-                    </Nav>
-                  </div>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>
-         
+                  </Nav.Link>
+                  <Nav.Link
+                    onClick={toggleVisibility}
+                    style={{ color: "white", fontSize: "15px" }}
+                    className="Nav-Links"
+                  >
+                    Categories
+                  </Nav.Link>
+                  <Card
+                    style={{
+                      width: "15rem",
+                      borderRadius: "none",
+                      margin: "0px",
+                    }}
+                    className="Categrory_Card_Mobile"
+                  >
+                    {isVisible && (
+                      <Card.Body>
+                        <div className="scrollable-content">
+                          {showPollCategories &&
+                            Pollcategories.map((category, index) => (
+                              <Nav defaultActiveKey="/polling" key={index}>
+                                <div className="Nav_Links-Bar">
+                                  <Nav.Link
+                                    className="Category_Name"
+                                    onClick={() => handleClick(category._id)}
+                                  >
+                                    {category.category_name}
+                                  </Nav.Link>
+                                </div>
+                              </Nav>
+                            ))}
+                        </div>
+                      </Card.Body>
+                    )}
+                  </Card>
+                  <Nav.Link
+                    onClick={handleSignOut}
+                    style={{
+                      paddingLeft: 20,
+                      backgroundColor: "white",
+                      width: 100,
+                      height: "auto",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Sign Out
+                  </Nav.Link>
+                </Nav>
+              </div>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
       </div>
     </>
   );

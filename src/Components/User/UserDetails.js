@@ -50,6 +50,8 @@ function UserDetails() {
 
   const location = useLocation();
   const { userPhoneNUmber, userID } = location.state || {};
+  console.log(userID)
+
 
 
   function capitalizeFirstLetter(string) {
@@ -62,19 +64,25 @@ function UserDetails() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       setLoading(true);
+   
+
       try {
+        console.log(loginUserID,"function login user id ")
+        console.log(userID,"function userDetails User id ")
         const response = await axios.post(
           "http://49.204.232.254:84/api/getProfile",
-          { user_id: userID,
+          { 
+            user_id: userID,
             current_user:loginUserID,
 
            }
         );
         setUserDetails(response.data.user);
-        console.log(response.data.user);
+        console.log(response.data.user,"user polls ");
         if (response.status === 200) {
           setPollData(true);
           fetchMultiplePolls(response.data.user.created_polls);
+          
         }
       } catch (err) {
         setError(err.message);
@@ -144,6 +152,7 @@ function UserDetails() {
     setSendCommented(false);
     fetchMultiplePolls(polls);
   };
+  
   //profile
   const UpdateProfile = async () => {
     const { value: file } = await Swal.fire({
@@ -227,7 +236,7 @@ function UserDetails() {
           <div>
             <Row id="desktop-View">
               <Col sm={12} md={12} lg={12} xl={12}>
-                <Card className="poll_card" style={{ boder: "none" }}>
+                <Card className="poll_card" style={{ boder: "none",width:'90%',marginLeft:'7%' }}>
                   <Card.Header
                     className="userDetails_Card"
                     style={{

@@ -56,8 +56,9 @@
 }
 
 .UserDetails_polls_data {
-  width: 80%;
-  margin: 10px 10px 10px 5px;
+  width: 85%;
+  margin: 10px 0px 10px 5px;
+  font-size: inherit;
   font-size: medium;
   color: rgb(8, 7, 7);
   background-image: linear-gradient(to right top, #5f9ea0, #6bb1b4, #77c5c9, #83d9de, #8feef3);

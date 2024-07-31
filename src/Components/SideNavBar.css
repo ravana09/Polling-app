@@ -41,13 +41,32 @@ box-shadow: 2px solid skyblue;
 .Nav_Links-Bar {
   display: flex;
   flex-direction: column;
-  position: relative;
+ justify-content: center;
   
 }
 .Nav_Links-Bar:hover {
   position: relative;
 
 }
+.Category_Box {
+  display: flex;
+  background-color: (29, 130, 134) ;
+  /* border-bottom: 1px solid; */
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: white;
+}
+
+.Category_Box:hover {
+  background: linear-gradient(to bottom,rgb(29, 130, 134) 40%, #ffffff 100%);
+  transform: translateY(-10px);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+}
+
+
 
 .Navbar_icon {
   margin-right: 20px; /* Adjust the value as needed */
@@ -58,11 +77,12 @@ box-shadow: 2px solid skyblue;
   margin-top: 5px;
   font-size: 18px;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+ 
 }
 
 .Navbar-Links:hover {
   transform: scale(1.2);
-  width: 180px; /* Adjust the width as needed */
+  /* width: 100px; */
   box-shadow: 0 20px 10px -10px rgb(120, 201, 204);
   color: rgb(84, 206, 208);
 

@@ -50,7 +50,7 @@ function Trending() {
             key={index}
             style={{ width: "20rem",margin:"0px 0px 20px 10px" }}
             className="Trending_Card"
-            onClick={() => handleNavigate(apidata)}
+            onClick={() => handleNavigate(apidata._id)}
           >
             <Card.Header as="h5">Question: {apidata.question}</Card.Header>
             <Card.Body>

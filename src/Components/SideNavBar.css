@@ -81,7 +81,7 @@ box-shadow: 2px solid skyblue;
 }
 
 .Navbar-Links:hover {
-  transform: scale(1.2);
+  transform: scale(1.0);
   /* width: 100px; */
   box-shadow: 0 20px 10px -10px rgb(120, 201, 204);
   color: rgb(84, 206, 208);

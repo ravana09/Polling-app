@@ -29,7 +29,8 @@ function SignUp() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const number = /^\d*$/;
+    const number = /^\d{10}$/;
+
 
     switch (name) {
       case "Name":
